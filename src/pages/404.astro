@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+---
+
+<BaseLayout title="404 - Page Not Found">
+  <div class="max-w-3xl mx-auto px-6 py-12 md:py-32 text-center">
+    <div class="font-heading font-bold text-9xl md:text-[150px] bg-gradient-to-r from-blue-500 to-violet-500 bg-clip-text text-transparent mb-6">
+      404
+    </div>
+
+    <h1 class="font-heading font-bold text-4xl md:text-5xl text-white mb-4">
+      Page Not Found
+    </h1>
+
+    <p class="text-lg text-gray-400 mb-8 max-w-xl mx-auto">
+      Oops! It looks like the page you're looking for doesn't exist. This could be a
+      typo, or the content may have been moved.
+    </p>
+
+    <div class="space-y-4">
+      <a
+        href="/"
+        class="inline-block px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors duration-200"
+      >
+        Back to Home
+      </a>
+
+      <p class="text-gray-500 text-sm">
+        Or explore by category:
+      </p>
+
+      <nav class="flex flex-wrap justify-center gap-4">
+        <a href="/category/tech" class="text-blue-400 hover:text-blue-300 text-sm">
+          Tech & Business
+        </a>
+        <span class="text-gray-600">•</span>
+        <a href="/category/geopolitics" class="text-red-400 hover:text-red-300 text-sm">
+          Geopolitics
+        </a>
+        <span class="text-gray-600">•</span>
+        <a href="/category/society" class="text-violet-400 hover:text-violet-300 text-sm">
+          Society
+        </a>
+        <span class="text-gray-600">•</span>
+        <a href="/articles" class="text-gray-400 hover:text-gray-300 text-sm">
+          All Articles
+        </a>
+      </nav>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { CATEGORIES, type CategoryKey } from '../../utils/categories';
+
+export async function getStaticPaths() {
+  return Object.keys(CATEGORIES).map((category) => ({
+    params: { category },
+  }));
+}
+
+const { category } = Astro.params as { category: CategoryKey };
+const categoryData = CATEGORIES[category];
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const categoryArticles = allArticles
+  .filter((a) => a.data.category === category)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<BaseLayout
+  title={`${categoryData.label} | Tonypedia`}
+  description={`Explore all articles in the ${categoryData.label} category on Tonypedia.`}
+>
+  <div class="max-w-6xl mx-auto px-6 py-12 md:py-16">
+    <div class="mb-12">
+      <h1 class="font-heading font-bold text-4xl md:text-5xl text-white mb-2 flex items-center gap-3">
+        <span class="text-4xl">{categoryData.icon}</span>
+        {categoryData.label}
+      </h1>
+      <p class="text-gray-400">
+        {categoryArticles.length} article{categoryArticles.length !== 1 ? 's' : ''}
+      </p>
+    </div>
+
+    {
+      categoryArticles.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {categoryArticles.map((article) => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              category={article.data.category}
+              pubDate={article.data.pubDate}
+              slug={article.slug}
+              heroImage={article.data.heroImage}
+              readingTime={article.data.readingTime}
+              body={article.body}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="glass-card p-12 text-center">
+          <div class="text-6xl mb-4">{categoryData.icon}</div>
+          <h2 class="font-heading font-semibold text-xl text-gray-300 mb-2">
+            Coming Soon
+          </h2>
+          <p class="text-gray-400">
+            Articles for {categoryData.label} are coming soon. Check back later!
+          </p>
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>

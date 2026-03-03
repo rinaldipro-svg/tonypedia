@@ -1,0 +1,58 @@
+---
+import { formatDate, getReadingTime } from '../utils/helpers';
+import TagBadge from './TagBadge.astro';
+import type { CategoryKey } from '../utils/categories';
+
+interface Props {
+  title: string;
+  description: string;
+  category: CategoryKey;
+  pubDate: Date;
+  slug: string;
+  heroImage?: string;
+  readingTime?: number;
+  body?: string;
+}
+
+const {
+  title,
+  description,
+  category,
+  pubDate,
+  slug,
+  heroImage,
+  readingTime,
+  body = '',
+} = Astro.props;
+
+const estimatedReadingTime = readingTime || getReadingTime(body);
+---
+
+<a
+  href={`/articles/${slug}`}
+  class="glass-card group overflow-hidden block hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+>
+  {
+    heroImage && (
+      <img
+        src={heroImage}
+        alt={title}
+        class="w-full h-48 object-cover rounded-t-2xl group-hover:brightness-110 transition-all duration-300"
+        loading="lazy"
+      />
+    )
+  }
+  <div class="p-6 flex flex-col h-full">
+    <TagBadge category={category} />
+    <h3 class="font-heading font-semibold text-lg mt-4 text-white group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
+      {title}
+    </h3>
+    <p class="text-sm text-gray-400 line-clamp-2 mt-2 mb-4">
+      {description}
+    </p>
+    <div class="mt-auto flex items-center justify-between text-xs text-gray-500">
+      <span>{estimatedReadingTime} min read</span>
+      <span>{formatDate(pubDate)}</span>
+    </div>
+  </div>
+</a>

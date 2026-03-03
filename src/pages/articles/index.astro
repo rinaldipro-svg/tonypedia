@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const sortedArticles = allArticles.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<BaseLayout title="All Articles" description="Explore all articles from Tonypedia across all categories.">
+  <div class="max-w-6xl mx-auto px-6 py-12 md:py-16">
+    <h1 class="font-heading font-bold text-4xl md:text-5xl text-white mb-2">
+      All Articles
+    </h1>
+    <p class="text-gray-400 mb-12">
+      {sortedArticles.length} articles across all categories
+    </p>
+
+    {
+      sortedArticles.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedArticles.map((article) => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              category={article.data.category}
+              pubDate={article.data.pubDate}
+              slug={article.slug}
+              heroImage={article.data.heroImage}
+              readingTime={article.data.readingTime}
+              body={article.body}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="glass-card p-12 text-center">
+          <p class="text-gray-400">No articles found yet.</p>
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>

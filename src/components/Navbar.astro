@@ -1,0 +1,140 @@
+---
+import { CATEGORIES } from '../utils/categories';
+import ThemeToggle from './ThemeToggle.astro';
+
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar">
+  <div class="px-6 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="font-heading font-bold text-2xl text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
+      <span class="text-blue-500">●</span>
+      Tonypedia
+    </a>
+
+    <!-- Nav Links (Desktop) -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="/" class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium">
+        Home
+      </a>
+      {
+        Object.entries(CATEGORIES).map(([key, { label, icon }]) => (
+          <a
+            href={`/category/${key}`}
+            class="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium flex items-center gap-1"
+          >
+            <span>{icon}</span>
+            {label}
+          </a>
+        ))
+      }
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-4">
+      <button
+        id="search-btn"
+        class="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200 text-gray-300 hover:text-white"
+        aria-label="Search articles"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </button>
+      <ThemeToggle />
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden absolute top-full left-0 right-0 bg-navy-900 border-b border-white/10 p-6"
+  >
+    <div class="flex flex-col gap-4">
+      <a href="/" class="text-gray-300 hover:text-white transition-colors duration-200 font-medium">
+        Home
+      </a>
+      {
+        Object.entries(CATEGORIES).map(([key, { label, icon }]) => (
+          <a
+            href={`/category/${key}`}
+            class="text-gray-300 hover:text-white transition-colors duration-200 font-medium flex items-center gap-2"
+          >
+            <span>{icon}</span>
+            {label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</nav>
+
+<script>
+  function initNavbar() {
+    const navbar = document.getElementById('navbar');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const searchBtn = document.getElementById('search-btn');
+
+    // Mobile menu toggle
+    mobileMenuBtn?.addEventListener('click', () => {
+      const isOpen = mobileMenu?.classList.contains('hidden') === false;
+      if (isOpen) {
+        mobileMenu?.classList.add('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      } else {
+        mobileMenu?.classList.remove('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Close mobile menu on link click
+    mobileMenu?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Add backdrop blur on scroll
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          navbar?.classList.add('bg-navy-900/80', 'backdrop-blur-lg', 'border-b', 'border-white/10');
+        } else {
+          navbar?.classList.remove('bg-navy-900/80', 'backdrop-blur-lg', 'border-b', 'border-white/10');
+        }
+      },
+      { threshold: 0 }
+    );
+
+    const sentinel = document.createElement('div');
+    sentinel.style.position = 'absolute';
+    sentinel.style.top = '100vh';
+    document.body.insertBefore(sentinel, document.body.firstChild);
+    observer.observe(sentinel);
+
+    // Search button
+    searchBtn?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('open-search'));
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavbar);
+  } else {
+    initNavbar();
+  }
+
+  document.addEventListener('astro:after-swap', initNavbar);
+</script>

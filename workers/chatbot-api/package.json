@@ -1,0 +1,14 @@
+{
+  "name": "tonypedia-chatbot",
+  "version": "1.0.0",
+  "description": "AI chatbot for Tonypedia powered by Claude",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

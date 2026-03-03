@@ -1,0 +1,237 @@
+---
+import SearchModal from './SearchModal.astro';
+
+---
+
+<SearchModal />
+
+<div id="chatbot-container" class="fixed bottom-6 right-6 z-40">
+  <!-- Floating Button -->
+  <button
+    id="chatbot-toggle"
+    class="w-14 h-14 rounded-full bg-blue-500 hover:bg-blue-600 flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 pulse-ring"
+    aria-label="Open chat"
+    aria-expanded="false"
+  >
+    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"></path>
+      <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z" opacity="0.5"></path>
+    </svg>
+  </button>
+
+  <!-- Chat Panel -->
+  <div
+    id="chatbot-panel"
+    class="hidden fixed bottom-24 right-6 w-96 h-[500px] md:static md:bottom-auto md:right-auto glass-card rounded-2xl flex flex-col overflow-hidden max-h-[85vh] md:max-h-[500px]"
+  >
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 flex items-center justify-between">
+      <h3 class="font-heading font-bold text-white">Tonypedia AI</h3>
+      <button
+        id="chatbot-close"
+        class="text-white hover:opacity-80 transition-opacity"
+        aria-label="Close chat"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Messages Area -->
+    <div id="chatbot-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
+      <div class="text-sm text-gray-300 bg-white/5 rounded-lg p-3">
+        👋 Hi! I'm the Tonypedia AI assistant. Ask me anything about our articles or topics
+        we cover!
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="border-t border-white/10 p-4">
+      <form id="chatbot-form" class="flex gap-2">
+        <input
+          id="chatbot-input"
+          type="text"
+          placeholder="Ask something..."
+          class="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm"
+        />
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 font-medium text-sm"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  interface Message {
+    role: 'user' | 'assistant';
+    content: string;
+    sources?: Array<{ title: string; url: string }>;
+  }
+
+  let messages: Message[] = [];
+  let isLoading = false;
+
+  function initChatbot() {
+    const toggle = document.getElementById('chatbot-toggle');
+    const panel = document.getElementById('chatbot-panel');
+    const closeBtn = document.getElementById('chatbot-close');
+    const form = document.getElementById('chatbot-form');
+    const input = document.getElementById('chatbot-input') as HTMLInputElement;
+    const messagesBox = document.getElementById('chatbot-messages');
+
+    // Toggle panel
+    toggle?.addEventListener('click', () => {
+      panel?.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', panel?.classList.contains('hidden') ? 'false' : 'true');
+      if (!panel?.classList.contains('hidden')) {
+        input?.focus();
+      }
+    });
+
+    closeBtn?.addEventListener('click', () => {
+      panel?.classList.add('hidden');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
+
+    // Handle form submission
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const message = input?.value.trim();
+      if (!message || isLoading) return;
+
+      // Add user message
+      messages.push({ role: 'user', content: message });
+      if (messagesBox) {
+        messagesBox.insertAdjacentHTML(
+          'beforeend',
+          `
+          <div class="text-sm bg-blue-500/30 text-white rounded-lg p-3 self-end ml-12">
+            ${message}
+          </div>
+        `
+        );
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+      }
+
+      if (input) {
+        input.value = '';
+      }
+
+      // Show loading indicator
+      isLoading = true;
+      if (messagesBox) {
+        messagesBox.insertAdjacentHTML(
+          'beforeend',
+          `
+          <div class="text-sm bg-white/10 text-gray-300 rounded-lg p-3">
+            <div class="flex gap-1">
+              <div class="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style="animation-delay: 0ms"></div>
+              <div class="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style="animation-delay: 150ms"></div>
+              <div class="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style="animation-delay: 300ms"></div>
+            </div>
+          </div>
+        `
+        );
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+      }
+
+      try {
+        // Send to API
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message,
+            history: messages.slice(-5),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('API request failed');
+        }
+
+        const data = await response.json();
+        const assistantMessage: Message = {
+          role: 'assistant',
+          content: data.response,
+          sources: data.sources,
+        };
+        messages.push(assistantMessage);
+
+        // Remove loading indicator
+        if (messagesBox) {
+          const loading = messagesBox.querySelector('div:last-child');
+          if (loading) loading.remove();
+        }
+
+        // Add assistant message
+        if (messagesBox) {
+          let html = `
+            <div class="text-sm bg-white/10 text-gray-200 rounded-lg p-3">
+              ${data.response}
+          `;
+
+          if (data.sources && data.sources.length > 0) {
+            html += '<div class="mt-3 pt-3 border-t border-white/10 space-y-1">';
+            data.sources.forEach(
+              (source: { title: string; url: string }) => {
+                html += `
+                <a href="${source.url}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 text-xs block">
+                  📄 ${source.title}
+                </a>
+              `;
+              }
+            );
+            html += '</div>';
+          }
+
+          html += '</div>';
+          messagesBox.insertAdjacentHTML('beforeend', html);
+          messagesBox.scrollTop = messagesBox.scrollHeight;
+        }
+      } catch (error) {
+        console.error('Chat error:', error);
+
+        // Remove loading indicator
+        if (messagesBox) {
+          const loading = messagesBox.querySelector('div:last-child');
+          if (loading) loading.remove();
+        }
+
+        // Show error message
+        if (messagesBox) {
+          messagesBox.insertAdjacentHTML(
+            'beforeend',
+            `
+            <div class="text-sm bg-red-500/30 text-red-200 rounded-lg p-3">
+              Sorry, I encountered an error. Please try again.
+            </div>
+          `
+          );
+          messagesBox.scrollTop = messagesBox.scrollHeight;
+        }
+      } finally {
+        isLoading = false;
+        input?.focus();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initChatbot);
+  } else {
+    initChatbot();
+  }
+
+  document.addEventListener('astro:after-swap', initChatbot);
+</script>

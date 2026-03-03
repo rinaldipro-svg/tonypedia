@@ -1,0 +1,38 @@
+---
+import ArticleCard from './ArticleCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  category: string;
+  currentSlug: string;
+  articles: CollectionEntry<'articles'>[];
+}
+
+const { category, currentSlug, articles } = Astro.props;
+
+const relatedArticles = articles
+  .filter((a) => a.data.category === category && a.slug !== currentSlug)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+---
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  {
+    relatedArticles.length > 0 ? (
+      relatedArticles.map((article) => (
+        <ArticleCard
+          title={article.data.title}
+          description={article.data.description}
+          category={article.data.category}
+          pubDate={article.data.pubDate}
+          slug={article.slug}
+          heroImage={article.data.heroImage}
+          readingTime={article.data.readingTime}
+          body={article.body}
+        />
+      ))
+    ) : (
+      <p class="text-gray-400 text-sm col-span-full">No related articles found.</p>
+    )
+  }
+</div>

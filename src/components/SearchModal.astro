@@ -1,0 +1,172 @@
+---
+---
+
+<div id="search-modal" class="fixed inset-0 z-50 hidden">
+  <!-- Overlay -->
+  <div
+    id="search-overlay"
+    class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+  ></div>
+
+  <!-- Modal Content -->
+  <div class="relative flex items-start justify-center pt-20 h-full">
+    <div class="w-full max-w-2xl mx-4 max-h-[80vh]">
+      <div class="glass-card rounded-2xl overflow-hidden">
+        <!-- Search Input -->
+        <div class="p-6 border-b border-white/10">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search articles..."
+            class="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none text-lg"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Results -->
+        <div
+          id="search-results"
+          class="overflow-y-auto max-h-[calc(80vh-120px)] p-6"
+        >
+          <p class="text-gray-400 text-sm">
+            Start typing to search articles...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let searchIndex: Array<{
+    slug: string;
+    title: string;
+    description: string;
+    category: string;
+    tags: string[];
+    url: string;
+  }> = [];
+
+  async function loadSearchIndex() {
+    try {
+      const response = await fetch('/search-index.json');
+      searchIndex = await response.json();
+    } catch (error) {
+      console.error('Failed to load search index:', error);
+    }
+  }
+
+  function initSearch() {
+    const modal = document.getElementById('search-modal');
+    const overlay = document.getElementById('search-overlay');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+
+    // Load search index on first interaction
+    loadSearchIndex();
+
+    // Open search modal
+    window.addEventListener('open-search', () => {
+      modal?.classList.remove('hidden');
+      input?.focus();
+    });
+
+    // Close on overlay click
+    overlay?.addEventListener('click', () => {
+      modal?.classList.add('hidden');
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        modal?.classList.add('hidden');
+      }
+    });
+
+    // Search functionality
+    input?.addEventListener('input', (e) => {
+      const query = (e.target as HTMLInputElement).value.toLowerCase();
+
+      if (!query) {
+        if (results) {
+          results.innerHTML = '<p class="text-gray-400 text-sm">Start typing to search articles...</p>';
+        }
+        return;
+      }
+
+      const filtered = searchIndex.filter(
+        (article) =>
+          article.title.toLowerCase().includes(query) ||
+          article.description.toLowerCase().includes(query) ||
+          article.tags.some((tag) => tag.toLowerCase().includes(query))
+      );
+
+      if (results) {
+        if (filtered.length === 0) {
+          results.innerHTML = '<p class="text-gray-400 text-sm">No articles found.</p>';
+        } else {
+          results.innerHTML = filtered
+            .map(
+              (article) => `
+            <a href="${article.url}" class="block p-4 hover:bg-white/5 rounded-lg transition-colors duration-200 group">
+              <p class="text-white font-semibold group-hover:text-blue-400 transition-colors duration-200 text-sm mb-1">
+                ${article.title}
+              </p>
+              <p class="text-gray-400 text-xs mb-2 line-clamp-2">
+                ${article.description}
+              </p>
+              <div class="flex items-center gap-2 text-xs text-gray-500">
+                <span class="px-2 py-1 bg-white/5 rounded">${article.category}</span>
+              </div>
+            </a>
+          `
+            )
+            .join('');
+        }
+      }
+    });
+
+    // Close modal when article link is clicked
+    results?.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) {
+        modal?.classList.add('hidden');
+        if (input) {
+          (input as HTMLInputElement).value = '';
+        }
+      }
+    });
+
+    // Focus trap in modal
+    modal?.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        const focusableElements = modal?.querySelectorAll(
+          'input, a, button'
+        );
+        if (!focusableElements || focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSearch);
+  } else {
+    initSearch();
+  }
+
+  document.addEventListener('astro:after-swap', initSearch);
+</script>

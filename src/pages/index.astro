@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import StatsBar from '../components/StatsBar.astro';
+import CategoryLane from '../components/CategoryLane.astro';
+import Newsletter from '../components/Newsletter.astro';
+import { CATEGORIES } from '../utils/categories';
+
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+
+const sortedArticles = allArticles.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+const featuredArticle =
+  sortedArticles.find((a) => a.data.featured) || sortedArticles[0];
+---
+
+<BaseLayout title="Tonypedia - Your World, Explained" description="A curated knowledge hub covering technology, geopolitics, society, music, movies, and events.">
+  {featuredArticle && (
+    <Hero
+      title={featuredArticle.data.title}
+      description={featuredArticle.data.description}
+      category={featuredArticle.data.category}
+      pubDate={featuredArticle.data.pubDate}
+      slug={featuredArticle.slug}
+      heroImage={featuredArticle.data.heroImage}
+      readingTime={featuredArticle.data.readingTime}
+      body={featuredArticle.body}
+    />
+  )}
+
+  <StatsBar articles={sortedArticles} />
+
+  {Object.keys(CATEGORIES).map((category) => (
+    <CategoryLane
+      category={category as keyof typeof CATEGORIES}
+      articles={sortedArticles}
+    />
+  ))}
+
+  <Newsletter />
+</BaseLayout>

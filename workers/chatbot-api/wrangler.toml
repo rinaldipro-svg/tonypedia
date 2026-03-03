@@ -1,0 +1,7 @@
+name = "tonypedia-chatbot"
+main = "index.ts"
+compatibility_date = "2025-03-01"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+vars = { SITE_URL = "https://tonypedia.pages.dev" }

@@ -1,0 +1,29 @@
+---
+import { CATEGORIES, type CategoryKey } from '../utils/categories';
+
+interface Props {
+  category?: CategoryKey;
+  text?: string;
+  className?: string;
+}
+
+const { category, text, className = '' } = Astro.props;
+
+if (!category && !text) {
+  throw new Error('TagBadge requires either category or text prop');
+}
+
+const categoryData = category ? CATEGORIES[category] : null;
+const displayText = text || (categoryData ? categoryData.label : '');
+const colorClass = category 
+  ? `text-${CATEGORIES[category].color}-500 bg-${CATEGORIES[category].color}-500/20 border border-${CATEGORIES[category].color}-500/30`
+  : 'bg-gray-500/20 border border-gray-500/30 text-gray-400';
+---
+
+<span
+  class={`category-badge ${colorClass} inline-block ${className}`}
+  role="status"
+>
+  {categoryData && <span class="mr-1">{categoryData.icon}</span>}
+  {displayText}
+</span>

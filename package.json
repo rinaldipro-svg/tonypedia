@@ -1,0 +1,27 @@
+{
+  "name": "tonypedia-v2",
+  "version": "1.0.0",
+  "description": "Tonypedia V2 - Your World, Explained",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "keywords": [
+    "astro",
+    "knowledge-hub",
+    "content-collection"
+  ],
+  "author": "Tony",
+  "license": "MIT",
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@astrojs/rss": "latest",
+    "@astrojs/tailwind": "latest",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3",
+    "@tailwindcss/typography": "latest"
+  },
+  "devDependencies": {}
+}

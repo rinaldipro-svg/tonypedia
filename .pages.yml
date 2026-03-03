@@ -1,0 +1,34 @@
+content:
+  - name: articles
+    label: Articles
+    path: src/content/articles
+    type: collection
+    view:
+      fields: [title, category, pubDate, featured, draft]
+      sort: -pubDate
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: description, label: Description, type: text, required: true, config: { required: true } }
+      - name: category
+        label: Category
+        type: select
+        options:
+          - { label: Tech & Business, value: tech }
+          - { label: Geopolitics, value: geopolitics }
+          - { label: Society, value: society }
+          - { label: Music, value: music }
+          - { label: Movies, value: movies }
+          - { label: Events, value: events }
+      - { name: tags, label: Tags, type: string, list: true }
+      - { name: author, label: Author, type: string, default: Tony }
+      - { name: heroImage, label: Hero Image, type: image }
+      - { name: pubDate, label: Publish Date, type: date, required: true }
+      - { name: updatedDate, label: Updated Date, type: date }
+      - { name: readingTime, label: Reading Time (min), type: number }
+      - { name: featured, label: Featured, type: boolean, default: false }
+      - { name: draft, label: Draft, type: boolean, default: false }
+      - { name: body, label: Content, type: rich-text }
+
+media:
+  input: public/images
+  output: /images
