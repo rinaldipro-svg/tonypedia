@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "keywords": [
     "astro",
@@ -16,12 +18,15 @@
   "author": "Tony",
   "license": "MIT",
   "dependencies": {
-    "astro": "^5.0.0",
+    "@astrojs/cloudflare": "^12.6.12",
     "@astrojs/rss": "latest",
     "@astrojs/tailwind": "latest",
+    "@tailwindcss/typography": "latest",
+    "astro": "^5.0.0",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.3.3",
-    "@tailwindcss/typography": "latest"
+    "typescript": "^5.3.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "wrangler": "^4.69.0"
+  }
 }
