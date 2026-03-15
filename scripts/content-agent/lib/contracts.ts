@@ -1,13 +1,10 @@
-export const CATEGORY_KEYS = [
-  'tech',
-  'geopolitics',
-  'society',
-  'music',
-  'movies',
-  'events',
-] as const;
+import {
+  CATEGORY_KEYS,
+  type CategoryKey,
+} from '../../../src/shared/categories.js';
 
-export type CategoryKey = (typeof CATEGORY_KEYS)[number];
+export { CATEGORY_KEYS };
+export type { CategoryKey };
 
 export const AUDIENCE_OPTIONS = [
   'Founders',

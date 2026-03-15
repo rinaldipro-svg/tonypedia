@@ -1,16 +1,22 @@
+import {
+  CATEGORY_KEYS,
+  type CategoryKey,
+} from '../../src/shared/categories';
+
 interface Env {
   TELEGRAM_BOT_TOKEN: string;
   TELEGRAM_AUTHORIZED_USER_ID: string;
   ANTHROPIC_API_KEY: string;
   NOTION_API_KEY: string;
   NOTION_DATABASE_ID: string;
+  GITHUB_WORKFLOW_TOKEN: string;
+  GITHUB_REPO_OWNER: string;
+  GITHUB_REPO_NAME: string;
+  GITHUB_REPO_BRANCH?: string;
 }
 
-const CATEGORY_KEYS = ['tech', 'geopolitics', 'society', 'music', 'movies', 'events'] as const;
 const AUDIENCES = ['Founders', 'Marketers', 'Developers', 'General', 'Other'] as const;
 const TONES = ['Provocative', 'Educational', 'Data-driven', 'Conversational', 'Formal'] as const;
-
-type CategoryKey = (typeof CATEGORY_KEYS)[number];
 type Audience = (typeof AUDIENCES)[number];
 type Tone = (typeof TONES)[number];
 
@@ -128,6 +134,27 @@ async function sendTelegramMessage(env: Env, chatId: number, text: string): Prom
       text,
     }),
   });
+}
+
+async function triggerWorkflow(env: Env, workflowFileName: string): Promise<void> {
+  const branch = env.GITHUB_REPO_BRANCH || 'main';
+  const response = await fetch(
+    `https://api.github.com/repos/${env.GITHUB_REPO_OWNER}/${env.GITHUB_REPO_NAME}/actions/workflows/${workflowFileName}/dispatches`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.GITHUB_WORKFLOW_TOKEN}`,
+        Accept: 'application/vnd.github+json',
+        'User-Agent': 'tonypedia-content-feed-bot',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ref: branch }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`GitHub workflow dispatch failed (${response.status}): ${await response.text()}`);
+  }
 }
 
 async function parseFreeformIdea(env: Env, text: string): Promise<ParsedIdea> {
@@ -273,11 +300,76 @@ async function handleStatusCommand(env: Env, chatId: number): Promise<Response> 
   return new Response('OK');
 }
 
+async function handlePublishCommand(env: Env, chatId: number): Promise<Response> {
+  try {
+    const pages = await queryDatabase(env, {});
+    const counts: Record<string, number> = {};
+
+    for (const page of pages) {
+      const status = page.properties.Status?.select?.name ?? 'Unknown';
+      counts[status] = (counts[status] ?? 0) + 1;
+    }
+
+    if ((counts.Processing ?? 0) > 0) {
+      await sendTelegramMessage(
+        env,
+        chatId,
+        `A content run is already in progress.\n\nProcessing: ${counts.Processing}`
+      );
+      return new Response('OK');
+    }
+
+    if ((counts['Draft Sent'] ?? 0) > 0) {
+      await sendTelegramMessage(
+        env,
+        chatId,
+        `You already have ${counts['Draft Sent']} draft batch item(s) waiting for approval.\n\nApprove them from the email link before publishing.`
+      );
+      return new Response('OK');
+    }
+
+    if ((counts.Approved ?? 0) > 0) {
+      await triggerWorkflow(env, 'publish-approved.yml');
+      await sendTelegramMessage(
+        env,
+        chatId,
+        `Triggered Publish Approved Articles.\n\nApproved items queued for publish: ${counts.Approved}`
+      );
+      return new Response('OK');
+    }
+
+    if ((counts.Ready ?? 0) > 0) {
+      await triggerWorkflow(env, 'generate-articles.yml');
+      await sendTelegramMessage(
+        env,
+        chatId,
+        `Triggered Generate Articles.\n\nReady items in queue: ${counts.Ready}\nYou will still receive the draft approval email before anything is published.`
+      );
+      return new Response('OK');
+    }
+
+    await sendTelegramMessage(
+      env,
+      chatId,
+      'Nothing to publish right now.\n\nThere are no Ready or Approved items in the queue.'
+    );
+  } catch (error) {
+    console.error(error);
+    await sendTelegramMessage(
+      env,
+      chatId,
+      'I could not trigger the publish flow right now. Check the worker GitHub secrets and try again.'
+    );
+  }
+
+  return new Response('OK');
+}
+
 async function handleHelpCommand(env: Env, chatId: number): Promise<Response> {
   await sendTelegramMessage(
     env,
     chatId,
-    'Send any article idea as a plain message and I will add it to the Tonypedia queue.\n\nCommands:\n/status\n/help'
+    'Send any article idea as a plain message and I will add it to the Tonypedia queue.\n\nCommands:\n/status\n/publish\n/help'
   );
   return new Response('OK');
 }
@@ -298,6 +390,10 @@ async function handleTelegram(env: Env, request: Request): Promise<Response> {
 
   if (text === '/status') {
     return handleStatusCommand(env, message.chat.id);
+  }
+
+  if (text === '/publish') {
+    return handlePublishCommand(env, message.chat.id);
   }
 
   if (text === '/help') {

@@ -1,11 +1,12 @@
 import { defineCollection, z } from 'astro:content';
+import { CATEGORY_KEYS } from '../shared/categories';
 
 const articles = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
     description: z.string().max(200),
-    category: z.enum(['tech', 'geopolitics', 'society', 'music', 'movies', 'events']),
+    category: z.enum(CATEGORY_KEYS),
     tags: z.array(z.string()).default([]),
     author: z.string().default('Tony'),
     heroImage: z.string().optional(),

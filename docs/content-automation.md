@@ -47,6 +47,10 @@ Create or update the `Article Feed` database with these properties:
 - `ANTHROPIC_API_KEY`
 - `NOTION_API_KEY`
 - `NOTION_DATABASE_ID`
+- `GITHUB_WORKFLOW_TOKEN`
+- `GITHUB_REPO_OWNER`
+- `GITHUB_REPO_NAME`
+- `GITHUB_REPO_BRANCH` (optional, defaults to `main`)
 
 ### GitHub Actions
 
@@ -71,10 +75,16 @@ npx wrangler secret put TELEGRAM_AUTHORIZED_USER_ID
 npx wrangler secret put ANTHROPIC_API_KEY
 npx wrangler secret put NOTION_API_KEY
 npx wrangler secret put NOTION_DATABASE_ID
+npx wrangler secret put GITHUB_WORKFLOW_TOKEN
+npx wrangler secret put GITHUB_REPO_OWNER
+npx wrangler secret put GITHUB_REPO_NAME
+npx wrangler secret put GITHUB_REPO_BRANCH
 npx wrangler deploy
 ```
 
-Register Telegram’s webhook against:
+`GITHUB_WORKFLOW_TOKEN` should be a GitHub token that can dispatch Actions workflows for this repo.
+
+Register Telegram's webhook against:
 
 ```text
 https://<your-worker-url>/telegram
@@ -91,6 +101,14 @@ Approval link endpoint:
 ```text
 GET /approve/<batch-id>
 ```
+
+Telegram bot commands:
+
+- `/status` shows queue counts
+- `/publish` triggers the next safe workflow step:
+  - generates drafts if items are still `Ready`
+  - refuses to skip email approval if items are `Draft Sent`
+  - triggers publish immediately when items are already `Approved`
 
 ## Local Commands
 
