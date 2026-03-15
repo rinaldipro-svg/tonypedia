@@ -1,0 +1,13 @@
+{
+  "name": "tonypedia-content-feed-bot",
+  "version": "1.0.0",
+  "description": "Telegram intake and approval worker for Tonypedia content automation",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

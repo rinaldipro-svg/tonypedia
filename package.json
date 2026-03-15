@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "content:generate": "tsx scripts/content-agent/generate.ts",
+    "content:publish": "tsx scripts/content-agent/publish.ts",
+    "content:weekly-summary": "tsx scripts/content-agent/weekly-summary.ts"
   },
   "keywords": [
     "astro",
@@ -16,12 +19,17 @@
   "author": "Tony",
   "license": "MIT",
   "dependencies": {
-    "astro": "^5.0.0",
     "@astrojs/rss": "latest",
     "@astrojs/tailwind": "latest",
+    "@tailwindcss/typography": "latest",
+    "astro": "^5.0.0",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.3.3",
-    "@tailwindcss/typography": "latest"
+    "typescript": "^5.3.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/nodemailer": "^7.0.11",
+    "nodemailer": "^8.0.2",
+    "tsx": "^4.21.0"
+  }
 }

@@ -124,6 +124,16 @@ vars = { SITE_URL = "https://tonypedia.pages.dev" }
 
 For local development, the chatbot will error gracefully. For production, point to your deployed Worker.
 
+## 🛠️ Content Automation
+
+The repo now includes a separate Tonypedia content automation system for Telegram intake, Notion queueing, scheduled Anthropic article generation, email approvals, and GitHub-based publishing.
+
+Setup docs:
+
+- `docs/content-automation.md`
+- `workers/content-feed-bot/`
+- `scripts/content-agent/`
+
 ## 🚀 Deployment
 
 ### Deploy to Cloudflare Pages

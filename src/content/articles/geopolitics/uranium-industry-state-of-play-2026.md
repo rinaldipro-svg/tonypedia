@@ -1,7 +1,7 @@
 ---
 title: "Yellowcake and the New Arms Race: Inside the Global Scramble for Uranium"
 description: "As nuclear power stages its biggest comeback in decades, the uranium industry faces a widening gap between surging demand and constrained supply."
-category: "Energy"
+category: "geopolitics"
 tags: ["uranium", "nuclear-energy", "mining", "energy-security", "geopolitics", "china", "kazakhstan"]
 author: "Tony"
 heroImage: ""

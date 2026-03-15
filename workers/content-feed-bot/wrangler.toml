@@ -1,0 +1,4 @@
+name = "tonypedia-content-feed-bot"
+main = "index.ts"
+compatibility_date = "2025-03-01"
+
