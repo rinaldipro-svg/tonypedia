@@ -1,0 +1,53 @@
+---
+import { CATEGORIES, type CategoryKey } from '../utils/categories';
+
+interface Props {
+  label?: string;
+  category?: CategoryKey;
+  href?: string;
+  size?: 'sm' | 'md';
+  variant?: 'neutral' | 'category' | 'solid';
+  className?: string;
+}
+
+const {
+  label,
+  category,
+  href,
+  size = 'md',
+  variant = 'neutral',
+  className = '',
+} = Astro.props;
+
+const meta = category ? CATEGORIES[category] : null;
+const text = label ?? (meta ? meta.label : '');
+
+const sizeCx =
+  size === 'sm' ? 'px-2 py-0.5 text-[0.625rem]' : 'px-2.5 py-1 text-[0.7rem]';
+
+const Tag = (href ? 'a' : 'span') as any;
+
+const accentVar =
+  category != null ? `var(--cat-${category})` : 'var(--ink-dim)';
+
+const styleAttr =
+  variant === 'category'
+    ? `--chip-accent:${accentVar};color:${accentVar};border-color:color-mix(in oklab, ${accentVar} 35%, transparent);background:color-mix(in oklab, ${accentVar} 12%, transparent);`
+    : variant === 'solid'
+      ? `--chip-accent:${accentVar};color:var(--bg);background:${accentVar};border-color:${accentVar};`
+      : '';
+---
+
+<Tag
+  {...href ? { href } : {}}
+  class:list={[
+    'inline-flex items-center gap-1.5 rounded-full border font-mono uppercase tracking-[0.08em] transition-colors',
+    sizeCx,
+    variant === 'neutral' && 'border-line text-ink-dim hover:text-ink hover:border-line-2 bg-[color:color-mix(in_oklab,var(--ink)_4%,transparent)]',
+    className,
+  ]}
+  style={styleAttr || undefined}
+>
+  {meta && variant !== 'neutral' && <span aria-hidden="true">{meta.icon}</span>}
+  <span>{text}</span>
+</Tag>
