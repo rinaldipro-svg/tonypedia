@@ -21,39 +21,93 @@ const currentUrl = new URL(Astro.request.url).href;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0c0a08" />
+
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={currentUrl} />
     <meta property="og:type" content="website" />
-    
+
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
-    <!-- Google Fonts -->
+
+    <!-- Fonts: Fraunces (display), Space Grotesk (UI), JetBrains Mono (labels/mono) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    
+
     <title>{title}</title>
   </head>
-  <body>
+  <body class="bg-editorial min-h-screen">
     <Navbar />
     <main class="pt-24">
       <slot />
     </main>
     <Footer />
     <Chatbot />
+
+    <script>
+      // Global scroll-reveal observer for .reveal / .reveal-stagger
+      function initReveal() {
+        const els = document.querySelectorAll('.reveal, .reveal-stagger');
+        if (!els.length) return;
+        if (!('IntersectionObserver' in window)) {
+          els.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.05 }
+        );
+        els.forEach((el) => io.observe(el));
+      }
+
+      // Track pointer inside cards for the radial glow on .card
+      function initCardGlow() {
+        const cards = document.querySelectorAll<HTMLElement>('.card');
+        cards.forEach((card) => {
+          if ((card as any)._glowBound) return;
+          (card as any)._glowBound = true;
+          card.addEventListener('pointermove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            card.style.setProperty('--mx', `${x}%`);
+            card.style.setProperty('--my', `${y}%`);
+          });
+        });
+      }
+
+      function init() {
+        initReveal();
+        initCardGlow();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+      document.addEventListener('astro:after-swap', init);
+    </script>
   </body>
 </html>
