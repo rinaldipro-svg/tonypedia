@@ -2,34 +2,34 @@
 ---
 
 <div id="search-modal" class="fixed inset-0 z-50 hidden">
-  <!-- Overlay -->
   <div
     id="search-overlay"
-    class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+    class="absolute inset-0 bg-bg/80 backdrop-blur-md"
   ></div>
 
-  <!-- Modal Content -->
-  <div class="relative flex items-start justify-center pt-20 h-full">
+  <div class="relative flex items-start justify-center pt-24 h-full">
     <div class="w-full max-w-2xl mx-4 max-h-[80vh]">
-      <div class="glass-card rounded-2xl overflow-hidden">
-        <!-- Search Input -->
-        <div class="p-6 border-b border-white/10">
+      <div class="surface-panel overflow-hidden shadow-2xl">
+        <div class="p-5 border-b border-line flex items-center gap-3">
+          <svg class="w-4 h-4 text-ink-faint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
           <input
             id="search-input"
             type="text"
-            placeholder="Search articles..."
-            class="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none text-lg"
+            placeholder="Search articles, tags, topics…"
+            class="w-full bg-transparent text-ink placeholder:text-ink-faint focus:outline-none text-base font-ui"
             autocomplete="off"
           />
+          <kbd class="hidden md:inline-block label-mono border border-line rounded px-1.5 py-0.5">esc</kbd>
         </div>
 
-        <!-- Results -->
         <div
           id="search-results"
-          class="overflow-y-auto max-h-[calc(80vh-120px)] p-6"
+          class="overflow-y-auto max-h-[calc(80vh-72px)] p-3"
         >
-          <p class="text-gray-400 text-sm">
-            Start typing to search articles...
+          <p class="text-ink-dim text-sm px-3 py-4">
+            Start typing to search.
           </p>
         </div>
       </div>
@@ -56,40 +56,47 @@
     }
   }
 
+  function escapeHtml(str: string): string {
+    return str.replace(/[&<>"']/g, (c) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!)
+    );
+  }
+
   function initSearch() {
     const modal = document.getElementById('search-modal');
     const overlay = document.getElementById('search-overlay');
     const input = document.getElementById('search-input');
     const results = document.getElementById('search-results');
 
-    // Load search index on first interaction
     loadSearchIndex();
 
-    // Open search modal
     window.addEventListener('open-search', () => {
       modal?.classList.remove('hidden');
-      input?.focus();
+      (input as HTMLInputElement | null)?.focus();
     });
 
-    // Close on overlay click
     overlay?.addEventListener('click', () => {
       modal?.classList.add('hidden');
     });
 
-    // Close on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         modal?.classList.add('hidden');
       }
+      if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        modal?.classList.remove('hidden');
+        (input as HTMLInputElement | null)?.focus();
+      }
     });
 
-    // Search functionality
     input?.addEventListener('input', (e) => {
       const query = (e.target as HTMLInputElement).value.toLowerCase();
 
       if (!query) {
         if (results) {
-          results.innerHTML = '<p class="text-gray-400 text-sm">Start typing to search articles...</p>';
+          results.innerHTML =
+            '<p class="text-ink-dim text-sm px-3 py-4">Start typing to search.</p>';
         }
         return;
       }
@@ -101,62 +108,37 @@
           article.tags.some((tag) => tag.toLowerCase().includes(query))
       );
 
-      if (results) {
-        if (filtered.length === 0) {
-          results.innerHTML = '<p class="text-gray-400 text-sm">No articles found.</p>';
-        } else {
-          results.innerHTML = filtered
-            .map(
-              (article) => `
-            <a href="${article.url}" class="block p-4 hover:bg-white/5 rounded-lg transition-colors duration-200 group">
-              <p class="text-white font-semibold group-hover:text-blue-400 transition-colors duration-200 text-sm mb-1">
-                ${article.title}
-              </p>
-              <p class="text-gray-400 text-xs mb-2 line-clamp-2">
-                ${article.description}
-              </p>
-              <div class="flex items-center gap-2 text-xs text-gray-500">
-                <span class="px-2 py-1 bg-white/5 rounded">${article.category}</span>
-              </div>
-            </a>
-          `
-            )
-            .join('');
-        }
+      if (!results) return;
+
+      if (filtered.length === 0) {
+        results.innerHTML =
+          '<p class="text-ink-dim text-sm px-3 py-4">No matches.</p>';
+      } else {
+        results.innerHTML = filtered
+          .map(
+            (article) => `
+              <a href="${article.url}" class="block px-3 py-3 rounded-lg hover:bg-bg2 transition-colors group border border-transparent hover:border-line">
+                <p class="font-display text-base text-ink group-hover:text-amber-soft transition-colors line-clamp-1">
+                  ${escapeHtml(article.title)}
+                </p>
+                <p class="text-ink-dim text-xs mt-1 line-clamp-2">
+                  ${escapeHtml(article.description)}
+                </p>
+                <div class="flex items-center gap-2 text-[0.65rem] mt-2 label-mono">
+                  <span>${escapeHtml(article.category)}</span>
+                </div>
+              </a>
+            `
+          )
+          .join('');
       }
     });
 
-    // Close modal when article link is clicked
     results?.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('a')) {
         modal?.classList.add('hidden');
         if (input) {
           (input as HTMLInputElement).value = '';
-        }
-      }
-    });
-
-    // Focus trap in modal
-    modal?.addEventListener('keydown', (e) => {
-      if (e.key === 'Tab') {
-        const focusableElements = modal?.querySelectorAll(
-          'input, a, button'
-        );
-        if (!focusableElements || focusableElements.length === 0) return;
-
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-        if (e.shiftKey) {
-          if (document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement.focus();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement.focus();
-          }
         }
       }
     });
