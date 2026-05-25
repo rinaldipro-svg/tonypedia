@@ -4,8 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import StatsBar from '../components/StatsBar.astro';
 import CategoryLane from '../components/CategoryLane.astro';
+import CategorySubnav from '../components/CategorySubnav.astro';
 import Newsletter from '../components/Newsletter.astro';
-import { CATEGORIES } from '../utils/categories';
+import { CATEGORY_KEYS } from '../utils/categories';
 
 const allArticles = await getCollection('articles', ({ data }) => !data.draft);
 
@@ -17,7 +18,12 @@ const featuredArticle =
   sortedArticles.find((a) => a.data.featured) || sortedArticles[0];
 ---
 
-<BaseLayout title="Tonypedia - Your World, Explained" description="A curated knowledge hub covering technology, geopolitics, society, music, movies, and events.">
+<BaseLayout
+  title="Tonypedia — Your World, Explained"
+  description="A curated knowledge hub covering technology, geopolitics, society, music, movies, and events."
+>
+  <CategorySubnav active="all" />
+
   {featuredArticle && (
     <Hero
       title={featuredArticle.data.title}
@@ -33,11 +39,8 @@ const featuredArticle =
 
   <StatsBar articles={sortedArticles} />
 
-  {Object.keys(CATEGORIES).map((category) => (
-    <CategoryLane
-      category={category as keyof typeof CATEGORIES}
-      articles={sortedArticles}
-    />
+  {CATEGORY_KEYS.map((category) => (
+    <CategoryLane category={category} articles={sortedArticles} />
   ))}
 
   <Newsletter />
