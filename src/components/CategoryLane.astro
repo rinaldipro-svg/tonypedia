@@ -1,8 +1,9 @@
 ---
 import ArticleCard from './ArticleCard.astro';
+import SectionHeader from './SectionHeader.astro';
 import type { CollectionEntry } from 'astro:content';
 import type { CategoryKey } from '../utils/categories';
-import { CATEGORIES } from '../utils/categories';
+import { CATEGORIES, CATEGORY_KEYS } from '../utils/categories';
 
 interface Props {
   category: CategoryKey;
@@ -13,62 +14,56 @@ const { category, articles } = Astro.props;
 
 const categoryData = CATEGORIES[category];
 const categoryArticles = articles
-  .filter(a => a.data.category === category)
+  .filter((a) => a.data.category === category)
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 
-const borderColors: Record<CategoryKey, string> = {
-  tech: 'border-blue-500',
-  geopolitics: 'border-red-500',
-  society: 'border-violet-500',
-  music: 'border-amber-500',
-  movies: 'border-emerald-500',
-  events: 'border-pink-500',
-};
+const accent = `var(--cat-${category})`;
+const index = CATEGORY_KEYS.indexOf(category) + 1;
+const number = String(index).padStart(2, '0');
 ---
 
-<section class="max-w-6xl mx-auto px-6 py-12 md:py-16">
-  <div class={`border-l-4 ${borderColors[category]} pl-6 mb-8 flex items-center justify-between`}>
-    <div>
-      <h2 class="font-heading font-bold text-3xl md:text-4xl text-white">
-        <span class="mr-2">{categoryData.icon}</span>
-        {categoryData.label}
-      </h2>
-    </div>
-    <a
-      href={`/category/${category}`}
-      class="text-gray-400 hover:text-white transition-colors duration-200 font-medium text-sm"
-    >
-      View All →
-    </a>
-  </div>
+<section class="reveal">
+  <SectionHeader
+    number={number}
+    eyebrow={categoryData.label}
+    title={categoryData.label}
+    italicTail={`— what's happening.`}
+    href={`/category/${category}`}
+    hrefLabel="View all"
+    accent={accent}
+  />
 
-  {
-    categoryArticles.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {categoryArticles.map(article => (
-          <ArticleCard
-            title={article.data.title}
-            description={article.data.description}
-            category={article.data.category}
-            pubDate={article.data.pubDate}
-            slug={article.slug}
-            heroImage={article.data.heroImage}
-            readingTime={article.data.readingTime}
-            body={article.body}
-          />
-        ))}
-      </div>
-    ) : (
-      <div class="glass-card p-12 text-center">
-        <div class="text-6xl mb-4">{categoryData.icon}</div>
-        <h3 class="font-heading font-semibold text-xl text-gray-300 mb-2">
-          Coming Soon
-        </h3>
-        <p class="text-gray-400">
-          Articles for {categoryData.label} are coming soon. Check back later!
-        </p>
-      </div>
-    )
-  }
+  <div class="mx-auto max-w-content px-6">
+    {
+      categoryArticles.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal-stagger">
+          {categoryArticles.map((article) => (
+            <ArticleCard
+              title={article.data.title}
+              description={article.data.description}
+              category={article.data.category}
+              pubDate={article.data.pubDate}
+              slug={article.slug}
+              heroImage={article.data.heroImage}
+              readingTime={article.data.readingTime}
+              body={article.body}
+              tags={article.data.tags}
+            />
+          ))}
+        </div>
+      ) : (
+        <div
+          class="surface-panel p-12 text-center"
+          style={`background:linear-gradient(180deg, color-mix(in oklab, ${accent} 8%, var(--panel)) 0%, var(--panel) 100%);`}
+        >
+          <div class="text-4xl mb-3" aria-hidden="true">{categoryData.icon}</div>
+          <h3 class="font-display text-xl text-ink mb-2">More on the way</h3>
+          <p class="text-ink-dim text-sm">
+            {categoryData.label} pieces are in the pipeline.
+          </p>
+        </div>
+      )
+    }
+  </div>
 </section>
