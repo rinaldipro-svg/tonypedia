@@ -95,6 +95,9 @@ body {
 /* Card hover-lift + radial glow */
 .card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 14px;

@@ -32,6 +32,7 @@ const {
 const estimatedReadingTime = readingTime || getReadingTime(body);
 const meta = CATEGORIES[category];
 const accentVar = `var(--cat-${category})`;
+const hasImage = Boolean(heroImage && heroImage.trim());
 
 const titleCx =
   size === 'lg'
@@ -40,8 +41,23 @@ const titleCx =
       ? 'text-base'
       : 'text-xl';
 
-const imgCx =
+const visualCx =
   size === 'lg' ? 'h-64' : size === 'sm' ? 'h-32' : 'h-44';
+
+const iconCx =
+  size === 'lg' ? 'text-7xl' : size === 'sm' ? 'text-4xl' : 'text-5xl';
+
+const initials = title
+  .split(/\s+/)
+  .filter((w) => /^[A-Za-z]/.test(w))
+  .slice(0, 2)
+  .map((w) => w[0]!.toUpperCase())
+  .join('');
+
+const placeholderStyle = `background:
+  radial-gradient(120% 80% at 100% 0%, color-mix(in oklab, ${accentVar} 22%, transparent) 0%, transparent 60%),
+  radial-gradient(120% 80% at 0% 100%, color-mix(in oklab, ${accentVar} 14%, transparent) 0%, transparent 60%),
+  linear-gradient(160deg, color-mix(in oklab, ${accentVar} 10%, var(--panel)) 0%, var(--panel-2) 100%);`;
 ---
 
 <a
@@ -49,25 +65,63 @@ const imgCx =
   class="card group block overflow-hidden"
   style={`--card-accent:${accentVar};`}
 >
-  {
-    heroImage && (
-      <div class={`relative overflow-hidden border-b border-line ${imgCx}`}>
+  <!-- Visual slot: placeholder always renders; image overlays on top when present. -->
+  <div class={`relative overflow-hidden border-b border-line ${visualCx}`}>
+    <!-- On-brand placeholder layer -->
+    <div class="absolute inset-0" style={placeholderStyle}>
+      <!-- Faint grid texture so the slot has body even without an image -->
+      <div
+        class="absolute inset-0 opacity-40 pointer-events-none"
+        style="background-image: linear-gradient(to right, rgba(244,237,224,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(244,237,224,0.04) 1px, transparent 1px); background-size: 36px 36px;"
+      ></div>
+
+      <!-- Category icon, centered -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span
+          class={`${iconCx} leading-none transition-transform duration-500 group-hover:scale-110`}
+          style={`filter: drop-shadow(0 6px 24px color-mix(in oklab, ${accentVar} 50%, transparent));`}
+          aria-hidden="true"
+        >
+          {meta.icon}
+        </span>
+      </div>
+
+      <!-- Mono category label, bottom-left -->
+      <span
+        class="absolute bottom-3 left-4 label-mono"
+        style={`color:${accentVar};`}
+      >
+        {meta.label}
+      </span>
+
+      <!-- Initials monogram, top-right -->
+      {initials && (
+        <span
+          class="absolute top-3 right-4 font-display italic text-xs tracking-tight"
+          style="color: var(--ink-faint);"
+        >
+          {initials}
+        </span>
+      )}
+    </div>
+
+    {hasImage && (
+      <>
         <img
           src={heroImage}
-          alt={title}
+          alt=""
           loading="lazy"
+          onerror="this.style.display='none'"
           class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-panel/90 via-panel/10 to-transparent pointer-events-none"></div>
-      </div>
-    )
-  }
-  <div class="relative p-5 flex flex-col gap-3">
+      </>
+    )}
+  </div>
+
+  <div class="relative p-5 flex flex-col gap-3 flex-1">
     <div class="flex items-center gap-2 flex-wrap">
       <Chip category={category} variant="category" size="sm" />
-      <span class="label-mono text-ink-faint">
-        {meta.label === 'Tech & Business' ? 'Tech' : meta.label}
-      </span>
     </div>
 
     <h3
@@ -82,7 +136,7 @@ const imgCx =
       </p>
     )}
 
-    <div class="mt-1 flex items-center justify-between text-[0.7rem] text-ink-faint font-mono uppercase tracking-[0.08em]">
+    <div class="mt-auto flex items-center justify-between text-[0.7rem] text-ink-faint font-mono uppercase tracking-[0.08em] pt-2">
       <span>{formatDate(pubDate)}</span>
       <span>{estimatedReadingTime} min</span>
     </div>

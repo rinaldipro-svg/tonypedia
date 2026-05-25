@@ -28,6 +28,12 @@ const {
 const estimatedReadingTime = readingTime || getReadingTime(body);
 const meta = CATEGORIES[category];
 const accentVar = `var(--cat-${category})`;
+const hasImage = Boolean(heroImage && heroImage.trim());
+
+const placeholderStyle = `background:
+  radial-gradient(120% 80% at 100% 0%, color-mix(in oklab, ${accentVar} 28%, transparent) 0%, transparent 60%),
+  radial-gradient(120% 80% at 0% 100%, color-mix(in oklab, ${accentVar} 16%, transparent) 0%, transparent 60%),
+  linear-gradient(160deg, color-mix(in oklab, ${accentVar} 12%, var(--panel)) 0%, var(--panel-2) 100%);`;
 ---
 
 <section class="relative overflow-hidden">
@@ -76,31 +82,50 @@ const accentVar = `var(--cat-${category})`;
           class="card group block overflow-hidden"
           style={`--card-accent:${accentVar};`}
         >
-          {
-            heroImage ? (
-              <div class="relative aspect-[4/5] overflow-hidden">
+          <div class="relative aspect-[4/5] overflow-hidden">
+            <!-- On-brand placeholder underneath -->
+            <div class="absolute inset-0" style={placeholderStyle}>
+              <!-- Faint grid texture -->
+              <div
+                class="absolute inset-0 opacity-40 pointer-events-none"
+                style="background-image: linear-gradient(to right, rgba(244,237,224,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(244,237,224,0.04) 1px, transparent 1px); background-size: 44px 44px;"
+              ></div>
+
+              <!-- Large category icon, top -->
+              <div class="absolute top-10 left-8 right-8 flex">
+                <span
+                  class="text-7xl md:text-8xl leading-none"
+                  style={`filter: drop-shadow(0 12px 40px color-mix(in oklab, ${accentVar} 55%, transparent));`}
+                  aria-hidden="true"
+                >
+                  {meta.icon}
+                </span>
+              </div>
+
+              <!-- Category chip + quote, bottom -->
+              <div class="absolute bottom-0 left-0 right-0 p-8 space-y-3">
+                <Chip category={category} variant="category" size="sm" />
+                <p class="italic-accent text-2xl md:text-3xl text-ink leading-snug text-pretty">
+                  {description.split('.')[0]}.
+                </p>
+              </div>
+            </div>
+
+            {hasImage && (
+              <>
                 <img
                   src={heroImage}
-                  alt={title}
+                  alt=""
+                  onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='none');"
                   class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-panel/95 via-panel/30 to-transparent pointer-events-none"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-6">
                   <Chip category={category} variant="category" size="sm" />
                 </div>
-              </div>
-            ) : (
-              <div
-                class="relative aspect-[4/5] flex items-end p-8"
-                style={`background:linear-gradient(160deg, color-mix(in oklab, ${accentVar} 25%, var(--panel)) 0%, var(--panel) 70%);`}
-              >
-                <div class="space-y-3">
-                  <span class="label-mono">{meta.label}</span>
-                  <p class="italic-accent text-2xl text-ink">"{description.split('.')[0]}."</p>
-                </div>
-              </div>
-            )
-          }
+              </>
+            )}
+          </div>
         </a>
       </div>
     </div>
