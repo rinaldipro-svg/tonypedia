@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Deep Dives — Tonypedia"
+  description="Tonypedia Deep Dives: study-length pages on the topics that compound. Launching in Phase 2."
+>
+  <section class="mx-auto max-w-content px-6 pt-16 md:pt-24 pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+      <div class="md:col-span-7">
+        <div class="flex items-center gap-3 mb-6">
+          <span class="label-mono text-violet">03 · Deep Dives</span>
+          <span class="h-px w-12 block bg-line" aria-hidden="true"></span>
+        </div>
+        <h1 class="display text-5xl md:text-7xl text-ink text-balance mb-6">
+          Deep Dives <span class="italic-accent text-ink-dim">— coming in Phase 2.</span>
+        </h1>
+        <p class="text-lg text-ink-dim leading-relaxed max-w-xl mb-8">
+          Study-length pages on the topics that compound. Six in the pipeline
+          for launch: a global power map, quantum, Coppernico, rare materials,
+          the robotics matrix, and the uranium–nuclear stack.
+        </p>
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-line text-ink-dim hover:text-ink hover:border-line-2 transition-colors"
+        >
+          <span>← Back to the Hub</span>
+        </a>
+      </div>
+
+      <aside class="md:col-span-5">
+        <div
+          class="surface-panel p-8 h-full"
+          style="background:linear-gradient(180deg, color-mix(in oklab, var(--violet) 10%, var(--panel)) 0%, var(--panel) 100%);"
+        >
+          <span class="label-mono text-violet">Launch line-up</span>
+          <ul class="mt-6 space-y-3 text-sm text-ink-dim">
+            <li class="flex items-center gap-3 border-b border-line pb-3">
+              <span class="label-mono text-violet">01</span>
+              <span class="text-ink">Global Dominance Map</span>
+            </li>
+            <li class="flex items-center gap-3 border-b border-line pb-3">
+              <span class="label-mono text-violet">02</span>
+              <span class="text-ink">Quantum</span>
+            </li>
+            <li class="flex items-center gap-3 border-b border-line pb-3">
+              <span class="label-mono text-violet">03</span>
+              <span class="text-ink">Coppernico</span>
+            </li>
+            <li class="flex items-center gap-3 border-b border-line pb-3">
+              <span class="label-mono text-violet">04</span>
+              <span class="text-ink">Rare Materials</span>
+            </li>
+            <li class="flex items-center gap-3 border-b border-line pb-3">
+              <span class="label-mono text-violet">05</span>
+              <span class="text-ink">Robotics Matrix</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="label-mono text-violet">06</span>
+              <span class="text-ink">Uranium &amp; Nuclear</span>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

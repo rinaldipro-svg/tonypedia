@@ -1,8 +1,13 @@
 export function formatDate(date: Date): string {
+  // Frontmatter pubDate values are date-only strings (e.g. "2026-03-17") which
+  // z.coerce.date() parses as UTC midnight. Formatting in UTC keeps the
+  // displayed date equal to the authored calendar date regardless of the
+  // runtime timezone (otherwise machines west of UTC render the previous day).
   const formatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    timeZone: 'UTC',
   });
   return formatter.format(date);
 }

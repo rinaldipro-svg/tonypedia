@@ -1,0 +1,62 @@
+---
+import { CATEGORIES, CATEGORY_KEYS, type CategoryKey } from '../utils/categories';
+
+interface Props {
+  active?: CategoryKey | 'all';
+}
+
+const { active = 'all' } = Astro.props;
+---
+
+<nav aria-label="Hub categories" class="mx-auto max-w-content px-6">
+  <div class="flex items-center gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-none">
+    <a
+      href="/"
+      class:list={[
+        'shrink-0 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors',
+        active === 'all'
+          ? 'bg-ink text-bg border-ink'
+          : 'border-line text-ink-dim hover:text-ink hover:border-line-2',
+      ]}
+      aria-current={active === 'all' ? 'page' : undefined}
+    >
+      <span>All</span>
+    </a>
+    {
+      CATEGORY_KEYS.map((key: CategoryKey) => {
+        const meta = CATEGORIES[key];
+        const isActive = active === key;
+        const accent = `var(--cat-${key})`;
+        return (
+          <a
+            href={`/category/${key}`}
+            class:list={[
+              'shrink-0 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors',
+              isActive
+                ? ''
+                : 'border-line text-ink-dim hover:text-ink hover:border-line-2',
+            ]}
+            style={
+              isActive
+                ? `color:${accent};border-color:color-mix(in oklab, ${accent} 50%, transparent);background:color-mix(in oklab, ${accent} 14%, transparent);`
+                : undefined
+            }
+            aria-current={isActive ? 'page' : undefined}
+          >
+            <span aria-hidden="true">{meta.icon}</span>
+            <span>{meta.label}</span>
+          </a>
+        );
+      })
+    }
+  </div>
+</nav>
+
+<style>
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+</style>

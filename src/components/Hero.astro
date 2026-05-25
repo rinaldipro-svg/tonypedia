@@ -1,7 +1,7 @@
 ---
 import { formatDate, getReadingTime } from '../utils/helpers';
-import TagBadge from './TagBadge.astro';
-import type { CategoryKey } from '../utils/categories';
+import Chip from './Chip.astro';
+import { CATEGORIES, type CategoryKey } from '../utils/categories';
 
 interface Props {
   title: string;
@@ -26,36 +26,108 @@ const {
 } = Astro.props;
 
 const estimatedReadingTime = readingTime || getReadingTime(body);
+const meta = CATEGORIES[category];
+const accentVar = `var(--cat-${category})`;
+const hasImage = Boolean(heroImage && heroImage.trim());
+
+const placeholderStyle = `background:
+  radial-gradient(120% 80% at 100% 0%, color-mix(in oklab, ${accentVar} 28%, transparent) 0%, transparent 60%),
+  radial-gradient(120% 80% at 0% 100%, color-mix(in oklab, ${accentVar} 16%, transparent) 0%, transparent 60%),
+  linear-gradient(160deg, color-mix(in oklab, ${accentVar} 12%, var(--panel)) 0%, var(--panel-2) 100%);`;
 ---
 
-<section
-  class="relative min-h-[70vh] md:min-h-screen flex items-center justify-center overflow-hidden"
-  style={heroImage ? `background-image: linear-gradient(135deg, rgba(10,15,30,0.8) 0%, rgba(31,41,55,0.6) 100%), url('${heroImage}'); background-size: cover; background-position: center;` : 'background: linear-gradient(135deg, #0a0f1e 0%, #1f2937 100%);'}
->
-  <div class="absolute inset-0 bg-gradient-to-b from-navy-900 via-navy-900/60 to-transparent pointer-events-none"></div>
-  
-  <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-    <TagBadge category={category} className="justify-center mx-auto mb-6" />
-    
-    <h1 class="font-heading font-bold text-4xl md:text-6xl text-white mb-6 leading-tight text-balance">
-      {title}
-    </h1>
-    
-    <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
-      {description}
-    </p>
-    
-    <div class="flex items-center justify-center gap-4 text-sm text-gray-400 mb-8">
-      <span>{estimatedReadingTime} min read</span>
-      <span>•</span>
-      <span>{formatDate(pubDate)}</span>
+<section class="relative overflow-hidden">
+  <div class="mx-auto max-w-content px-6 pt-12 md:pt-16 pb-16 md:pb-24">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      <!-- Copy -->
+      <div class="lg:col-span-7 reveal-stagger">
+        <div class="flex items-center gap-3 mb-6">
+          <span
+            class="label-mono"
+            style={`color:${accentVar};`}
+          >
+            Featured · {meta.label}
+          </span>
+          <span class="h-px w-12 block bg-line" aria-hidden="true"></span>
+        </div>
+
+        <h1 class="display text-5xl md:text-7xl text-ink text-balance mb-6">
+          {title}
+        </h1>
+
+        <p class="text-lg md:text-xl text-ink-dim leading-relaxed max-w-2xl mb-8">
+          {description}
+        </p>
+
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-ink-faint font-mono uppercase tracking-[0.08em] mb-10">
+          <span>{formatDate(pubDate)}</span>
+          <span aria-hidden="true">·</span>
+          <span>{estimatedReadingTime} min read</span>
+        </div>
+
+        <a
+          href={`/articles/${slug}`}
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium text-bg transition-transform hover:-translate-y-0.5"
+          style={`background:${accentVar};`}
+        >
+          <span>Read article</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <!-- Visual -->
+      <div class="lg:col-span-5 reveal">
+        <a
+          href={`/articles/${slug}`}
+          class="card group block overflow-hidden"
+          style={`--card-accent:${accentVar};`}
+        >
+          <div class="relative aspect-[4/5] overflow-hidden">
+            <!-- On-brand placeholder underneath -->
+            <div class="absolute inset-0" style={placeholderStyle}>
+              <!-- Faint grid texture -->
+              <div
+                class="absolute inset-0 opacity-40 pointer-events-none"
+                style="background-image: linear-gradient(to right, rgba(244,237,224,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(244,237,224,0.04) 1px, transparent 1px); background-size: 44px 44px;"
+              ></div>
+
+              <!-- Large category icon, top -->
+              <div class="absolute top-10 left-8 right-8 flex">
+                <span
+                  class="text-7xl md:text-8xl leading-none"
+                  style={`filter: drop-shadow(0 12px 40px color-mix(in oklab, ${accentVar} 55%, transparent));`}
+                  aria-hidden="true"
+                >
+                  {meta.icon}
+                </span>
+              </div>
+
+              <!-- Category chip + quote, bottom -->
+              <div class="absolute bottom-0 left-0 right-0 p-8 space-y-3">
+                <Chip category={category} variant="category" size="sm" />
+                <p class="italic-accent text-2xl md:text-3xl text-ink leading-snug text-pretty">
+                  {description.split('.')[0]}.
+                </p>
+              </div>
+            </div>
+
+            {hasImage && (
+              <>
+                <img
+                  src={heroImage}
+                  alt=""
+                  onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='none');"
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-panel/95 via-panel/30 to-transparent pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                  <Chip category={category} variant="category" size="sm" />
+                </div>
+              </>
+            )}
+          </div>
+        </a>
+      </div>
     </div>
-    
-    <a
-      href={`/articles/${slug}`}
-      class="inline-block px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors duration-200"
-    >
-      Read Article →
-    </a>
   </div>
 </section>

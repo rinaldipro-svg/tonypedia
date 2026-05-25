@@ -1,0 +1,69 @@
+---
+interface Props {
+  number?: string;
+  eyebrow?: string;
+  title: string;
+  italicTail?: string;
+  description?: string;
+  href?: string;
+  hrefLabel?: string;
+  accent?: string;
+}
+
+const {
+  number,
+  eyebrow,
+  title,
+  italicTail,
+  description,
+  href,
+  hrefLabel = 'View all',
+  accent,
+} = Astro.props;
+---
+
+<header class="mx-auto max-w-content px-6 mb-10 mt-16 md:mt-24">
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+    <div class="md:col-span-8">
+      {
+        (number || eyebrow) && (
+          <div class="flex items-center gap-3 mb-4">
+            {number && (
+              <span
+                class="label-mono"
+                style={accent ? `color:${accent};` : undefined}
+              >
+                {number}
+              </span>
+            )}
+            {number && eyebrow && (
+              <span class="h-px w-8 bg-line block" aria-hidden="true"></span>
+            )}
+            {eyebrow && <span class="label-mono">{eyebrow}</span>}
+          </div>
+        )
+      }
+      <h2 class="display text-4xl md:text-5xl text-ink text-balance">
+        {title}
+        {italicTail && <span class="italic-accent text-ink-dim"> {italicTail}</span>}
+      </h2>
+    </div>
+
+    <div class="md:col-span-4 md:text-right space-y-3">
+      {description && (
+        <p class="text-ink-dim text-sm leading-relaxed max-w-sm md:ml-auto">
+          {description}
+        </p>
+      )}
+      {href && (
+        <a
+          href={href}
+          class="inline-flex items-center gap-2 text-sm text-ink hover:text-amber transition-colors group"
+        >
+          <span>{hrefLabel}</span>
+          <span class="transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      )}
+    </div>
+  </div>
+</header>

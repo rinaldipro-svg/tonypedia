@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import CategorySubnav from '../../components/CategorySubnav.astro';
 
 const allArticles = await getCollection('articles', ({ data }) => !data.draft);
 const sortedArticles = allArticles.sort(
@@ -9,18 +10,29 @@ const sortedArticles = allArticles.sort(
 );
 ---
 
-<BaseLayout title="All Articles" description="Explore all articles from Tonypedia across all categories.">
-  <div class="max-w-6xl mx-auto px-6 py-12 md:py-16">
-    <h1 class="font-heading font-bold text-4xl md:text-5xl text-white mb-2">
-      All Articles
-    </h1>
-    <p class="text-gray-400 mb-12">
-      {sortedArticles.length} articles across all categories
-    </p>
+<BaseLayout title="All Articles | Tonypedia" description="Every article on Tonypedia, sorted by publish date.">
+  <CategorySubnav active="all" />
 
+  <header class="mx-auto max-w-content px-6 pt-12 md:pt-16 pb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="label-mono">Archive</span>
+      <span class="h-px w-12 block bg-line" aria-hidden="true"></span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+      <h1 class="md:col-span-8 display text-5xl md:text-6xl text-ink text-balance">
+        All articles
+      </h1>
+      <p class="md:col-span-4 md:text-right text-ink-dim text-sm">
+        {sortedArticles.length} article{sortedArticles.length !== 1 ? 's' : ''} ·
+        across all categories
+      </p>
+    </div>
+  </header>
+
+  <section class="mx-auto max-w-content px-6 pb-16">
     {
       sortedArticles.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger">
           {sortedArticles.map((article) => (
             <ArticleCard
               title={article.data.title}
@@ -31,14 +43,15 @@ const sortedArticles = allArticles.sort(
               heroImage={article.data.heroImage}
               readingTime={article.data.readingTime}
               body={article.body}
+              tags={article.data.tags}
             />
           ))}
         </div>
       ) : (
-        <div class="glass-card p-12 text-center">
-          <p class="text-gray-400">No articles found yet.</p>
+        <div class="surface-panel p-12 text-center">
+          <p class="text-ink-dim text-sm">No articles found yet.</p>
         </div>
       )
     }
-  </div>
+  </section>
 </BaseLayout>

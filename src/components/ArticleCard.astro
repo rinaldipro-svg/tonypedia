@@ -1,7 +1,7 @@
 ---
 import { formatDate, getReadingTime } from '../utils/helpers';
-import TagBadge from './TagBadge.astro';
-import type { CategoryKey } from '../utils/categories';
+import Chip from './Chip.astro';
+import { CATEGORIES, type CategoryKey } from '../utils/categories';
 
 interface Props {
   title: string;
@@ -12,6 +12,8 @@ interface Props {
   heroImage?: string;
   readingTime?: number;
   body?: string;
+  tags?: string[];
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const {
@@ -23,36 +25,132 @@ const {
   heroImage,
   readingTime,
   body = '',
+  tags = [],
+  size = 'md',
 } = Astro.props;
 
 const estimatedReadingTime = readingTime || getReadingTime(body);
+const meta = CATEGORIES[category];
+const accentVar = `var(--cat-${category})`;
+const hasImage = Boolean(heroImage && heroImage.trim());
+
+const titleCx =
+  size === 'lg'
+    ? 'text-2xl md:text-3xl'
+    : size === 'sm'
+      ? 'text-base'
+      : 'text-xl';
+
+const visualCx =
+  size === 'lg' ? 'h-64' : size === 'sm' ? 'h-32' : 'h-44';
+
+const iconCx =
+  size === 'lg' ? 'text-7xl' : size === 'sm' ? 'text-4xl' : 'text-5xl';
+
+const initials = title
+  .split(/\s+/)
+  .filter((w) => /^[A-Za-z]/.test(w))
+  .slice(0, 2)
+  .map((w) => w[0]!.toUpperCase())
+  .join('');
+
+const placeholderStyle = `background:
+  radial-gradient(120% 80% at 100% 0%, color-mix(in oklab, ${accentVar} 22%, transparent) 0%, transparent 60%),
+  radial-gradient(120% 80% at 0% 100%, color-mix(in oklab, ${accentVar} 14%, transparent) 0%, transparent 60%),
+  linear-gradient(160deg, color-mix(in oklab, ${accentVar} 10%, var(--panel)) 0%, var(--panel-2) 100%);`;
 ---
 
 <a
   href={`/articles/${slug}`}
-  class="glass-card group overflow-hidden block hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+  class="card group block overflow-hidden"
+  style={`--card-accent:${accentVar};`}
 >
-  {
-    heroImage && (
-      <img
-        src={heroImage}
-        alt={title}
-        class="w-full h-48 object-cover rounded-t-2xl group-hover:brightness-110 transition-all duration-300"
-        loading="lazy"
-      />
-    )
-  }
-  <div class="p-6 flex flex-col h-full">
-    <TagBadge category={category} />
-    <h3 class="font-heading font-semibold text-lg mt-4 text-white group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
+  <!-- Visual slot: placeholder always renders; image overlays on top when present. -->
+  <div class={`relative overflow-hidden border-b border-line ${visualCx}`}>
+    <!-- On-brand placeholder layer -->
+    <div class="absolute inset-0" style={placeholderStyle}>
+      <!-- Faint grid texture so the slot has body even without an image -->
+      <div
+        class="absolute inset-0 opacity-40 pointer-events-none"
+        style="background-image: linear-gradient(to right, rgba(244,237,224,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(244,237,224,0.04) 1px, transparent 1px); background-size: 36px 36px;"
+      ></div>
+
+      <!-- Category icon, centered -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span
+          class={`${iconCx} leading-none transition-transform duration-500 group-hover:scale-110`}
+          style={`filter: drop-shadow(0 6px 24px color-mix(in oklab, ${accentVar} 50%, transparent));`}
+          aria-hidden="true"
+        >
+          {meta.icon}
+        </span>
+      </div>
+
+      <!-- Mono category label, bottom-left -->
+      <span
+        class="absolute bottom-3 left-4 label-mono"
+        style={`color:${accentVar};`}
+      >
+        {meta.label}
+      </span>
+
+      <!-- Initials monogram, top-right -->
+      {initials && (
+        <span
+          class="absolute top-3 right-4 font-display italic text-xs tracking-tight"
+          style="color: var(--ink-faint);"
+        >
+          {initials}
+        </span>
+      )}
+    </div>
+
+    {hasImage && (
+      <>
+        <img
+          src={heroImage}
+          alt=""
+          loading="lazy"
+          onerror="this.style.display='none'"
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-panel/90 via-panel/10 to-transparent pointer-events-none"></div>
+      </>
+    )}
+  </div>
+
+  <div class="relative p-5 flex flex-col gap-3 flex-1">
+    <div class="flex items-center gap-2 flex-wrap">
+      <Chip category={category} variant="category" size="sm" />
+    </div>
+
+    <h3
+      class={`font-display font-black text-ink leading-tight transition-colors group-hover:text-amber-soft ${titleCx}`}
+    >
       {title}
     </h3>
-    <p class="text-sm text-gray-400 line-clamp-2 mt-2 mb-4">
-      {description}
-    </p>
-    <div class="mt-auto flex items-center justify-between text-xs text-gray-500">
-      <span>{estimatedReadingTime} min read</span>
+
+    {size !== 'sm' && (
+      <p class="text-sm text-ink-dim leading-relaxed line-clamp-3">
+        {description}
+      </p>
+    )}
+
+    <div class="mt-auto flex items-center justify-between text-[0.7rem] text-ink-faint font-mono uppercase tracking-[0.08em] pt-2">
       <span>{formatDate(pubDate)}</span>
+      <span>{estimatedReadingTime} min</span>
     </div>
+
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-1.5 pt-3 border-t border-line">
+        {tags.slice(0, 3).map((tag) => (
+          <Chip
+            label={`#${tag}`}
+            href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}`}
+            size="sm"
+          />
+        ))}
+      </div>
+    )}
   </div>
 </a>
