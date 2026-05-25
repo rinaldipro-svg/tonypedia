@@ -16,7 +16,7 @@ const relatedArticles = articles
   .slice(0, 3);
 ---
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal-stagger">
   {
     relatedArticles.length > 0 ? (
       relatedArticles.map((article) => (
@@ -29,10 +29,11 @@ const relatedArticles = articles
           heroImage={article.data.heroImage}
           readingTime={article.data.readingTime}
           body={article.body}
+          tags={article.data.tags}
         />
       ))
     ) : (
-      <p class="text-gray-400 text-sm col-span-full">No related articles found.</p>
+      <p class="text-ink-dim text-sm col-span-full">No related articles found.</p>
     )
   }
 </div>

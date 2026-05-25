@@ -27,28 +27,37 @@ const tagArticles = allArticles
   )
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const displayTag = tagArticles.length > 0 
-  ? tagArticles[0].data.tags.find((t) => t.toLowerCase().replace(/\s+/g, '-') === tag)
-  : tag;
+const displayTag =
+  tagArticles.length > 0
+    ? tagArticles[0].data.tags.find(
+        (t) => t.toLowerCase().replace(/\s+/g, '-') === tag
+      )
+    : tag;
 ---
 
 <BaseLayout
   title={`#${displayTag} | Tonypedia`}
-  description={`Articles tagged with ${tag} on Tonypedia.`}
+  description={`Articles tagged with ${displayTag} on Tonypedia.`}
 >
-  <div class="max-w-6xl mx-auto px-6 py-12 md:py-16">
-    <div class="mb-12">
-      <h1 class="font-heading font-bold text-4xl md:text-5xl text-white mb-2">
-        #{displayTag}
+  <header class="mx-auto max-w-content px-6 pt-12 md:pt-16 pb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="label-mono">Tag</span>
+      <span class="h-px w-12 block bg-line" aria-hidden="true"></span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+      <h1 class="md:col-span-8 display text-5xl md:text-6xl text-ink text-balance">
+        #<span class="italic-accent text-amber-soft">{displayTag}</span>
       </h1>
-      <p class="text-gray-400">
+      <p class="md:col-span-4 md:text-right text-ink-dim text-sm">
         {tagArticles.length} article{tagArticles.length !== 1 ? 's' : ''}
       </p>
     </div>
+  </header>
 
+  <section class="mx-auto max-w-content px-6 pb-16">
     {
       tagArticles.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger">
           {tagArticles.map((article) => (
             <ArticleCard
               title={article.data.title}
@@ -59,19 +68,16 @@ const displayTag = tagArticles.length > 0
               heroImage={article.data.heroImage}
               readingTime={article.data.readingTime}
               body={article.body}
+              tags={article.data.tags}
             />
           ))}
         </div>
       ) : (
-        <div class="glass-card p-12 text-center">
-          <h2 class="font-heading font-semibold text-xl text-gray-300 mb-2">
-            No articles found
-          </h2>
-          <p class="text-gray-400">
-            No articles are tagged with #{tag}.
-          </p>
+        <div class="surface-panel p-12 text-center">
+          <h2 class="font-display text-2xl text-ink mb-2">Nothing here yet</h2>
+          <p class="text-ink-dim text-sm">No articles are tagged with #{displayTag}.</p>
         </div>
       )
     }
-  </div>
+  </section>
 </BaseLayout>
