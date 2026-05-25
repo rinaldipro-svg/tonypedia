@@ -1,0 +1,162 @@
+/* Tonypedia v3 design tokens — dark editorial. Single source of truth. */
+
+:root {
+  /* Surfaces */
+  --bg: #0c0a08;
+  --bg2: #12100c;
+  --panel: #16130e;
+  --panel2: #1c1810;
+
+  /* Ink */
+  --ink: #f4ede0;
+  --ink-dim: #a89a82;
+  --ink-faint: #6f6353;
+
+  /* Lines */
+  --line: #2a251c;
+  --line2: #37301f;
+
+  /* Accents */
+  --amber: #ff7a2f;
+  --amber-soft: #f7b267;
+  --sky: #5cc8ff;
+  --acid: #c8ff4d;
+  --violet: #b89bff;
+  --rose: #ff6f91;
+  --green: #6fdc8c;
+
+  /* Per-Hub-category accent (sourced from accents above) */
+  --cat-tech: var(--amber);
+  --cat-geopolitics: var(--sky);
+  --cat-society: var(--violet);
+  --cat-music: var(--rose);
+  --cat-movies: var(--green);
+  --cat-events: var(--acid);
+
+  /* Type stacks */
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-ui: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Layout */
+  --max-content: 72rem;
+  --max-prose: 44rem;
+}
+
+/* Base body styling — applied via Tailwind base in global.css */
+html {
+  background-color: var(--bg);
+  color: var(--ink);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Page background: faint grid + grain over base color */
+.bg-editorial {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(rgba(244, 237, 224, 0.025) 1px, transparent 1px),
+    linear-gradient(to right, rgba(244, 237, 224, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 237, 224, 0.025) 1px, transparent 1px);
+  background-size: 3px 3px, 56px 56px, 56px 56px;
+  background-position: 0 0, 0 0, 0 0;
+}
+
+/* Display headline accent — Fraunces italic */
+.display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+}
+.display em,
+.display i,
+.italic-accent {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Mono label utility */
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* Card hover-lift + radial glow */
+.card {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: transform 240ms ease, border-color 240ms ease, background 240ms ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--line2);
+  background: var(--panel2);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in oklab, var(--card-accent, var(--amber)) 22%, transparent) 0%,
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Scroll reveal — opt-in via .reveal; activated by class .is-visible added by IO */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+.reveal-stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+.reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0ms; }
+.reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 60ms; }
+.reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 120ms; }
+.reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 180ms; }
+.reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 240ms; }
+.reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 300ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .card {
+    transition: none;
+  }
+}
