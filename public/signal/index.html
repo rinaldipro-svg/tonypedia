@@ -310,8 +310,68 @@
   .reader-frame{flex:1;border:none;width:100%;background:#fff}
   .reader-pill{width:8px;height:8px;border-radius:50%;background:var(--ra,var(--amber));box-shadow:0 0 10px var(--ra,var(--amber));flex-shrink:0}
 </style>
+<!-- Tonypedia shared nav (injected) -->
+<style>
+  .tp-nav, .tp-nav * { box-sizing: border-box; }
+  .tp-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    background: rgba(12, 10, 8, 0.85);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-bottom: 1px solid #2a251c;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    color: #f4ede0;
+  }
+  .tp-nav-inner {
+    max-width: 72rem; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .tp-nav-brand {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Fraunces', Georgia, serif; font-weight: 900; font-size: 20px;
+    color: #f4ede0; text-decoration: none; letter-spacing: -0.02em;
+    transition: opacity 200ms ease;
+  }
+  .tp-nav-brand:hover { opacity: 0.9; }
+  .tp-nav-brand-dot { color: #ff7a2f; }
+  .tp-nav-switcher {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #16130e; border: 1px solid #2a251c;
+    padding: 4px; border-radius: 999px;
+  }
+  .tp-nav-link {
+    padding: 6px 16px; border-radius: 999px;
+    font-size: 14px; font-weight: 500; line-height: 1;
+    color: #a89a82; text-decoration: none; font-family: inherit;
+    transition: color 200ms ease, background 200ms ease;
+  }
+  .tp-nav-link:hover { color: #f4ede0; }
+  .tp-nav-link.is-active { background: #f4ede0; color: #0c0a08; }
+  .tp-nav-spacer { width: 80px; }
+  @media (max-width: 767px) {
+    .tp-nav-switcher { display: none; }
+    .tp-nav-spacer { display: none; }
+  }
+  body { padding-top: 64px; }
+  /* SIGNAL's own sticky topbar/catnav — offset them below the Tonypedia nav */
+  .topbar { top: 64px; }
+  .catnav { top: 125px; }
+</style>
 </head>
 <body>
+<nav class="tp-nav" aria-label="Tonypedia">
+  <div class="tp-nav-inner">
+    <a class="tp-nav-brand" href="/">
+      <span class="tp-nav-brand-dot">●</span>
+      <span>Tonypedia</span>
+    </a>
+    <div class="tp-nav-switcher">
+      <a class="tp-nav-link" href="/">Hub</a>
+      <a class="tp-nav-link is-active" href="/signal/" aria-current="page">Feed</a>
+      <a class="tp-nav-link" href="/studies/">Deep Dives</a>
+    </div>
+    <div class="tp-nav-spacer" aria-hidden="true"></div>
+  </div>
+</nav>
 
 <!-- TOP BAR -->
 <div class="topbar">

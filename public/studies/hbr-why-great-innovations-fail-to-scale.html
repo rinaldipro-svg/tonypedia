@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Great Innovations Fail to Scale — HBR Mar–Apr 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,900;9..144,1,400;9..144,1,600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0a08;
+    --bg2: #12100c;
+    --panel: #16130e;
+    --panel2: #1c1810;
+    --ink: #f4ede0;
+    --ink-dim: #a89a82;
+    --ink-faint: #6f6353;
+    --line: #2a251c;
+    --line2: #37301f;
+    --amber: #ff7a2f;
+    --amber-soft: #f7b267;
+    --acid: #c8ff4d;
+    --sky: #5cc8ff;
+    --violet: #b89bff;
+    --rose: #ff6f91;
+    --green: #6fdc8c;
+    --accent: #5cc8ff;
+    --accent-dim: rgba(92,200,255,.12);
+    --accent-glow: rgba(92,200,255,.2);
+    --shadow: 0 18px 50px -18px rgba(0,0,0,.85);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(92,200,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(92,200,255,.025) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, #000 30%, transparent 80%);
+  }
+
+  body::after {
+    content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 0 60px;
+    position: relative;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 3px; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .eyebrow::before { content: ""; width: 34px; height: 1px; background: var(--accent); }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 900; line-height: .93; letter-spacing: -2px;
+    font-size: clamp(42px, 7vw, 96px);
+    max-width: 880px;
+  }
+  .hero h1 .em { font-style: italic; color: var(--accent); }
+  .hero h1 .out { -webkit-text-stroke: 1.5px var(--ink); color: transparent; }
+
+  .hero-sub {
+    max-width: 640px; margin-top: 28px;
+    font-size: 18px; color: var(--ink-dim); line-height: 1.65;
+  }
+  .hero-sub b { color: var(--ink); }
+
+  .hero-meta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    border: 1px solid var(--line2); color: var(--ink-dim);
+    padding: 6px 13px; border-radius: 30px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--line); border: 1px solid var(--line);
+    border-radius: 16px; overflow: hidden; margin: 48px 0;
+  }
+  .stat-cell {
+    background: var(--panel); padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .stat-cell b {
+    font-family: 'Fraunces', serif; font-weight: 900;
+    font-size: 38px; line-height: 1; color: var(--accent); letter-spacing: -1.5px;
+  }
+  .stat-cell span {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: .5px; color: var(--ink-faint); text-transform: uppercase;
+    line-height: 1.4;
+  }
+  @media(max-width: 680px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ── IDEA IN BRIEF ── */
+  .brief {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    margin: 48px 0;
+  }
+  .brief-card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 16px; padding: 28px;
+    position: relative; overflow: hidden;
+  }
+  .brief-card::after {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--accent);
+  }
+  .brief-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 2px; color: var(--accent); text-transform: uppercase;
+    margin-bottom: 12px; font-weight: 700;
+  }
+  .brief-card p { font-size: 13.5px; color: var(--ink-dim); line-height: 1.6; }
+  .brief-card p b { color: var(--ink); }
+  @media(max-width: 720px) { .brief { grid-template-columns: 1fr; } }
+
+  /* ── SECTION ── */
+  section.block { padding: 56px 0 20px; }
+  .section-head {
+    display: flex; align-items: flex-end; gap: 18px;
+    margin-bottom: 32px; border-bottom: 1px solid var(--line); padding-bottom: 18px;
+  }
+  .section-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-faint); }
+  .section-title {
+    font-family: 'Fraunces', serif; font-weight: 900;
+    font-size: clamp(26px, 3.5vw, 42px); letter-spacing: -1px; line-height: 1;
+  }
+  .section-title .accent { color: var(--accent); }
+
+  /* ── BODY TEXT ── */
+  .prose { max-width: 760px; }
+  .prose p { font-size: 15px; color: var(--ink-dim); line-height: 1.75; margin-bottom: 20px; }
+  .prose p b { color: var(--ink); }
+  .prose p em { color: var(--ink-dim); font-style: italic; }
+  .prose h3 {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: 22px; letter-spacing: -.3px; color: var(--ink);
+    margin: 36px 0 14px;
+  }
+  .prose h3 .accent { color: var(--accent); }
+
+  /* ── PULL QUOTE ── */
+  .pullquote {
+    border-left: 3px solid var(--accent);
+    padding: 20px 28px; margin: 36px 0;
+    background: var(--panel); border-radius: 0 12px 12px 0;
+  }
+  .pullquote p {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 19px; color: var(--ink); line-height: 1.45; margin: 0;
+  }
+
+  /* ── AWARE FRAMEWORK ── */
+  .aware-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
+    background: var(--line); border: 1px solid var(--line);
+    border-radius: 18px; overflow: hidden; margin: 40px 0;
+  }
+  .aware-cell {
+    background: var(--panel); padding: 28px 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: background .2s;
+  }
+  .aware-cell:hover { background: var(--panel2); }
+  .aware-letter {
+    font-family: 'Fraunces', serif; font-weight: 900;
+    font-size: 52px; line-height: 1; color: var(--accent);
+    letter-spacing: -2px;
+  }
+  .aware-word {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700;
+    font-size: 12px; letter-spacing: 1px; color: var(--ink);
+    text-transform: uppercase;
+  }
+  .aware-desc { font-size: 12.5px; color: var(--ink-dim); line-height: 1.55; }
+  .aware-action {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    color: var(--ink-faint); margin-top: auto; line-height: 1.5;
+    border-top: 1px solid var(--line); padding-top: 12px;
+  }
+  @media(max-width: 860px) { .aware-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media(max-width: 480px) { .aware-grid { grid-template-columns: 1fr; } }
+
+  /* ── NEEDS TABLE ── */
+  .needs-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    margin: 36px 0;
+  }
+  .need-card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; padding: 24px; position: relative; overflow: hidden;
+  }
+  .need-card::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(120% 80% at 100% 0%, var(--accent-dim), transparent 60%);
+    opacity: .6;
+  }
+  .need-icon {
+    font-size: 26px; margin-bottom: 14px; position: relative; z-index: 1;
+  }
+  .need-title {
+    font-family: 'Fraunces', serif; font-weight: 700;
+    font-size: 20px; color: var(--ink); margin-bottom: 10px;
+    position: relative; z-index: 1;
+  }
+  .need-card p { font-size: 13px; color: var(--ink-dim); line-height: 1.6; position: relative; z-index: 1; }
+  .need-tag {
+    display: inline-flex; margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 1px; text-transform: uppercase;
+    border: 1px solid var(--line2); border-radius: 20px;
+    padding: 4px 10px; color: var(--ink-faint);
+    position: relative; z-index: 1;
+  }
+  .need-tag.threat { color: var(--rose); border-color: rgba(255,111,145,.3); }
+  .need-tag.boost { color: var(--green); border-color: rgba(111,220,140,.3); }
+  @media(max-width: 680px) { .needs-grid { grid-template-columns: 1fr; } }
+
+  /* ── DATA CALLOUTS ── */
+  .data-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 36px 0; }
+  .data-item {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 22px 20px; text-align: center;
+  }
+  .data-item .dn {
+    font-family: 'Fraunces', serif; font-weight: 900;
+    font-size: 44px; line-height: 1; color: var(--amber-soft); letter-spacing: -2px;
+  }
+  .data-item .dl { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .5px; margin-top: 6px; line-height: 1.4; }
+  @media(max-width: 600px) { .data-row { grid-template-columns: 1fr; } }
+
+  /* ── COMPANY EXAMPLES ── */
+  .examples { margin: 36px 0; display: flex; flex-direction: column; gap: 14px; }
+  .example-row {
+    display: flex; gap: 18px; align-items: flex-start;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 20px 22px;
+  }
+  .ex-logo {
+    font-family: 'Fraunces', serif; font-weight: 900; font-size: 16px;
+    color: var(--accent); flex-shrink: 0; width: 100px;
+    padding-top: 2px;
+  }
+  .ex-body { font-size: 13.5px; color: var(--ink-dim); line-height: 1.6; }
+  .ex-body b { color: var(--ink); }
+
+  /* ── CONCLUSION ── */
+  .conclusion {
+    background: var(--panel); border: 1px solid var(--line2);
+    border-radius: 20px; padding: 48px; margin: 56px 0;
+    position: relative; overflow: hidden;
+  }
+  .conclusion::before {
+    content: ""; position: absolute; top: -60%; right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--accent-dim), transparent 65%);
+    pointer-events: none;
+  }
+  .conclusion .ct {
+    font-family: 'Fraunces', serif; font-weight: 900;
+    font-size: clamp(22px, 3vw, 34px); letter-spacing: -1px;
+    margin-bottom: 18px; position: relative; z-index: 1;
+  }
+  .conclusion p { font-size: 15px; color: var(--ink-dim); line-height: 1.75; max-width: 680px; position: relative; z-index: 1; }
+  .conclusion p b { color: var(--ink); }
+
+  /* ── AUTHORS ── */
+  .authors {
+    border-top: 1px solid var(--line); padding-top: 36px; margin-top: 56px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .authors-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--ink-faint); text-transform: uppercase; margin-bottom: 8px; }
+  .authors p { font-size: 13px; color: var(--ink-dim); line-height: 1.6; }
+  .authors p b { color: var(--ink-dim); font-weight: 600; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 80px; border-top: 1px solid var(--line); padding: 40px 0 60px;
+  }
+  .foot-grid { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+  .foot-brand { font-family: 'Fraunces', serif; font-weight: 900; font-size: 28px; letter-spacing: -1px; }
+  .foot-brand .em { color: var(--amber); font-style: italic; }
+  .foot-note { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-faint); max-width: 360px; line-height: 1.7; }
+  .foot-note b { color: var(--amber-soft); }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(22px); transition: .6s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+</style>
+<!-- Tonypedia shared nav (injected) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+<style>
+  .tp-nav, .tp-nav * { box-sizing: border-box; }
+  .tp-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    background: rgba(12, 10, 8, 0.85);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-bottom: 1px solid #2a251c;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    color: #f4ede0;
+  }
+  .tp-nav-inner {
+    max-width: 72rem; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .tp-nav-brand {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Fraunces', Georgia, serif; font-weight: 900; font-size: 20px;
+    color: #f4ede0; text-decoration: none; letter-spacing: -0.02em;
+    transition: opacity 200ms ease;
+  }
+  .tp-nav-brand:hover { opacity: 0.9; }
+  .tp-nav-brand-dot { color: #ff7a2f; }
+  .tp-nav-switcher {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #16130e; border: 1px solid #2a251c;
+    padding: 4px; border-radius: 999px;
+  }
+  .tp-nav-link {
+    padding: 6px 16px; border-radius: 999px;
+    font-size: 14px; font-weight: 500; line-height: 1;
+    color: #a89a82; text-decoration: none; font-family: inherit;
+    transition: color 200ms ease, background 200ms ease;
+  }
+  .tp-nav-link:hover { color: #f4ede0; }
+  .tp-nav-link.is-active { background: #f4ede0; color: #0c0a08; }
+  .tp-nav-spacer { width: 80px; }
+  @media (max-width: 767px) {
+    .tp-nav-switcher { display: none; }
+    .tp-nav-spacer { display: none; }
+  }
+  body { padding-top: 64px; }
+</style>
+</head>
+<body>
+<nav class="tp-nav" aria-label="Tonypedia">
+  <div class="tp-nav-inner">
+    <a class="tp-nav-brand" href="/">
+      <span class="tp-nav-brand-dot">●</span>
+      <span>Tonypedia</span>
+    </a>
+    <div class="tp-nav-switcher">
+      <a class="tp-nav-link" href="/">Hub</a>
+      <a class="tp-nav-link" href="/signal/">Feed</a>
+      <a class="tp-nav-link is-active" href="/studies/" aria-current="page">Deep Dives</a>
+    </div>
+    <div class="tp-nav-spacer" aria-hidden="true"></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Harvard Business Review &nbsp;·&nbsp; March–April 2026</div>
+    <h1>Why Great <span class="em">Innovations</span><br>Fail to <span class="out">Scale</span></h1>
+    <p class="hero-sub">
+      Breakthrough ideas need a special kind of leader to help them flourish.<br>
+      <b>Breakthrough ideas need a special kind of leader to help them flourish.</b>
+    </p>
+    <p class="hero-sub" style="margin-top:12px">
+      As gen AI performs more creative and interpersonal tasks, many workers feel that their competence, autonomy, and sense of connection at work are under threat. That psychological disruption leads to resistance, disengagement, and even sabotage.
+    </p>
+    <div class="hero-meta">
+      <div class="pill"><span class="dot" style="background:var(--sky)"></span>Erik Hermann</div>
+      <div class="pill"><span class="dot" style="background:var(--sky)"></span>Stefano Puntoni · Wharton</div>
+      <div class="pill"><span class="dot" style="background:var(--sky)"></span>Carey K. Morewedge · BU</div>
+      <div class="pill"><span class="dot" style="background:var(--amber)"></span>HBR Reprint R2602B</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="wrap">
+  <div class="stats-row reveal">
+    <div class="stat-cell">
+      <b>45%</b>
+      <span>of CEOs say most employees are resistant or hostile to gen AI — Kyndryl 2025</span>
+    </div>
+    <div class="stat-cell">
+      <b>85%</b>
+      <span>of leaders use gen AI regularly vs only 51% of frontline workers — BCG 2025</span>
+    </div>
+    <div class="stat-cell">
+      <b>31%</b>
+      <span>of knowledge workers actively working against their company's AI initiatives — 2025</span>
+    </div>
+    <div class="stat-cell">
+      <b>36%</b>
+      <span>of employees felt properly trained to use gen AI tools — BCG survey</span>
+    </div>
+  </div>
+
+  <!-- IDEA IN BRIEF -->
+  <div class="brief reveal">
+    <div class="brief-card">
+      <div class="brief-label">The Problem</div>
+      <p>As gen AI performs more creative and interpersonal tasks, many workers feel their <b>competence, autonomy, and sense of connection</b> at work are under threat — leading to resistance, disengagement, and even sabotage.</p>
+    </div>
+    <div class="brief-card">
+      <div class="brief-label">The Solution</div>
+      <p>Use the <b>AWARE framework</b> to integrate gen AI at work: <b>Acknowledge</b> worker concerns, <b>Watch</b> for maladaptive coping, <b>Align</b> support systems, <b>Redesign</b> roles, and <b>Empower</b> workers through transparency.</p>
+    </div>
+    <div class="brief-card">
+      <div class="brief-label">The Payoff</div>
+      <p>By supporting workers' core psychological needs, organizations can increase receptivity to gen AI — <b>transforming it from a perceived threat into a trusted copilot.</b></p>
+    </div>
+  </div>
+
+  <!-- SECTION 1: PSYCHOLOGICAL IMPACT -->
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="section-num">01 /</span>
+      <h2 class="section-title">Psychological <span class="accent">Impact</span></h2>
+    </div>
+
+    <div class="needs-grid">
+      <div class="need-card">
+        <div class="need-icon">🎯</div>
+        <div class="need-title">Competence</div>
+        <p>The feeling of being effective and capable. Gen AI can boost skills across experience levels — but also threatens workers when it redefines needed capabilities or signals replacement. 89% of senior leaders say it enhances skills; 71% also worry it will lead to skill atrophy.</p>
+        <span class="need-tag boost">↑ Boosts capability</span>
+        <span class="need-tag threat">↓ Threatens identity</span>
+      </div>
+      <div class="need-card">
+        <div class="need-icon">🎛️</div>
+        <div class="need-title">Autonomy</div>
+        <p>The feeling of being in control. AI can reduce administrative burden and free workers for meaningful tasks — but mandating it creates an "algorithmic cage" that limits workers' ability to tailor their work, threatening professional identity and ownership.</p>
+        <span class="need-tag boost">↑ Reduces cognitive load</span>
+        <span class="need-tag threat">↓ Erodes ownership</span>
+      </div>
+      <div class="need-card">
+        <div class="need-icon">🤝</div>
+        <div class="need-title">Relatedness</div>
+        <p>The feeling of meaningful interpersonal connection. Gen AI can free time for social work and even provide human-like warmth — but automating collaborative tasks can evoke loneliness, reduce team cohesion, and spark generational resentment.</p>
+        <span class="need-tag boost">↑ Frees time for people</span>
+        <span class="need-tag threat">↓ Disrupts social fabric</span>
+      </div>
+    </div>
+
+    <div class="pullquote">
+      <p>"If we can have some protections where we, the workers, can control the automation, then the automation can be used to help us do our jobs. We're not saying we want to go back to the rotary phone. We're saying we need to hold the keys."</p>
+    </div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint);margin-top:-8px;margin-bottom:32px">— Raphael Bob-Waksberg, creator of BoJack Horseman, on the 2023 writers' strike</p>
+
+    <div class="data-row">
+      <div class="data-item">
+        <div class="dn">89%</div>
+        <div class="dl">of senior leaders say gen AI enhances employee skills<br>(Wharton / GBK survey)</div>
+      </div>
+      <div class="data-item">
+        <div class="dn">71%</div>
+        <div class="dl">also believe gen AI will lead to skill atrophy and replace employees for some tasks</div>
+      </div>
+      <div class="data-item">
+        <div class="dn">54%</div>
+        <div class="dl">of workers say they would use AI tools without formal approval — BCG 2025</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: AWARE FRAMEWORK -->
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="section-num">02 /</span>
+      <h2 class="section-title">The <span class="accent">AWARE</span> Framework</h2>
+    </div>
+
+    <div class="prose">
+      <p>To help leaders facilitate the adoption of gen AI in the workplace, the authors designed five interdependent actions. As gen AI capabilities evolve, so must the application of these principles — this is not a one-time checklist but a continuous leadership posture.</p>
+    </div>
+
+    <div class="aware-grid">
+      <div class="aware-cell">
+        <div class="aware-letter">A</div>
+        <div class="aware-word">Acknowledge</div>
+        <div class="aware-desc">How gen AI may affect workers' feelings of competence, autonomy, and relatedness.</div>
+        <div class="aware-action">Create space for open dialogue. Surface concerns — don't suppress them. Build psychological safety before rolling out tools.</div>
+      </div>
+      <div class="aware-cell">
+        <div class="aware-letter">W</div>
+        <div class="aware-word">Watch</div>
+        <div class="aware-desc">For maladaptive behaviors so you can intervene before performance declines.</div>
+        <div class="aware-action">Monitor task avoidance, withdrawal, shadow AI use. 41% of Gen Z workers admit actively working against AI initiatives.</div>
+      </div>
+      <div class="aware-cell">
+        <div class="aware-letter">A</div>
+        <div class="aware-word">Align</div>
+        <div class="aware-desc">Support systems with the psychological needs of workers.</div>
+        <div class="aware-action">Offer personalized learning journeys, peer coaching, role-specific paths. One-size-fits-all programs fail. Only 36% feel properly trained today.</div>
+      </div>
+      <div class="aware-cell">
+        <div class="aware-letter">R</div>
+        <div class="aware-word">Redesign</div>
+        <div class="aware-desc">Workflows to make the most of human–AI collaboration.</div>
+        <div class="aware-action">Focus on end-to-end workflow redesign, not plug-and-play. Give AI repetitive tasks; give humans empathy, creativity, ethical judgment.</div>
+      </div>
+      <div class="aware-cell">
+        <div class="aware-letter">E</div>
+        <div class="aware-word">Empower</div>
+        <div class="aware-desc">Workers to shape how gen AI affects their work lives.</div>
+        <div class="aware-action">Be transparent about what AI will do and how roles may evolve. Only 44% of leaders currently involve workers in implementation.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: COMPANY EXAMPLES -->
+  <section class="block reveal">
+    <div class="section-head">
+      <span class="section-num">03 /</span>
+      <h2 class="section-title">Who's <span class="accent">Doing It</span> Right</h2>
+    </div>
+
+    <div class="examples">
+      <div class="example-row">
+        <div class="ex-logo">GitHub</div>
+        <div class="ex-body">By <b>monitoring adoption and usage metrics of GitHub Copilot</b>, managers assess onboarding efforts and track how developers engage with the tool — detecting both adaptive engagement and early signs of disengagement for timely support. A model for the <em>Watch</em> step.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-logo">Citigroup</div>
+        <div class="ex-body">Created the <b>Citi AI suite</b> expanded to 80+ markets for 175,000 employees. More than 2,000 employees participate in AI Champions and Accelerator programs to ensure peer support — a best-practice example of the <em>Align</em> step.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-logo">Moderna</div>
+        <div class="ex-body">Merged its Technology and HR departments into <b>People and Digital Technology</b> — a single unit designed to co-create AI workflows and collaboratively decide what stays human-led vs automated across trials, staffing, and operations. Pure <em>Redesign</em>.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-logo">Dell</div>
+        <div class="ex-body">Before introducing gen AI tools, <b>simplified sales processes, consolidated content, and eliminated redundancies</b>. Bringing in AI at that point amplified efficiency further and freed sales teams for strategic customer engagement — workflow-first thinking.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-logo">BNY</div>
+        <div class="ex-body">"<b>We want AI to be able to be for everyone in the company</b>" — CEO Robin Vince. ~60% of employees onboarded themselves to the gen AI platform; 5,000 — including half the engineering team — have already built their own agents. The <em>Empower</em> step at scale.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-logo">PwC</div>
+        <div class="ex-body">The <b>My AI initiative</b> combines tools, training, and a dedicated "playground" with "prompting parties" where employees experiment in real contexts. Peer "activators" embedded across the firm ensure support is woven into day-to-day work, not siloed in L&D.</div>
+      </div>
+      <div class="example-row">
+        <div class="ex-logo">Duolingo</div>
+        <div class="ex-body">After its "AI-first" strategy caused anxiety, CEO Luis von Ahn <b>publicly acknowledged the misstep</b>: "AI is creating uncertainty for all of us, and we can respond with fear or curiosity." He reframed the change and affirmed AI would not replace employees — a textbook <em>Acknowledge</em> move.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCLUSION -->
+  <div class="conclusion reveal">
+    <div class="ct">Gen AI is not merely a tool.<br>Workers are not merely users.</div>
+    <p>The gen AI revolution is redefining the boundary between people and machines. Its human-like capabilities make workers view it not just as a new technological system but as a social actor — even a teammate — in the workplace. As a result, leaders can't think about integrating gen AI in purely technical, operational, or cost-efficiency terms.</p>
+    <p style="margin-top:16px">The AWARE framework enables leaders to <b>respect the psychological realities of change</b>, foster psychological safety, and ensure that the technology augments, rather than replaces, human workers. They should be <b>partners in co-creating the future of work.</b></p>
+  </div>
+
+  <!-- AUTHORS -->
+  <div class="authors reveal">
+    <div class="authors-label">Authors</div>
+    <p><b>Erik Hermann</b> — Interim professor of marketing, European University Viadrina, Frankfurt (Oder).</p>
+    <p><b>Stefano Puntoni</b> — Sebastian S. Kresge Professor of Marketing, University of Pennsylvania's Wharton School; co-director of Wharton Human-AI Research.</p>
+    <p><b>Carey K. Morewedge</b> — Professor of marketing and Everett W. Lord Distinguished Faculty Scholar, Questrom School of Business, Boston University.</p>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <div class="foot-brand">Tony<span class="em">pedia</span></div>
+      <div class="foot-note">
+        Source: <b>Harvard Business Review</b>, March–April 2026.<br>
+        HBR Reprint R2602B. Study archived in Deep Dives.
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.08 });
+reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

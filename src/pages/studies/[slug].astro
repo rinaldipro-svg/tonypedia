@@ -1,46 +1,30 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const studies = await getCollection('studies');
   return studies.map((entry) => ({
     params: { slug: entry.slug },
-    props: { entry },
+    props: { slug: entry.slug },
   }));
 }
 
-interface Props {
-  entry: CollectionEntry<'studies'>;
+const { slug } = Astro.props;
+
+// Map study slug → static HTML filename in public/studies/
+const slugToHtml: Record<string, string> = {
+  'coppernico-metals-investment-analysis': 'coppernico.html',
+  'quantum-computing-2026-industrial-state': 'quantum.html',
+  'global-dominance-30-technologies': 'Global_Dom.html',
+  'rare-materials-financial-analysis': 'rare_materials.html',
+  'robotics-matrix-top-50-2026': 'robotics_matrix.html',
+  'uranium-nuclear-investment-study': 'uranium_nuclear.html',
+};
+
+const filename = slugToHtml[slug];
+if (!filename) {
+  throw new Error(`No static HTML mapping for study slug "${slug}"`);
 }
 
-const { entry } = Astro.props;
-const { Content } = await entry.render();
+return Astro.redirect(`/studies/${filename}`, 301);
 ---
-
-<BaseLayout title={`${entry.data.title} — Tonypedia`} description={entry.data.description}>
-  <div class="study-bleed">
-    <Content />
-  </div>
-</BaseLayout>
-
-<style is:global>
-  /* Detail page: cancel BaseLayout's main pt-24 so the iframe is truly full-bleed
-     below the sticky nav (the nav floats over the iframe top edge) and reaches
-     edge to edge horizontally. */
-  body:has(.study-bleed) main {
-    padding-top: 0;
-  }
-  .study-bleed {
-    width: 100%;
-  }
-  .study-bleed .study-embed {
-    display: block;
-    margin: 0;
-    border-radius: 0 !important;
-    height: 100vh !important;
-  }
-  .study-bleed .study-embed iframe {
-    display: block;
-  }
-</style>
