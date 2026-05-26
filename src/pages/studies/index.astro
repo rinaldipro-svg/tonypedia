@@ -1,0 +1,113 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const studies = (await getCollection('studies')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const monthYear = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+const truncate = (str: string, max = 120) =>
+  str.length > max ? str.slice(0, max).trimEnd() + '…' : str;
+---
+
+<BaseLayout
+  title="Deep Dives — Tonypedia"
+  description="Study-length analyses on the topics that compound: quantum, robotics, copper, rare materials, uranium, and the technologies defining global leadership."
+>
+  <header class="mx-auto max-w-content px-6 pt-12 md:pt-16 pb-10">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="label-mono" style="color: var(--violet);">03 · Deep Dives</span>
+      <span class="h-px w-12 block bg-line" aria-hidden="true"></span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+      <h1 class="md:col-span-8 display text-5xl md:text-6xl text-ink text-balance">
+        Deep Dives <span class="italic-accent text-ink-dim">— the topics that compound.</span>
+      </h1>
+      <p class="md:col-span-4 md:text-right text-ink-dim text-sm">
+        {studies.length} stud{studies.length === 1 ? 'y' : 'ies'} ·
+        sorted by date
+      </p>
+    </div>
+  </header>
+
+  <section class="mx-auto max-w-content px-6 pb-16">
+    <div class="studies-grid reveal-stagger">
+      {
+        studies.map((entry) => {
+          const accent = entry.data.accent;
+          const cardStyle = `border-left: 4px solid ${accent}; --card-accent: ${accent};`;
+          return (
+            <a
+              href={`/studies/${entry.slug}`}
+              class="card study-card group block overflow-hidden"
+              style={cardStyle}
+            >
+              <div class="p-6 flex flex-col gap-4 h-full">
+                <div class="flex items-center justify-between gap-3">
+                  <span
+                    class="label-mono"
+                    style={`color: ${accent};`}
+                  >
+                    {monthYear.format(entry.data.date)}
+                  </span>
+                  {entry.data.coverGlyph && (
+                    <span
+                      class="text-2xl leading-none"
+                      style={`filter: drop-shadow(0 4px 16px color-mix(in oklab, ${accent} 55%, transparent));`}
+                      aria-hidden="true"
+                    >
+                      {entry.data.coverGlyph}
+                    </span>
+                  )}
+                </div>
+
+                <h2 class="font-display font-black text-ink leading-tight text-xl md:text-2xl transition-colors group-hover:text-amber-soft">
+                  {entry.data.title}
+                </h2>
+
+                <p class="text-sm text-ink-dim leading-relaxed">
+                  {truncate(entry.data.description)}
+                </p>
+
+                {entry.data.tags.length > 0 && (
+                  <div class="mt-auto flex flex-wrap gap-1.5 pt-4 border-t border-line">
+                    {entry.data.tags.slice(0, 4).map((tag) => (
+                      <span class="chip">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .studies-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .studies-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1200px) {
+    .studies-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .study-card {
+    background: var(--panel);
+  }
+</style>
