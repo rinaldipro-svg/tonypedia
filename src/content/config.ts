@@ -18,4 +18,30 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { articles };
+const studies = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    accent: z.string(),
+    coverGlyph: z.string().optional(),
+  }),
+});
+
+const feed = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    source: z.string(),
+    category: z.enum(['concepts', 'tools', 'guides', 'prompts', 'industry', 'data']),
+    accent: z.string(),
+    size: z.enum(['col4', 'col6', 'col8']).default('col4'),
+    blurb: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { articles, studies, feed };
