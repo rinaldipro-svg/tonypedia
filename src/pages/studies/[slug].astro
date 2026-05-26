@@ -5,27 +5,27 @@ export async function getStaticPaths() {
   const studies = await getCollection('studies');
   return studies.map((entry) => ({
     params: { slug: entry.slug },
-    props: { slug: entry.slug },
+    props: { entry },
   }));
 }
 
-const { slug } = Astro.props;
+const { entry } = Astro.props;
+const htmlFile = entry.data.htmlFile;
 
-// Map study slug → static HTML filename in public/studies/
-const slugToHtml: Record<string, string> = {
-  'coppernico-metals-investment-analysis': 'coppernico.html',
-  'quantum-computing-2026-industrial-state': 'quantum.html',
-  'global-dominance-30-technologies': 'Global_Dom.html',
-  'rare-materials-financial-analysis': 'rare_materials.html',
-  'robotics-matrix-top-50-2026': 'robotics_matrix.html',
-  'uranium-nuclear-investment-study': 'uranium_nuclear.html',
-  'hbr-why-great-innovations-fail-to-scale': 'hbr-why-great-innovations-fail-to-scale.html',
-};
-
-const filename = slugToHtml[slug];
-if (!filename) {
-  throw new Error(`No static HTML mapping for study slug "${slug}"`);
+if (htmlFile) {
+  return Astro.redirect(`/studies/${htmlFile}`, 301);
 }
 
-return Astro.redirect(`/studies/${filename}`, 301);
+// Fallback: render the MDX body inside the site chrome when no htmlFile is set.
+const { Content } = await entry.render();
 ---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{entry.data.title}</title>
+    <meta name="description" content={entry.data.description} />
+  </head>
+  <body>
+    <Content />
+  </body>
+</html>

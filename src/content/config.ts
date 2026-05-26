@@ -27,6 +27,7 @@ const studies = defineCollection({
     tags: z.array(z.string()).default([]),
     accent: z.string(),
     coverGlyph: z.string().optional(),
+    htmlFile: z.string().optional(),
   }),
 });
 
