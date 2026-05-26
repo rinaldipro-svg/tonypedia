@@ -6,7 +6,7 @@ const pathname = new URL(Astro.request.url).pathname;
 type SectionKey = 'hub' | 'feed' | 'studies';
 
 function activeSection(path: string): SectionKey {
-  if (path.startsWith('/feed')) return 'feed';
+  if (path.startsWith('/feed') || path.startsWith('/signal')) return 'feed';
   if (path.startsWith('/studies')) return 'studies';
   return 'hub';
 }
