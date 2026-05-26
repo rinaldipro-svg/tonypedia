@@ -29,7 +29,7 @@ const truncate = (str: string, max = 120) =>
       <h1 class="md:col-span-8 display text-5xl md:text-6xl text-ink text-balance">
         Deep Dives <span class="italic-accent text-ink-dim">— the topics that compound.</span>
       </h1>
-      <p class="md:col-span-4 md:text-right text-ink-dim text-sm">
+      <p class="studies-count md:col-span-4 md:text-right text-ink-dim text-sm">
         {studies.length} stud{studies.length === 1 ? 'y' : 'ies'} ·
         sorted by date
       </p>
@@ -51,7 +51,7 @@ const truncate = (str: string, max = 120) =>
               class="card study-card group block overflow-hidden"
               style={cardStyle}
             >
-              <div class="p-6 flex flex-col gap-4 h-full">
+              <div class="study-card-body p-6 flex flex-col gap-4 h-full">
                 <div class="flex items-center justify-between gap-3">
                   <span
                     class="label-mono"
@@ -70,11 +70,11 @@ const truncate = (str: string, max = 120) =>
                   )}
                 </div>
 
-                <h2 class="font-display font-black text-ink leading-tight text-xl md:text-2xl transition-colors group-hover:text-amber-soft">
+                <h2 class="study-card-title font-display font-black text-ink leading-tight text-xl md:text-2xl transition-colors group-hover:text-amber-soft">
                   {entry.data.title}
                 </h2>
 
-                <p class="text-sm text-ink-dim leading-relaxed">
+                <p class="study-card-desc text-sm text-ink-dim leading-relaxed">
                   {truncate(entry.data.description)}
                 </p>
 
@@ -100,17 +100,27 @@ const truncate = (str: string, max = 120) =>
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  @media (min-width: 768px) {
+  /* Tablet: 2 columns (640–1023px) */
+  @media (min-width: 640px) {
     .studies-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
-  @media (min-width: 1200px) {
+  /* Desktop: 3 columns (≥1024px) */
+  @media (min-width: 1024px) {
     .studies-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
   .study-card {
     background: var(--panel);
+  }
+
+  /* === Pass A: mobile <640px — additive overrides only === */
+  @media (max-width: 639px) {
+    .study-card .study-card-body { padding: 18px; }
+    .study-card-title { font-size: clamp(18px, 4vw, 24px); }
+    .study-card-desc { overflow-wrap: break-word; word-break: break-word; }
+    .studies-count { display: none; }
   }
 </style>

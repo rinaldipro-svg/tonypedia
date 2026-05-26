@@ -25,7 +25,7 @@ const sections: { key: SectionKey; label: string; href: string }[] = [
   class="fixed top-0 left-0 right-0 z-50 border-b border-line/0 transition-colors duration-300"
 >
   <div class="mx-auto max-w-content px-6 py-4 flex items-center justify-between gap-6">
-    <!-- Brand -->
+    <!-- Brand: always visible at every viewport -->
     <a
       href="/"
       class="flex items-center gap-2 font-display font-black text-ink text-xl tracking-tight hover:opacity-90 transition-opacity"
@@ -34,7 +34,7 @@ const sections: { key: SectionKey; label: string; href: string }[] = [
       <span>Tonypedia</span>
     </a>
 
-    <!-- Section switcher (desktop) -->
+    <!-- Section switcher (desktop ≥768) -->
     <div class="hidden md:flex items-center gap-1 surface-panel px-1 py-1 rounded-full">
       {
         sections.map((s) => {
@@ -81,7 +81,7 @@ const sections: { key: SectionKey; label: string; href: string }[] = [
     </div>
   </div>
 
-  <!-- Mobile menu -->
+  <!-- Existing dropdown menu (used at 641–767px; unchanged from before) -->
   <div
     id="mobile-menu"
     class="hidden md:hidden absolute top-full left-0 right-0 bg-bg border-b border-line"
@@ -119,31 +119,153 @@ const sections: { key: SectionKey; label: string; href: string }[] = [
       </div>
     </div>
   </div>
+
+  <!-- Fullscreen overlay (used at ≤640px). Hidden by default; .open reveals it -->
+  <div id="mobile-overlay" aria-hidden="true">
+    <nav class="mobile-overlay-nav" aria-label="Primary">
+      {
+        sections.map((s) => {
+          const isActive = active === s.key;
+          return (
+            <a
+              href={s.href}
+              class:list={['mobile-overlay-link', isActive && 'is-active']}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {s.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+  </div>
 </nav>
+
+<style>
+  /* === Pass A: mobile ≤640px overrides — additive @media rules only === */
+  @media (max-width: 640px) {
+    /* The 641–767 dropdown is replaced by a fullscreen overlay at this width */
+    #mobile-menu { display: none !important; }
+
+    /* Hamburger: 44×44 tap target, ink color */
+    #mobile-menu-btn {
+      width: 44px;
+      height: 44px;
+      padding: 10px;
+      color: var(--ink);
+    }
+    #mobile-menu-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2.25;
+    }
+
+    /* Fullscreen overlay */
+    #mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 998;
+      padding: 80px 32px 40px;
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+    #mobile-overlay.open {
+      display: block;
+      opacity: 1;
+      transform: none;
+    }
+    .mobile-overlay-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .mobile-overlay-link {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 48px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--ink-dim);
+      text-decoration: none;
+      transition: color 180ms ease;
+    }
+    .mobile-overlay-link:hover { color: var(--ink); }
+    .mobile-overlay-link.is-active { color: var(--amber); }
+  }
+
+  /* Hide the overlay above the mobile breakpoint so it never leaks into desktop */
+  @media (min-width: 641px) {
+    #mobile-overlay { display: none !important; }
+  }
+</style>
 
 <script>
   function initNavbar() {
     const navbar = document.getElementById('navbar');
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
+    const mobileOverlay = document.getElementById('mobile-overlay');
     const searchBtn = document.getElementById('search-btn');
 
+    const isMobile = () => window.matchMedia('(max-width: 640px)').matches;
+
+    function openOverlay() {
+      mobileOverlay?.classList.add('open');
+      mobileOverlay?.setAttribute('aria-hidden', 'false');
+      mobileMenuBtn?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay() {
+      mobileOverlay?.classList.remove('open');
+      mobileOverlay?.setAttribute('aria-hidden', 'true');
+      mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
     mobileMenuBtn?.addEventListener('click', () => {
-      const isOpen = mobileMenu?.classList.contains('hidden') === false;
-      if (isOpen) {
-        mobileMenu?.classList.add('hidden');
-        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      if (isMobile()) {
+        if (mobileOverlay?.classList.contains('open')) {
+          closeOverlay();
+        } else {
+          openOverlay();
+        }
       } else {
-        mobileMenu?.classList.remove('hidden');
-        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        // 641–767px: original dropdown behavior, unchanged
+        const isOpen = mobileMenu?.classList.contains('hidden') === false;
+        if (isOpen) {
+          mobileMenu?.classList.add('hidden');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          mobileMenu?.classList.remove('hidden');
+          mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        }
       }
     });
 
+    // Existing dropdown closes on link click
     mobileMenu?.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
         mobileMenuBtn?.setAttribute('aria-expanded', 'false');
       });
+    });
+
+    // Overlay closes on link click
+    mobileOverlay?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        closeOverlay();
+      });
+    });
+
+    // Escape key closes the overlay
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileOverlay?.classList.contains('open')) {
+        closeOverlay();
+      }
     });
 
     const onScroll = () => {
