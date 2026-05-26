@@ -14,6 +14,21 @@ const monthYear = new Intl.DateTimeFormat('en-US', {
 
 const truncate = (str: string, max = 120) =>
   str.length > max ? str.slice(0, max).trimEnd() + '…' : str;
+
+// Direct slug → static HTML file in public/studies/ to skip the redirect hop.
+// Future entries without a mapping fall back to /studies/<slug> (the [slug].astro
+// redirect page) so nothing breaks.
+const slugToHtml: Record<string, string> = {
+  'coppernico-metals-investment-analysis': '/studies/coppernico.html',
+  'quantum-computing-2026-industrial-state': '/studies/quantum.html',
+  'global-dominance-30-technologies': '/studies/Global_Dom.html',
+  'rare-materials-financial-analysis': '/studies/rare_materials.html',
+  'robotics-matrix-top-50-2026': '/studies/robotics_matrix.html',
+  'uranium-nuclear-investment-study': '/studies/uranium_nuclear.html',
+  'hbr-why-great-innovations-fail-to-scale': '/studies/hbr-why-great-innovations-fail-to-scale.html',
+};
+
+const studyHref = (slug: string) => slugToHtml[slug] ?? `/studies/${slug}`;
 ---
 
 <BaseLayout
@@ -44,7 +59,7 @@ const truncate = (str: string, max = 120) =>
           const cardStyle = `border-left: 4px solid ${accent}; --card-accent: ${accent};`;
           return (
             <a
-              href={`/studies/${entry.slug}`}
+              href={studyHref(entry.slug)}
               class="card study-card group block overflow-hidden"
               style={cardStyle}
             >
