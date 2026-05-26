@@ -309,6 +309,90 @@
   @media(max-width:600px){.reader-brand{display:none}}
   .reader-frame{flex:1;border:none;width:100%;background:#fff}
   .reader-pill{width:8px;height:8px;border-radius:50%;background:var(--ra,var(--amber));box-shadow:0 0 10px var(--ra,var(--amber));flex-shrink:0}
+
+  /* ========================================================================
+     PASS B1: Mobile responsiveness — additive @media rules only.
+     User-spec class names were translated to the actual SIGNAL classes:
+       hero-pills    → hero-meta              hero-pill    → .hero-meta .pill
+       ticker-wrap   → ticker                 ticker-inner → ticker-track
+       cat-tabs      → catnav-inner           cat-tab      → .catnav-inner .chip
+       card-title    → .card h3               card-body    → .card p
+       table-wrap    → benchwrap              feature-row  → pipe
+       modal-overlay → modal-bg               modal-body   → modal-bd
+     The 3 <table class="bench"> instances are already wrapped in
+     <div class="benchwrap"> in the markup, so no HTML change is needed.
+     ======================================================================== */
+
+  /* Topbar */
+  @media(max-width:640px){
+    .topbar-inner{padding:10px 16px;gap:10px}
+    .viewtoggle button .lbl{display:none}
+    .viewtoggle button{padding:7px 10px}
+    .stat-mini{display:none}
+    .search{display:none}
+  }
+
+  /* Hero */
+  @media(max-width:640px){
+    .hero{padding:36px 0 28px}
+    .hero h1{font-size:clamp(36px,11vw,64px);letter-spacing:-1.5px}
+    .hero-sub{font-size:15px;margin-top:18px}
+    .hero-meta{gap:8px;margin-top:20px}
+    .hero-meta .pill{font-size:10px;padding:5px 10px}
+  }
+
+  /* Ticker */
+  @media(max-width:640px){
+    .ticker{padding:10px 0}
+    .ticker-track{font-size:10px}
+  }
+
+  /* Category filter chips */
+  @media(max-width:640px){
+    .catnav-inner{gap:8px;padding:14px 16px;flex-wrap:wrap}
+    .catnav-inner .chip{font-size:10px;padding:6px 12px}
+    .cat-desc{display:none}
+  }
+
+  /* Card grid */
+  @media(max-width:640px){
+    .grid{gap:12px}
+    .card,.card.col4,.card.col6,.card.col8,.card.col12{grid-column:span 12!important}
+    .card{padding:18px;border-radius:12px}
+    .card h3{font-size:clamp(16px,4.5vw,22px)}
+    .card p{font-size:13px}
+  }
+
+  /* Benchmark tables (already wrapped in .benchwrap) */
+  @media(max-width:640px){
+    .benchwrap{-webkit-overflow-scrolling:touch}
+    table.bench{min-width:480px;font-size:11px}
+  }
+
+  /* Feature block / pipeline steps */
+  @media(max-width:640px){
+    .pipe{flex-direction:column;gap:16px}
+    .pipe-step{min-width:unset;width:100%;padding:14px 0}
+    .pipe-step::after{display:none!important}
+  }
+
+  /* Modal — bottom-sheet behaviour on mobile */
+  @media(max-width:640px){
+    .modal{border-radius:14px 14px 0 0;max-height:90vh;width:100%;margin:auto 0 0 0}
+    .modal-bg{align-items:flex-end}
+    .modal-bd{padding:24px 20px}
+  }
+
+  /* Studies grid inside SIGNAL's Deep Dives view */
+  @media(max-width:640px){
+    .studies-grid{grid-template-columns:1fr!important;gap:14px}
+    .study-card{grid-column:span 12!important;padding:20px}
+  }
+
+  /* Page wrap */
+  @media(max-width:640px){
+    .wrap{padding:0 16px}
+  }
 </style>
 <!-- Tonypedia shared nav (injected) -->
 <style>
