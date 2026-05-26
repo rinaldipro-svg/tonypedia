@@ -448,6 +448,27 @@
   .topbar .stat-mini { display: none !important; }
   .topbar-inner { justify-content: center; }
   .topbar .search { max-width: 720px; }
+  /* Self-contained hamburger for this standalone page (no external JS available) */
+  .tp-nav-hamburger {
+    display: none;
+    width: 44px; height: 44px;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid #2a251c;
+    border-radius: 999px;
+    color: #f4ede0;
+    cursor: pointer;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .tp-nav-hamburger:hover { border-color: #37301f; }
+  .tp-nav-hamburger svg { width: 22px; height: 22px; }
+  @media (max-width: 640px) {
+    .tp-nav-hamburger { display: inline-flex; }
+  }
+  @media (min-width: 641px) {
+    #tp-mobile-overlay { display: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -463,8 +484,47 @@
       <a class="tp-nav-link" href="/studies/">Deep Dives</a>
     </div>
     <div class="tp-nav-spacer" aria-hidden="true"></div>
+    <button type="button" class="tp-nav-hamburger" id="tp-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
   </div>
 </nav>
+
+<!-- Mobile overlay menu (controlled by inline script below) -->
+<div id="tp-mobile-overlay" style="display:none;position:fixed;inset:0;background:#0c0a08;z-index:9998;padding:80px 32px 40px;flex-direction:column;gap:32px;">
+  <a href="/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:#f4ede0;text-decoration:none;">Hub</a>
+  <a href="/signal/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:#ff7a2f;text-decoration:none;">Feed</a>
+  <a href="/studies/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:#f4ede0;text-decoration:none;">Deep Dives</a>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('tp-hamburger');
+  var ov = document.getElementById('tp-mobile-overlay');
+  if (!btn || !ov) return;
+  function openMenu() {
+    ov.style.display = 'flex';
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    ov.style.display = 'none';
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  btn.addEventListener('click', function() {
+    if (ov.style.display === 'flex') closeMenu(); else openMenu();
+  });
+  ov.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && ov.style.display === 'flex') closeMenu();
+  });
+})();
+</script>
 
 <!-- TOP BAR -->
 <div class="topbar">
