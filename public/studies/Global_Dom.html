@@ -536,6 +536,29 @@
             transition: opacity 0.7s ease, transform 0.7s ease;
         }
         .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* === PASS B2: mobile responsiveness — additive @media rules only === */
+        @media (max-width: 640px) {
+            .content { padding: 0 16px; }
+            .hero { padding: 40px 16px; }
+            .hero h1 { font-size: clamp(32px, 10vw, 60px); letter-spacing: -1px; }
+            .hero-desc { font-size: 15px; overflow-wrap: break-word; }
+            .hero-stats { gap: 14px; }
+            .tech-grid { grid-template-columns: 1fr !important; }
+            .tech-card { padding: 18px; }
+            .geo-leaders { grid-template-columns: 1fr !important; }
+            .geo-card { padding: 18px; }
+            .company-list { grid-template-columns: 1fr !important; }
+            .company { padding: 16px; }
+            .domain-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .footer-section { flex-direction: column; gap: 16px; padding: 24px 16px; }
+            .tech-desc, .hero-desc, .geo-lead {
+                font-size: 14px; line-height: 1.7; overflow-wrap: break-word;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-stats { grid-template-columns: 1fr; }
+        }
     </style>
 
 <!-- Tonypedia shared nav (injected) -->

@@ -315,6 +315,43 @@
   /* ── REVEAL ── */
   .reveal { opacity: 0; transform: translateY(22px); transition: .6s cubic-bezier(.2,.8,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
+
+  /* === PASS B2: mobile responsiveness — additive @media rules only === */
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px; }
+    .hero { padding: 40px 0 28px; }
+    .hero h1 { font-size: clamp(32px, 10vw, 60px); letter-spacing: -1px; }
+    .hero-sub { font-size: 15px; overflow-wrap: break-word; }
+    .hero-meta { gap: 8px; }
+    .pill { font-size: 10px; padding: 5px 10px; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .stat-cell { padding: 20px 18px; }
+    .brief { grid-template-columns: 1fr; }
+    .brief-card { padding: 20px; }
+    .aware-grid { grid-template-columns: repeat(2, 1fr); }
+    .aware-cell { padding: 20px 18px; }
+    .aware-letter { font-size: 42px; }
+    .needs-grid { grid-template-columns: 1fr; }
+    .need-card { padding: 18px; }
+    .data-row { grid-template-columns: 1fr; }
+    .data-item { padding: 18px; }
+    .examples .example-row { flex-direction: column; gap: 8px; padding: 18px; }
+    .ex-logo { width: auto; padding-top: 0; }
+    .pullquote { padding: 14px 18px; }
+    .pullquote p { font-size: clamp(15px, 4vw, 19px); }
+    .prose p, .conclusion p, .hero-sub, .brief-card p, .aware-desc, .need-card p, .ex-body {
+      font-size: 14px; line-height: 1.7; overflow-wrap: break-word;
+    }
+    .conclusion { padding: 24px 20px; border-radius: 16px; }
+    footer { padding: 30px 0 40px; }
+    .foot-grid { flex-direction: column; align-items: flex-start; gap: 16px; }
+  }
+  @media (max-width: 480px) {
+    .stats-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 400px) {
+    .aware-grid { grid-template-columns: 1fr; }
+  }
 </style>
 <!-- Tonypedia shared nav (injected) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">

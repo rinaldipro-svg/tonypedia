@@ -670,6 +670,27 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* === PASS B2: mobile responsiveness — additive @media rules only === */
+        @media (max-width: 640px) {
+            .content { padding: 0 16px; }
+            .hero { padding: 40px 16px; }
+            .hero h1 { font-size: clamp(32px, 10vw, 60px); letter-spacing: -1px; }
+            .hero-summary { font-size: 15px; overflow-wrap: break-word; }
+            .hero-meta { gap: 8px; }
+            .entity-grid { grid-template-columns: 1fr !important; }
+            .entity-row { grid-template-columns: 1fr !important; }
+            .entity-cell { padding: 18px; }
+            .disruption-grid { grid-template-columns: 1fr !important; }
+            .disrupt-card { padding: 18px; }
+            .timeline-track { padding-left: 16px; }
+            .tl-node { padding: 0 0 28px 22px; }
+            .callout { padding: 14px 18px; font-size: clamp(15px, 4vw, 19px); overflow-wrap: break-word; }
+            .mandate { padding: 22px; border-radius: 12px; }
+            .mandate p, .thesis-text, .tech-detail, .tl-desc, .hero-summary, .disrupt-card p, .entity-cell {
+                font-size: 14px; line-height: 1.7; overflow-wrap: break-word;
+            }
+        }
     </style>
 
 <!-- Tonypedia shared nav (injected) -->
@@ -1291,8 +1312,8 @@
 </div>
 
 <script>
-// Scroll reveal
 // Scroll reveal with fallback
+const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
         if (e.isIntersecting) {
             e.target.classList.add('visible');

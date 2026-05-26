@@ -783,6 +783,32 @@
             .section-num { font-size: 2.1rem; }
             .asset-cell, .risk-card, .ud-card { padding: 18px 14px; }
         }
+
+        /* === PASS B2: mobile responsiveness — additive @media rules only === */
+        @media (max-width: 640px) {
+            .content { padding: 0 16px; }
+            .hero { padding: 40px 16px; }
+            .hero h1 { font-size: clamp(32px, 10vw, 60px); letter-spacing: -1px; }
+            .hero-desc { font-size: 15px; overflow-wrap: break-word; }
+            .hero-stats { gap: 14px; }
+            .asset-body { grid-template-columns: 1fr !important; }
+            .asset-cell { padding: 18px; }
+            .macro-box { grid-template-columns: 1fr !important; padding: 22px; }
+            .updown-grid { grid-template-columns: 1fr !important; }
+            .ud-card { padding: 18px; }
+            .risks-grid { grid-template-columns: 1fr !important; }
+            .risk-card { padding: 18px; }
+            .mgmt-card { flex-direction: column; padding: 22px; }
+            .verdict-banner { padding: 14px 18px; }
+            .verdict-content p { font-size: clamp(15px, 4vw, 19px); overflow-wrap: break-word; }
+            .mandate { padding: 22px; border-radius: 12px; }
+            .mandate p, .hero-desc, .risk-card p, .asset-cell p, .ud-card p, .macro-text p, .tl-desc {
+                font-size: 14px; line-height: 1.7; overflow-wrap: break-word;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-stats { display: grid; grid-template-columns: 1fr; }
+        }
     </style>
 
 <!-- Tonypedia shared nav (injected) -->

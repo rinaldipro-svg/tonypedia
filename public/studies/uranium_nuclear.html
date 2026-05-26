@@ -584,6 +584,33 @@
             .section-num { font-size: 2.1rem; }
             .company-card, .factor-card, .etf-card { padding: 18px 14px; }
         }
+
+        /* === PASS B2: mobile responsiveness — additive @media rules only === */
+        @media (max-width: 640px) {
+            .content { padding: 0 16px; }
+            .hero { padding: 40px 16px; }
+            .hero h1 { font-size: clamp(32px, 10vw, 60px); letter-spacing: -1px; }
+            .hero-desc { font-size: 15px; overflow-wrap: break-word; }
+            .hero-stats { gap: 14px; }
+            .factors-grid { grid-template-columns: 1fr !important; }
+            .factor-card { padding: 18px; }
+            .company-grid { grid-template-columns: 1fr !important; }
+            .company-card { padding: 18px; }
+            .etf-grid { grid-template-columns: 1fr !important; }
+            .etf-card { padding: 18px; }
+            .cameco-box { padding: 22px; }
+            .cameco-reasons { grid-template-columns: 1fr !important; }
+            .reserves-list { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .reserve-row { min-width: 480px; }
+            .callout { padding: 14px 18px; font-size: clamp(15px, 4vw, 19px); overflow-wrap: break-word; }
+            .mandate { padding: 22px; border-radius: 12px; }
+            .mandate p, .hero-desc, .reserve-note, .factor-card p, .company-card p {
+                font-size: 14px; line-height: 1.7; overflow-wrap: break-word;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-stats { grid-template-columns: 1fr; }
+        }
     </style>
 
 <!-- Tonypedia shared nav (injected) -->
