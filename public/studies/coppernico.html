@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coppernico Metals — Strategic Investment Analysis 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:           #0a0806;
+            --bg-raised:    #100e0b;
+            --bg-card:      #161310;
+            --bg-hover:     #1d1a16;
+            --border:       rgba(255,255,255,0.05);
+            --border-hi:    rgba(255,255,255,0.09);
+            --text:         #e2ddd8;
+            --text-dim:     #8a8278;
+            --text-muted:   #524d47;
+            --white:        #f5f0eb;
+
+            /* Copper palette */
+            --copper:       #e07d3c;
+            --copper-dim:   rgba(224,125,60,0.10);
+            --copper-glow:  rgba(224,125,60,0.22);
+            --copper-light: #f0a060;
+
+            --emerald:      #34d399;
+            --emerald-dim:  rgba(52,211,153,0.10);
+            --rose:         #fb7185;
+            --rose-dim:     rgba(251,113,133,0.10);
+            --sky:          #38bdf8;
+            --sky-dim:      rgba(56,189,248,0.10);
+            --amber:        #fbbf24;
+            --amber-dim:    rgba(251,191,36,0.10);
+            --violet:       #a78bfa;
+            --violet-dim:   rgba(167,139,250,0.10);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ══════════ HERO ══════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px clamp(20px, 6vw, 140px);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -25%; right: -15%;
+            width: 1000px; height: 1000px;
+            background: radial-gradient(circle, var(--copper-glow) 0%, transparent 60%);
+            opacity: 0.45;
+            animation: drift 14s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -25%; left: -10%;
+            width: 750px; height: 750px;
+            background: radial-gradient(circle, rgba(52,211,153,0.08) 0%, transparent 60%);
+            opacity: 0.5;
+            animation: drift 20s ease-in-out 4s infinite;
+            pointer-events: none;
+        }
+        @keyframes drift {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50%      { transform: translate(30px,-20px) scale(1.08); }
+        }
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(26px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        .hero-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--copper);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 36px;
+            opacity: 0; animation: fadeUp .8s ease .2s forwards;
+        }
+        .hero-eyebrow::before {
+            content: '';
+            width: 44px; height: 1px;
+            background: var(--copper);
+            flex-shrink: 0;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 6.6rem);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            color: var(--white);
+            max-width: 960px;
+            opacity: 0; animation: fadeUp 1s ease .4s forwards;
+        }
+        .hero h1 em { font-style: italic; color: var(--copper); }
+
+        .hero-desc {
+            margin-top: 32px;
+            max-width: 600px;
+            font-size: 1.05rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+            opacity: 0; animation: fadeUp 1s ease .6s forwards;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 52px;
+            flex-wrap: wrap;
+            margin-top: 60px;
+            opacity: 0; animation: fadeUp 1s ease .8s forwards;
+        }
+        .hero-stat span:first-child {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--white);
+            display: block;
+            letter-spacing: -1px;
+        }
+        .hero-stat span:last-child {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* ══════════ VERDICT BANNER ══════════ */
+        .verdict-banner {
+            margin: 0 clamp(20px, 6vw, 140px) 90px;
+            padding: 28px 36px;
+            background: var(--copper-dim);
+            border: 1px solid rgba(224,125,60,0.25);
+            border-radius: 12px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            line-height: 1.7;
+        }
+        .verdict-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+        .verdict-content { flex: 1; }
+        .verdict-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-bottom: 6px;
+        }
+        .verdict-content p { font-size: 0.93rem; color: var(--copper-light); }
+        .verdict-content strong { color: var(--white); }
+
+        /* ══════════ CONTENT ══════════ */
+        .content {
+            padding: 0 clamp(20px, 6vw, 140px);
+            max-width: 1540px;
+            margin: 0 auto;
+        }
+        .section { margin-bottom: 100px; }
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: 44px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            line-height: 0.85;
+            color: var(--bg-card);
+            -webkit-text-stroke: 1px var(--text-muted);
+            letter-spacing: -3px;
+            flex-shrink: 0;
+        }
+        .section-titles { flex: 1; }
+        .section-titles h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.85rem;
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: -0.5px;
+        }
+        .section-titles p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        /* ══════════ ASSET FEATURE ══════════ */
+        .asset-feature {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-hi);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .asset-header {
+            padding: 32px 36px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-raised) 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .asset-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            background: var(--copper-dim);
+            border: 1px solid rgba(224,125,60,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .asset-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--white);
+        }
+        .asset-header .asset-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-top: 4px;
+        }
+        .asset-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        .asset-cell {
+            padding: 28px 32px;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .asset-cell:nth-child(even) { border-right: none; }
+        .asset-cell:nth-last-child(-n+2) { border-bottom: none; }
+        .asset-cell-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin-bottom: 8px;
+        }
+        .asset-cell h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        .asset-cell p {
+            font-size: 0.84rem;
+            color: var(--text-dim);
+            line-height: 1.68;
+        }
+
+        /* ══════════ METRICS TABLE ══════════ */
+        .metrics-grid {
+            display: grid;
+            gap: 2px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .metric-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            background: var(--bg-raised);
+            transition: background 0.22s;
+        }
+        .metric-row:hover { background: var(--bg-hover); }
+        .metric-row.header {
+            background: var(--bg-card);
+        }
+        .metric-row.header .metric-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 14px 24px;
+        }
+        .metric-cell {
+            padding: 22px 24px;
+            font-size: 0.88rem;
+            color: var(--text-dim);
+            border-right: 1px solid var(--border);
+        }
+        .metric-cell:last-child { border-right: none; }
+        .metric-cell strong { color: var(--white); font-weight: 500; }
+        .metric-name { font-weight: 600; color: var(--text); font-size: 0.92rem; }
+        .metric-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--copper);
+            font-size: 0.88rem;
+        }
+        .metric-value.neutral { color: var(--emerald); }
+        .metric-value.good    { color: var(--emerald); }
+        .metric-value.caution { color: var(--amber); }
+
+        /* ══════════ CATALYST TIMELINE ══════════ */
+        .timeline-track {
+            position: relative;
+            padding-left: 28px;
+            border-left: 2px solid var(--border-hi);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .tl-item {
+            position: relative;
+            padding: 0 0 40px 32px;
+        }
+        .tl-item:last-child { padding-bottom: 0; }
+        .tl-dot {
+            position: absolute;
+            left: -37px;
+            top: 6px;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            border: 2px solid;
+            background: var(--bg);
+            z-index: 2;
+        }
+        .tl-item:nth-child(1) .tl-dot { border-color: var(--copper);  box-shadow: 0 0 10px var(--copper-glow); }
+        .tl-item:nth-child(2) .tl-dot { border-color: var(--amber);   box-shadow: 0 0 10px rgba(251,191,36,0.3); }
+        .tl-item:nth-child(3) .tl-dot { border-color: var(--emerald); box-shadow: 0 0 10px rgba(52,211,153,0.3); }
+        .tl-item:nth-child(4) .tl-dot { border-color: var(--sky);     box-shadow: 0 0 10px rgba(56,189,248,0.3); }
+
+        .tl-period {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .tl-item:nth-child(1) .tl-period { color: var(--copper); }
+        .tl-item:nth-child(2) .tl-period { color: var(--amber); }
+        .tl-item:nth-child(3) .tl-period { color: var(--emerald); }
+        .tl-item:nth-child(4) .tl-period { color: var(--sky); }
+
+        .tl-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        .tl-desc {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.68;
+            max-width: 680px;
+        }
+        .tl-risk {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 4px;
+            background: var(--amber-dim);
+            color: var(--amber);
+        }
+
+        /* ══════════ RISKS GRID ══════════ */
+        .risks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .risk-card {
+            background: var(--bg-raised);
+            padding: 28px 24px;
+            transition: background 0.22s;
+            position: relative;
+            overflow: hidden;
+        }
+        .risk-card:hover { background: var(--bg-hover); }
+        .risk-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .risk-card:nth-child(1)::before { background: var(--rose); }
+        .risk-card:nth-child(2)::before { background: var(--amber); }
+        .risk-card:nth-child(3)::before { background: var(--violet); }
+
+        .risk-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .risk-card:nth-child(1) .risk-label { color: var(--rose); }
+        .risk-card:nth-child(2) .risk-label { color: var(--amber); }
+        .risk-card:nth-child(3) .risk-label { color: var(--violet); }
+
+        .risk-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+        .risk-card p { font-size: 0.83rem; color: var(--text-dim); line-height: 1.68; }
+
+        /* ══════════ MACRO BOX ══════════ */
+        .macro-box {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-raised) 100%);
+            border: 1px solid var(--border-hi);
+            border-radius: 16px;
+            padding: 44px 48px;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+        .macro-box::before {
+            content: '';
+            position: absolute;
+            top: -40%; right: -20%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, var(--copper-glow) 0%, transparent 70%);
+            opacity: 0.10;
+            pointer-events: none;
+        }
+        .macro-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--white);
+            margin-bottom: 16px;
+        }
+        .macro-text p {
+            font-size: 0.86rem;
+            color: var(--text-dim);
+            line-height: 1.75;
+            margin-bottom: 12px;
+        }
+        .macro-text p strong { color: var(--copper); font-weight: 500; }
+        .macro-stats { display: flex; flex-direction: column; gap: 16px; }
+        .macro-stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 22px;
+        }
+        .macro-stat-card .ms-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .macro-stat-card .ms-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--copper-light);
+            letter-spacing: -1px;
+        }
+        .macro-stat-card .ms-note {
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        /* ══════════ MANAGEMENT CARD ══════════ */
+        .mgmt-card {
+            background: var(--bg-raised);
+            border: 1px solid var(--border-hi);
+            border-radius: 16px;
+            padding: 36px 40px;
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+        }
+        .mgmt-avatar {
+            width: 64px; height: 64px;
+            border-radius: 16px;
+            background: var(--copper-dim);
+            border: 1px solid rgba(224,125,60,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+        .mgmt-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--white);
+        }
+        .mgmt-info .mgmt-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--copper);
+            margin: 4px 0 14px;
+        }
+        .mgmt-info p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; }
+        .mgmt-track {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .track-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 6px;
+            background: var(--emerald-dim);
+            color: var(--emerald);
+        }
+
+        /* ══════════ UPDOWN ══════════ */
+        .updown-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .ud-card {
+            background: var(--bg-raised);
+            padding: 32px 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ud-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .ud-card.up::before   { background: var(--emerald); }
+        .ud-card.down::before { background: var(--rose); }
+        .ud-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .ud-card.up   .ud-label { color: var(--emerald); }
+        .ud-card.down .ud-label { color: var(--rose); }
+        .ud-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+        .ud-card.up   .ud-value { color: var(--emerald); }
+        .ud-card.down .ud-value { color: var(--rose); }
+        .ud-card p { font-size: 0.84rem; color: var(--text-dim); line-height: 1.68; }
+        .ud-card p strong { color: var(--text); font-weight: 500; }
+
+        /* ══════════ MANDATE / FOOTER ══════════ */
+        .mandate {
+            margin: 0 clamp(20px, 6vw, 140px) 100px;
+            padding: 56px 60px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-raised) 100%);
+            border: 1px solid var(--border-hi);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .mandate::before {
+            content: '';
+            position: absolute;
+            top: -40%; right: -20%;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, var(--copper-glow) 0%, transparent 70%);
+            opacity: 0.12;
+            pointer-events: none;
+        }
+        .mandate-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--copper);
+            background: var(--copper-dim);
+            border: 1px solid rgba(224,125,60,0.22);
+            padding: 6px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .mandate h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 400;
+            color: var(--white);
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        .mandate p {
+            font-size: 1rem;
+            color: var(--text-dim);
+            line-height: 1.82;
+            max-width: 820px;
+            margin-bottom: 14px;
+        }
+        .mandate p strong { color: var(--copper); font-weight: 500; }
+        .mandate p:last-child { margin-bottom: 0; }
+
+        .disclaimer {
+            margin: 0 clamp(20px, 6vw, 140px) 60px;
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            padding: 24px 0 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ══════════ SCROLL REVEAL ══════════ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ══════════ RESPONSIVE ══════════ */
+        @media (max-width: 768px) {
+            .hero { padding: 68px 20px 56px; min-height: auto; }
+            .hero-eyebrow { font-size: 0.6rem; letter-spacing: 3px; margin-bottom: 22px; }
+            .hero-eyebrow::before { width: 26px; }
+            .hero h1 { font-size: clamp(2.2rem, 9vw, 3.2rem); letter-spacing: -1px; }
+            .hero-desc { font-size: 0.95rem; margin-top: 20px; }
+            .hero-stats {
+                gap: 18px; margin-top: 36px;
+                display: grid; grid-template-columns: 1fr 1fr;
+            }
+            .hero-stat span:first-child { font-size: 1.9rem; }
+
+            .verdict-banner { margin: 0 20px 56px; padding: 20px 18px; flex-direction: column; }
+
+            .content { padding: 0 20px; }
+            .section { margin-bottom: 64px; }
+            .section-header {
+                flex-direction: column; align-items: flex-start;
+                gap: 6px; margin-bottom: 24px; padding-bottom: 14px;
+            }
+            .section-num { font-size: 2.6rem; }
+            .section-titles h2 { font-size: 1.35rem; }
+
+            /* Asset feature */
+            .asset-header { padding: 22px 20px; gap: 14px; }
+            .asset-icon { width: 44px; height: 44px; font-size: 1.1rem; }
+            .asset-header h3 { font-size: 1.2rem; }
+            .asset-body { grid-template-columns: 1fr; }
+            .asset-cell {
+                border-right: none !important;
+                border-bottom: 1px solid var(--border) !important;
+                padding: 20px 20px;
+            }
+            .asset-cell:last-child { border-bottom: none !important; }
+
+            /* Metrics */
+            .metric-row { grid-template-columns: 1fr; }
+            .metric-row.header { display: none; }
+            .metric-cell {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 14px 18px;
+                display: grid;
+                grid-template-columns: 100px 1fr;
+                gap: 8px;
+                align-items: baseline;
+            }
+            .metric-cell:last-child { border-bottom: none; }
+            .metric-cell::before {
+                content: attr(data-label);
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.6rem;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                color: var(--copper);
+                white-space: nowrap;
+                padding-top: 2px;
+            }
+            /* First cell in metric row = row header, no grid */
+            .metric-row > .metric-cell:first-child {
+                display: block;
+                background: rgba(255,255,255,0.02);
+                border-bottom: 1px solid var(--border);
+            }
+            .metric-row > .metric-cell:first-child::before { display: none; }
+
+            /* Timeline */
+            .timeline-track { padding-left: 16px; }
+            .tl-item { padding: 0 0 32px 24px; }
+            .tl-dot { left: -29px; }
+            .tl-title { font-size: 1.1rem; }
+
+            /* Risks */
+            .risks-grid { grid-template-columns: 1fr; }
+            .risk-card { padding: 22px 18px; }
+
+            /* Macro */
+            .macro-box {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 28px 22px;
+            }
+            .macro-text h3 { font-size: 1.3rem; }
+
+            /* Management */
+            .mgmt-card { flex-direction: column; gap: 18px; padding: 24px 20px; }
+
+            /* Up/down */
+            .updown-grid { grid-template-columns: 1fr; }
+            .ud-card { padding: 24px 20px; }
+            .ud-value { font-size: 2rem; }
+
+            /* Mandate */
+            .mandate { margin: 0 20px 72px; padding: 28px 22px; border-radius: 14px; }
+            .mandate h2 { font-size: 1.6rem; }
+            .mandate p { font-size: 0.9rem; }
+
+            .disclaimer { margin: 0 20px 48px; }
+        }
+
+        @media (max-width: 420px) {
+            .hero h1 { font-size: 2rem; }
+            .hero-stats { gap: 14px; }
+            .section-num { font-size: 2.1rem; }
+            .asset-cell, .risk-card, .ud-card { padding: 18px 14px; }
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<div class="hero">
+    <div class="hero-eyebrow">Strategic Investment Analysis &mdash; December 2025</div>
+    <h1>Coppernico<br><em>Metals</em> Inc.<br>The Elephant Hunter</h1>
+    <p class="hero-desc">A high-conviction deep dive into the most speculative copper-gold exploration play in the Andean belt — a company sitting next to world-class mines, hunting a district-scale discovery hidden beneath volcanic cover.</p>
+    <div class="hero-stats">
+        <div class="hero-stat"><span>~$50M</span><span>Market Cap (Dec 2025)</span></div>
+        <div class="hero-stat"><span>56,400</span><span>Hectares — Sombrero Package</span></div>
+        <div class="hero-stat"><span>$14.1M</span><span>Cash on Hand (Q3 2025)</span></div>
+        <div class="hero-stat"><span>9.9%</span><span>Strategic Stake — Teck</span></div>
+    </div>
+</div>
+
+<!-- ══════════════════ VERDICT BANNER ══════════════════ -->
+<div class="verdict-banner reveal">
+    <span class="verdict-icon">◆</span>
+    <div class="verdict-content">
+        <div class="verdict-label">Analyst Rating &mdash; December 2025</div>
+        <p><strong>Speculative Buy / High Conviction / High Risk.</strong> If Coppernico discovers a deposit comparable to Las Bambas, this is a <strong>10x–20x stock</strong>. If the drills miss or permits stall indefinitely, expect a <strong>-50% to -80% drawdown</strong>. Size it accordingly — this belongs in the venture capital sleeve of a copper-weighted portfolio.</p>
+    </div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════ SECTION 1: FLAGSHIP ASSET ══════════════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-titles">
+            <h2>Flagship Asset: Sombrero</h2>
+            <p>A district-scale copper-gold skarn target in Peru's premier mining belt</p>
+        </div>
+    </div>
+    <div class="asset-feature">
+        <div class="asset-header">
+            <div class="asset-icon">⛰️</div>
+            <div>
+                <h3>Sombrero Project — Andahuaylas-Yauri Belt, Peru</h3>
+                <div class="asset-sub">~56,400 Hectares &mdash; Adjacent to Las Bambas, Haquira & Tintaya</div>
+            </div>
+        </div>
+        <div class="asset-body">
+            <div class="asset-cell">
+                <div class="asset-cell-label">Location Context</div>
+                <h4>Elephant Country</h4>
+                <p>The Andahuaylas-Yauri belt hosts some of the world's largest copper mines. Coppernico's land sits directly adjacent to Las Bambas, Haquira, and Tintaya — proven Tier 1 deposits that validate the geological potential of the entire belt.</p>
+            </div>
+            <div class="asset-cell">
+                <div class="asset-cell-label">The "Cover" Theory</div>
+                <h4>Hidden Beneath the Sombrero</h4>
+                <p>The accessible copper in this belt has largely been found and mined. Coppernico's geologists believe the same massive copper-gold skarn systems extend onto their land but are concealed under a "sombrero" (hat) of younger volcanic rock — never properly drilled.</p>
+            </div>
+            <div class="asset-cell">
+                <div class="asset-cell-label">Scale & Potential</div>
+                <h4>District-Scale Target</h4>
+                <p>At 56,400 hectares, this is not a single mine target. A successful discovery would constitute a district-scale, Tier 1 asset. The geological setting demands a large-scale approach, which is exactly what the current UAV survey program is designed to provide.</p>
+            </div>
+            <div class="asset-cell">
+                <div class="asset-cell-label">Recent Catalyst — Dec 4, 2025</div>
+                <h4>UAV Magnetic & Gravity Survey</h4>
+                <p>Launched a 13,000-hectare UAV magnetic and gravity survey — effectively an X-ray through the volcanic cover. The goal: pinpoint the dense copper-gold bodies beneath for precision drill targeting. Survey results are the next major market catalyst.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════ SECTION 2: FINANCIAL HEALTH ══════════════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-titles">
+            <h2>Financial Health & Capital Structure</h2>
+            <p>Status: Healthy — funded through the critical permitting and early drilling phases</p>
+        </div>
+    </div>
+    <div class="metrics-grid">
+        <div class="metric-row header">
+            <div class="metric-cell">Metric</div>
+            <div class="metric-cell">Value (Dec 2025)</div>
+            <div class="metric-cell">Assessment</div>
+        </div>
+        <div class="metric-row">
+            <div class="metric-cell metric-name" data-label="Metric">Share Price</div>
+            <div class="metric-cell metric-value caution" data-label="Value">~$0.29 CAD</div>
+            <div class="metric-cell" data-label="Assessment">Recovering from lows, building momentum into the survey results catalyst</div>
+        </div>
+        <div class="metric-row">
+            <div class="metric-cell metric-name" data-label="Metric">Market Cap</div>
+            <div class="metric-cell metric-value" data-label="Value">~$50 Million</div>
+            <div class="metric-cell" data-label="Assessment">Tiny valuation relative to the scale of the target. Significant re-rating potential on discovery</div>
+        </div>
+        <div class="metric-row">
+            <div class="metric-cell metric-name" data-label="Metric">Cash on Hand</div>
+            <div class="metric-cell metric-value good" data-label="Value">~$14.1M (Q3 2025)</div>
+            <div class="metric-cell" data-label="Assessment">Sufficient to fund current geophysics surveys and advance permitting through mid-2026</div>
+        </div>
+        <div class="metric-row">
+            <div class="metric-cell metric-name" data-label="Metric">Funded Runway</div>
+            <div class="metric-cell metric-value good" data-label="Value">Mid-2026</div>
+            <div class="metric-cell" data-label="Assessment">CEO confirmed cash runway extends to mid-2026 — covers all key near-term catalysts</div>
+        </div>
+        <div class="metric-row">
+            <div class="metric-cell metric-name" data-label="Metric">Debt</div>
+            <div class="metric-cell metric-value good" data-label="Value">$0.00</div>
+            <div class="metric-cell" data-label="Assessment">Clean balance sheet. No debt obligations hanging over the exploration program</div>
+        </div>
+        <div class="metric-row">
+            <div class="metric-cell metric-name" data-label="Metric">Strategic Backers</div>
+            <div class="metric-cell metric-value" data-label="Value">Teck 9.9% · Newmont ~6%</div>
+            <div class="metric-cell" data-label="Assessment">Critical endorsement. Two of the world's largest miners hold stock — likely as a strategic option on a future acquisition</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════ SECTION 3: MANAGEMENT ══════════════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-titles">
+            <h2>Management — The "Auryn" Pedigree</h2>
+            <p>In junior mining, you bet on the jockey, not just the horse</p>
+        </div>
+    </div>
+    <div class="mgmt-card">
+        <div class="mgmt-avatar">👤</div>
+        <div class="mgmt-info">
+            <h3>Ivan Bebek</h3>
+            <div class="mgmt-role">Chief Executive Officer &mdash; Co-Founder</div>
+            <p>Bebek previously co-founded <strong style="color:var(--text)">Cayden Resources</strong> (sold to Agnico Eagle for $205M) and <strong style="color:var(--text)">Keegan Resources</strong> (now Galiano Gold). He is known for aggressive capital raising and delivering exits to shareholders at significant premiums. This team are not "lifestyle geologists" — they are company builders with a single stated objective: find a major deposit and sell to a Tier 1 miner.</p>
+            <div class="mgmt-track">
+                <span class="track-badge">Cayden → Agnico Eagle $205M</span>
+                <span class="track-badge">Keegan → Galiano Gold</span>
+                <span class="track-badge">Serial Exit Builder</span>
+                <span class="track-badge">Teck + Newmont Backed</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════ SECTION 4: CATALYSTS & TIMELINE ══════════════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-titles">
+            <h2>Catalyst Timeline 2025–2026</h2>
+            <p>The de-risking roadmap — each milestone is a potential re-rating event</p>
+        </div>
+    </div>
+    <div class="timeline-track">
+        <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-period">Now — Q4 2025</div>
+            <div class="tl-title">Geophysics Program (Active)</div>
+            <p class="tl-desc">The 13,000-hectare UAV magnetic and gravity survey is underway. Watch for press releases announcing results. If the survey identifies massive, dense anomalies underground that align with expected skarn geometry, market speculation — and share price — will build rapidly.</p>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-period">Mid-2026</div>
+            <div class="tl-title">Drill Permit Approval</div>
+            <p class="tl-desc">Coppernico filed for an expanded drill permit in November 2025, covering the Fierrazo and Tipicancha targets. Permit approval is the critical gating item before any drilling can begin.</p>
+            <span class="tl-risk">⚠ Risk: Permit delays in Peru are common — timeline could slip to late 2026</span>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-period">Late 2026</div>
+            <div class="tl-title">Phase 2 Drilling — The Moment of Truth</div>
+            <p class="tl-desc">When the drills start turning at Fierrazo and Tipicancha, the stock typically rallies on speculation ahead of results ("Buy the Rumor"). The first hole that intersects significant copper-gold mineralization would be a transformational event for this company's valuation.</p>
+        </div>
+        <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-period">2026–2027 (Macro)</div>
+            <div class="tl-title">Copper Price Inflection (Citi Scenario)</div>
+            <p class="tl-desc">Analysts at Citi and JP Morgan project copper could reach $5.90/lb in 2026 as structural supply deficits deepen. In that environment, major miners (BHP, Rio Tinto) will be competing aggressively to acquire new deposits — dramatically amplifying any acquisition premium on a Coppernico discovery.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════ SECTION 5: MACRO CONTEXT ══════════════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-titles">
+            <h2>The Copper Squeeze</h2>
+            <p>Why the macro backdrop amplifies the Coppernico opportunity right now</p>
+        </div>
+    </div>
+    <div class="macro-box">
+        <div class="macro-text">
+            <h3>The Citi / JP Morgan Scenario</h3>
+            <p>Copper is the metal of electrification — EVs, grid infrastructure, data centers, and renewables all require it at scale. Analysts project a structural supply deficit building through 2026–2030 as demand from the energy transition outpaces mining capacity additions.</p>
+            <p>If copper hits <strong>$5.90/lb</strong>, major miners (BHP, Rio Tinto, Glencore) will be under immense shareholder pressure to replace depleting reserves. Greenfield discoveries in proven belts — exactly what Coppernico is hunting — would command <strong>acquisition premiums far above normal</strong>.</p>
+            <p>This is the core of the thesis: a small-cap explorer with a plausible Tier 1 target in a proven belt, backed by two major miners who know exactly what sits next door, positioned ahead of a potential copper super-cycle.</p>
+        </div>
+        <div class="macro-stats">
+            <div class="macro-stat-card">
+                <div class="ms-label">Citi Price Target (2026)</div>
+                <div class="ms-value">$5.90/lb</div>
+                <div class="ms-note">Copper — structural supply deficit thesis</div>
+            </div>
+            <div class="macro-stat-card">
+                <div class="ms-label">Strategic Holder — Teck Resources</div>
+                <div class="ms-value">9.9%</div>
+                <div class="ms-note">One of the world's largest diversified miners</div>
+            </div>
+            <div class="macro-stat-card">
+                <div class="ms-label">Strategic Holder — Newmont</div>
+                <div class="ms-value">~6%</div>
+                <div class="ms-note">World's largest gold miner — key copper-gold acquirer</div>
+            </div>
+            <div class="macro-stat-card">
+                <div class="ms-label">Adjacent Benchmark</div>
+                <div class="ms-value">Las Bambas</div>
+                <div class="ms-note">One of the world's top copper mines — on the same belt</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════ SECTION 6: RISKS ══════════════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">06</div>
+        <div class="section-titles">
+            <h2>The Three Killers</h2>
+            <p>Risks that could take this stock near zero — size your position accordingly</p>
+        </div>
+    </div>
+    <div class="risks-grid">
+        <div class="risk-card">
+            <div class="risk-label">Risk 01 — Geological</div>
+            <h4>Exploration Failure</h4>
+            <p>The "cover" theory might simply be wrong. The volcanic rock could be masking nothing but barren geology. A dry drill program — holes that miss significant mineralization — is the terminal scenario for any junior explorer. Result: stock goes near zero.</p>
+        </div>
+        <div class="risk-card">
+            <div class="risk-label">Risk 02 — Jurisdictional</div>
+            <h4>Permitting Hell</h4>
+            <p>Peru is a notoriously difficult permitting jurisdiction. Bureaucratic delays can stall projects for years. If the expanded drill permit slides from mid-2026 to late 2026 or beyond, the company burns cash without results, straining the balance sheet and investor patience.</p>
+        </div>
+        <div class="risk-card">
+            <div class="risk-label">Risk 03 — Social</div>
+            <h4>Community Relations</h4>
+            <p>Local communities in this belt have historically blocked roads to Las Bambas, halting operations at one of the world's largest copper mines. Coppernico currently has signed access agreements and good community relations — but this is always fragile and can deteriorate rapidly.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════ SECTION 7: UPSIDE / DOWNSIDE ══════════════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">07</div>
+        <div class="section-titles">
+            <h2>The Payoff Matrix</h2>
+            <p>Asymmetric risk-reward — the full range of outcomes</p>
+        </div>
+    </div>
+    <div class="updown-grid">
+        <div class="ud-card up">
+            <div class="ud-label">Bull Case — Discovery</div>
+            <div class="ud-value">10x–20x</div>
+            <p>A discovery comparable to Las Bambas moves Coppernico from a <strong>~$50M market cap to $500M–$1B+</strong>. In a $5.90/lb copper environment, with Teck and Newmont already on the register, a competitive acquisition process could yield premiums well above the spot market cap. This is the lottery ticket.</p>
+        </div>
+        <div class="ud-card down">
+            <div class="ud-label">Bear Case — Miss or Stall</div>
+            <div class="ud-value">-50% to -80%</div>
+            <p>Dry holes or multi-year permit delays drain the treasury, destroy the exploration narrative, and force dilutive capital raises at distressed prices. <strong>Junior explorers that miss their main target rarely recover</strong> to prior valuations. This is real and permanent capital loss risk.</p>
+        </div>
+    </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- ══════════════════ MANDATE ══════════════════ -->
+<div class="mandate reveal">
+    <div class="mandate-rating">◆ &nbsp; Speculative Buy &mdash; High Conviction / High Risk</div>
+    <h2>The 2025 Strategic Mandate</h2>
+    <p>Coppernico is a pure-play bet on one of the best-located untested copper-gold targets in South America. The combination of <strong>proven belt geology</strong>, a credible "cover" theory, a <strong>management team with two prior exits</strong>, and strategic validation from Teck and Newmont creates a compelling — if highly speculative — setup.</p>
+    <p>The stock belongs in the <strong>venture capital sleeve</strong> of a copper-weighted portfolio, sized as a high-risk satellite position alongside stable producers like Ivanhoe or Teck. The drilling catalyst in late 2026 is the binary event. If copper is at $5.90/lb when those drills turn, the market will be watching very closely.</p>
+    <p>The window to build a position ahead of the permit approval and geophysics results is <strong>right now</strong> — at a ~$50M market cap, the downside is partially de-risked by the cash position, and the upside is district-scale.</p>
+</div>
+
+<div class="disclaimer reveal">
+    <strong>Disclaimer:</strong> This analysis is for informational and educational purposes only and does not constitute financial or investment advice. Data reflects conditions as of December 2025. Junior mining exploration involves extreme risk including total loss of capital. Always conduct independent due diligence and consult a qualified financial advisor. The author may hold positions in securities mentioned. All investments carry risk.
+</div>
+
+
+
+<noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
+<script>
+(function() {
+    function showAll() {
+        document.querySelectorAll('.reveal').forEach(function(el) {
+            el.classList.add('visible');
+        });
+    }
+    // Fallback: show everything after 300ms regardless
+    var fallback = setTimeout(showAll, 300);
+    if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) e.target.classList.add('visible');
+            });
+        }, { threshold: 0.05 });
+        document.querySelectorAll('.reveal').forEach(function(el) {
+            observer.observe(el);
+        });
+    } else {
+        showAll();
+    }
+})();
+</script>
+</body>
+</html>

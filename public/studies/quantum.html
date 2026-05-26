@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Computing: The 2026 Industrial State</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0b0f;
+            --bg-elevated: #131318;
+            --bg-card: #18181f;
+            --bg-hover: #1e1e27;
+            --border: rgba(255,255,255,0.06);
+            --border-accent: rgba(255,255,255,0.1);
+            --text: #e8e8ec;
+            --text-dim: #85858f;
+            --text-muted: #55555f;
+            --accent: #00e4a0;
+            --accent-dim: rgba(0,228,160,0.12);
+            --accent-glow: rgba(0,228,160,0.25);
+            --warm: #ff6b4a;
+            --warm-dim: rgba(255,107,74,0.12);
+            --blue: #4d8bff;
+            --blue-dim: rgba(77,139,255,0.12);
+            --purple: #a78bfa;
+            --purple-dim: rgba(167,139,250,0.12);
+            --yellow: #fbbf24;
+            --yellow-dim: rgba(251,191,36,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px clamp(24px, 6vw, 120px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -20%;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 65%);
+            opacity: 0.3;
+            animation: pulseGlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(77,139,255,0.15) 0%, transparent 65%);
+            opacity: 0.4;
+            animation: pulseGlow 10s ease-in-out 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.15); opacity: 0.5; }
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.2s forwards;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .hero h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(3.2rem, 7vw, 7.5rem);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            color: #fff;
+            max-width: 900px;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.4s forwards;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-summary {
+            margin-top: 40px;
+            max-width: 560px;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            line-height: 1.75;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.6s forwards;
+        }
+
+        .hero-meta {
+            margin-top: 60px;
+            display: flex;
+            gap: 48px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.8s forwards;
+        }
+
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hero-stat span:first-child {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2.4rem;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+
+        .hero-stat span:last-child {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── CALLOUT ─── */
+        .callout {
+            margin: 0 clamp(24px, 6vw, 120px) 100px;
+            padding: 32px 40px;
+            background: var(--accent-dim);
+            border: 1px solid rgba(0,228,160,0.2);
+            border-radius: 12px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            font-size: 0.95rem;
+            color: var(--accent);
+            line-height: 1.7;
+        }
+
+        .callout-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* ─── SECTIONS ─── */
+        .content {
+            padding: 0 clamp(24px, 6vw, 120px);
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 120px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: 48px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+        }
+
+        .section-num {
+            font-family: 'Instrument Serif', serif;
+            font-size: 4.5rem;
+            line-height: 0.85;
+            color: var(--bg-card);
+            -webkit-text-stroke: 1px var(--text-muted);
+            letter-spacing: -3px;
+        }
+
+        .section-titles {
+            flex: 1;
+        }
+
+        .section-titles h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .section-titles p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        /* ─── ENTITY CARDS ─── */
+        .entity-grid {
+            display: grid;
+            gap: 2px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .entity-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr 1fr;
+            background: var(--bg-elevated);
+            transition: background 0.25s;
+        }
+
+        .entity-row:hover { background: var(--bg-hover); }
+
+        .entity-row.header-row {
+            background: var(--bg-card);
+        }
+
+        .entity-row.header-row .entity-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 16px 28px;
+            font-weight: 500;
+        }
+
+        .entity-cell {
+            padding: 28px;
+            font-size: 0.88rem;
+            border-right: 1px solid var(--border);
+        }
+
+        .entity-cell:last-child { border-right: none; }
+
+        .entity-name {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .entity-name strong {
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .ticker-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 3px 10px;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .private-badge {
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .modality-tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            width: fit-content;
+        }
+
+        .mod-sc { background: var(--blue-dim); color: var(--blue); }
+        .mod-ti { background: var(--purple-dim); color: var(--purple); }
+        .mod-na { background: var(--accent-dim); color: var(--accent); }
+        .mod-ph { background: var(--yellow-dim); color: var(--yellow); }
+        .mod-qa { background: var(--warm-dim); color: var(--warm); }
+        .mod-topo { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+
+        .tech-detail {
+            color: var(--text-dim);
+            font-size: 0.84rem;
+            line-height: 1.6;
+        }
+
+        .tech-detail em { color: var(--text); font-style: normal; font-weight: 500; }
+
+        .financials {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            line-height: 2;
+            color: var(--text-dim);
+        }
+
+        .financials strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .thesis-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .thesis-text {
+            color: var(--text-dim);
+            font-size: 0.86rem;
+            line-height: 1.65;
+        }
+
+        /* ─── TIMELINE ─── */
+        .timeline-section {
+            margin-bottom: 120px;
+        }
+
+        .timeline-track {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            margin-top: 48px;
+        }
+
+        .timeline-track::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--accent), var(--blue), var(--purple), var(--warm));
+            border-radius: 1px;
+        }
+
+        .tl-node {
+            padding: 0 24px;
+            position: relative;
+        }
+
+        .tl-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid;
+            background: var(--bg);
+            position: relative;
+            z-index: 2;
+            margin-bottom: 24px;
+            margin-left: 8px;
+            top: 24px;
+        }
+
+        .tl-node:nth-child(1) .tl-dot { border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+        .tl-node:nth-child(2) .tl-dot { border-color: var(--blue); box-shadow: 0 0 12px rgba(77,139,255,0.3); }
+        .tl-node:nth-child(3) .tl-dot { border-color: var(--purple); box-shadow: 0 0 12px rgba(167,139,250,0.3); }
+        .tl-node:nth-child(4) .tl-dot { border-color: var(--warm); box-shadow: 0 0 12px rgba(255,107,74,0.3); }
+
+        .tl-year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 24px;
+        }
+
+        .tl-node:nth-child(1) .tl-year { color: var(--accent); }
+        .tl-node:nth-child(2) .tl-year { color: var(--blue); }
+        .tl-node:nth-child(3) .tl-year { color: var(--purple); }
+        .tl-node:nth-child(4) .tl-year { color: var(--warm); }
+
+        .tl-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.4rem;
+            color: #fff;
+            margin: 8px 0;
+        }
+
+        .tl-desc {
+            font-size: 0.84rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* ─── DISRUPTION ─── */
+        .disruption-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 48px;
+        }
+
+        .disrupt-card {
+            background: var(--bg-elevated);
+            padding: 40px 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .disrupt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .disrupt-card:nth-child(1)::before { background: var(--warm); }
+        .disrupt-card:nth-child(2)::before { background: var(--blue); }
+        .disrupt-card:nth-child(3)::before { background: var(--accent); }
+
+        .disrupt-priority {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .priority-critical { background: var(--warm-dim); color: var(--warm); }
+        .priority-commercial { background: var(--blue-dim); color: var(--blue); }
+        .priority-efficiency { background: var(--accent-dim); color: var(--accent); }
+
+        .disrupt-card h4 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .disrupt-card p {
+            font-size: 0.88rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        /* ─── MANDATE / FOOTER ─── */
+        .mandate {
+            margin: 0 clamp(24px, 6vw, 120px) 120px;
+            padding: 64px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
+            border: 1px solid var(--border-accent);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mandate::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .mandate h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2.4rem;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .mandate p {
+            font-size: 1.05rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+            max-width: 800px;
+            margin-bottom: 16px;
+        }
+
+        .mandate p strong { color: var(--accent); font-weight: 500; }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 1100px) {
+            .entity-row { grid-template-columns: 180px 1fr 1fr; }
+            .entity-row .entity-cell:nth-child(4) { display: none; }
+            .timeline-track { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+            .timeline-track::before { display: none; }
+            .disruption-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            /* Hero */
+            .hero {
+                padding: 72px 20px 60px;
+                min-height: auto;
+            }
+            .hero h1 {
+                font-size: clamp(2.4rem, 10vw, 3.5rem);
+                letter-spacing: -1px;
+            }
+            .hero-summary {
+                font-size: 1rem;
+                margin-top: 24px;
+            }
+            .hero-meta {
+                gap: 24px;
+                margin-top: 40px;
+                flex-wrap: wrap;
+            }
+            .hero-stat span:first-child { font-size: 1.8rem; }
+
+            /* Callout */
+            .callout {
+                margin: 0 20px 60px;
+                padding: 24px 20px;
+                flex-direction: column;
+                font-size: 0.9rem;
+            }
+
+            /* Section layout */
+            .content { padding: 0 20px; }
+            .section { margin-bottom: 72px; }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                margin-bottom: 28px;
+                padding-bottom: 16px;
+            }
+            .section-num {
+                font-size: 2.4rem;
+                letter-spacing: -2px;
+            }
+            .section-titles h2 { font-size: 1.5rem; }
+            .section-titles p { font-size: 0.85rem; }
+
+            /* Entity grid — card layout on mobile */
+            .entity-row { grid-template-columns: 1fr; }
+            .entity-row.header-row { display: none; }
+            .entity-cell {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 16px 20px;
+                font-size: 0.85rem;
+            }
+            .entity-cell:last-child { border-bottom: none; }
+
+            /* Show label chips before each cell on mobile */
+            .entity-cell:nth-child(2)::before { content: 'Technology'; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+            .entity-cell:nth-child(3)::before { content: 'Financials'; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+            .entity-cell:nth-child(4)::before { content: 'Thesis'; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+
+            /* Add subtle top border to visually group entity cards */
+            .entity-row:not(.header-row) {
+                border-top: 2px solid var(--accent-dim);
+                margin-top: 2px;
+            }
+
+            /* Timeline — vertical on mobile */
+            .timeline-track {
+                grid-template-columns: 1fr;
+                gap: 0;
+                padding-left: 20px;
+                border-left: 2px solid;
+                border-image: linear-gradient(to bottom, var(--accent), var(--blue), var(--purple), var(--warm)) 1;
+            }
+            .timeline-track::before { display: none; }
+            .tl-node {
+                padding: 0 0 36px 24px;
+                position: relative;
+            }
+            .tl-dot {
+                position: absolute;
+                left: -27px;
+                top: 6px;
+                margin: 0;
+            }
+            .tl-year { margin-top: 0; }
+
+            /* Disruption grid */
+            .disruption-grid {
+                grid-template-columns: 1fr;
+                margin-top: 28px;
+            }
+            .disrupt-card { padding: 28px 20px; }
+
+            /* Mandate */
+            .mandate {
+                margin: 0 20px 80px;
+                padding: 32px 24px;
+                border-radius: 14px;
+            }
+            .mandate h2 { font-size: 1.8rem; }
+            .mandate p { font-size: 0.95rem; }
+        }
+
+        @media (max-width: 420px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero-label { font-size: 0.65rem; letter-spacing: 2px; }
+            .hero-stat span:first-child { font-size: 1.6rem; }
+            .entity-cell { padding: 14px 16px; }
+            .section-num { font-size: 2rem; }
+        }
+
+        /* ─── SCROLL REVEAL ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="hero">
+    <div class="hero-label">April 2026 &mdash; The Post-NISQ Era</div>
+    <h1>The Monolithic<br><em>Quantum</em> Matrix</h1>
+    <p class="hero-summary">An exhaustive analysis of the 20 primary entities shaping the primordial landscape of machine-scale quantum utility &mdash; from cryogenic hardware to the post-quantum security migration.</p>
+    <div class="hero-meta">
+        <div class="hero-stat"><span>20</span><span>Entities Profiled</span></div>
+        <div class="hero-stat"><span>5</span><span>Qubit Modalities</span></div>
+        <div class="hero-stat"><span>2030</span><span>Fault Tolerance Target</span></div>
+    </div>
+</div>
+
+<div class="callout">
+    <span class="callout-icon">◆</span>
+    <div><strong>Monolithic Shift:</strong> The industry has moved beyond Noisy Intermediate-Scale Quantum (NISQ) systems. As of Q1 2026, the focus is on <strong>Logical Qubit Interconnects</strong> and <strong>Photonic Networking</strong>. The winners are vertically integrated players and those capturing the security migration's "anxiety premium."</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════ SECTION 1: SYSTEM SOVEREIGNS ═══════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-titles">
+            <h2>The System Sovereigns</h2>
+            <p>Full-stack ecosystems: cryogenic hardware to compiler-level software</p>
+        </div>
+    </div>
+    <div class="entity-grid">
+        <div class="entity-row header-row">
+            <div class="entity-cell">Entity</div>
+            <div class="entity-cell">Modality & Tech</div>
+            <div class="entity-cell">2026 Fiscal Realities</div>
+            <div class="entity-cell">Strategic Thesis</div>
+        </div>
+        <!-- IBM -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>IBM Quantum</strong>
+                <span class="ticker-badge">NYSE: IBM</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-sc">Superconducting</span>
+                <div class="tech-detail">1,121-qubit <em>Condor</em> + Modular <em>Heron</em> interconnects. Roadmap to 100k qubits by 2033.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Market Cap:</strong> ~$265B<br>
+                <strong>QaaS Rev:</strong> $1.4B<br>
+                <strong>Roadmap:</strong> 100k Qubits (2033)
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">Institutional Absolute</div>
+                <div class="thesis-text">The dominant enterprise layer. If quantum is "Cloud 2.0," IBM is its primary architect.</div>
+            </div>
+        </div>
+        <!-- Google -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Google Quantum AI</strong>
+                <span class="ticker-badge">NASDAQ: GOOGL</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-sc">Superconducting</span>
+                <div class="tech-detail"><em>Willow</em> processor. Pioneers in Surface Code error correction with sustained QEC.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Status:</strong> Vertically Integrated<br>
+                <strong>Milestone:</strong> Sustained QEC<br>
+                <strong>Capex:</strong> Unbounded
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">Fault-Tolerant Leader</div>
+                <div class="thesis-text">Not selling qubits &mdash; selling solutions to problems that don't exist yet.</div>
+            </div>
+        </div>
+        <!-- Microsoft -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Microsoft Azure Quantum</strong>
+                <span class="ticker-badge">NASDAQ: MSFT</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-topo">Topological (Majorana)</span>
+                <div class="tech-detail">Building the "Quantum Supercomputer" via topological protection. Azure Cloud integrated.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Partners:</strong> Quantinuum / IonQ<br>
+                <strong>Status:</strong> Azure Cloud Integrated
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The Ecosystem Play</div>
+                <div class="thesis-text">Wins whether their hardware works or not, by being the platform for everyone else's qubits.</div>
+            </div>
+        </div>
+        <!-- Quantinuum -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Quantinuum</strong>
+                <span class="ticker-badge private-badge">Private / IPO Pipeline</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-ti">Trapped Ion</span>
+                <div class="tech-detail"><em>Helios</em> system. Fidelity record holder at 99.9975%. Preferred for synthetic biology.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Valuation:</strong> ~$11B<br>
+                <strong>Stake:</strong> Honeywell (54%)<br>
+                <strong>Series C:</strong> $600M
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">High-Fidelity King</div>
+                <div class="thesis-text">Currently produces the cleanest logical qubits. The preferred choice for synthetic biology.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ SECTION 2: PURE-PLAY SCALERS ═══════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-titles">
+            <h2>Pure-Play Scalers</h2>
+            <p>Entities betting their existence on a specific qubit architecture. High risk, monolithic upside.</p>
+        </div>
+    </div>
+    <div class="entity-grid">
+        <div class="entity-row header-row">
+            <div class="entity-cell">Entity</div>
+            <div class="entity-cell">Modality & Tech</div>
+            <div class="entity-cell">2026 Fiscal Realities</div>
+            <div class="entity-cell">Strategic Thesis</div>
+        </div>
+        <!-- IonQ -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>IonQ</strong>
+                <span class="ticker-badge">NYSE: IONQ</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-ti">Trapped Ion</span>
+                <div class="tech-detail">Acquired <em>SkyWater</em> foundry for vertical chip production. Full semiconductor supply chain control.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Market Cap:</strong> ~$13.2B<br>
+                <strong>Rev Growth:</strong> +82% YOY<br>
+                <strong>Cash:</strong> $1.6B
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">Vertical Integration</div>
+                <div class="thesis-text">Transitioning from startup to manufacturer. Now controls its own semiconductor supply chain.</div>
+            </div>
+        </div>
+        <!-- Rigetti -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Rigetti Computing</strong>
+                <span class="ticker-badge">NASDAQ: RGTI</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-sc">Superconducting</span>
+                <div class="tech-detail">Multi-chip <em>Ankaa</em> processors. Low-latency hybrid loops for GPU AI integration.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Market Cap:</strong> ~$6.1B<br>
+                <strong>Status:</strong> Profitable (Adj. EBITDA)
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">Hybrid Utility</div>
+                <div class="thesis-text">Focused on the QPU as an accelerator for the current GPU AI wave.</div>
+            </div>
+        </div>
+        <!-- Infleqtion -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Infleqtion</strong>
+                <span class="ticker-badge">NASDAQ: INFQ</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-na">Neutral Atom</span>
+                <div class="tech-detail">Room-temp atoms held by lasers. Dual-use: Computing + Sensing. No massive fridges required.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Listed:</strong> Feb 2026<br>
+                <strong>Valuation:</strong> ~$4.2B<br>
+                <strong>Contracts:</strong> DOD / NASA
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">Scalability Dark Horse</div>
+                <div class="thesis-text">Neutral atoms bypass the cryogenic wall. Lowest infrastructure cost of any modality.</div>
+            </div>
+        </div>
+        <!-- PsiQuantum -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>PsiQuantum</strong>
+                <span class="ticker-badge private-badge">Private (Unicorn)</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-ph">Photonic</span>
+                <div class="tech-detail">Silicon photonics. Leveraging light for million-qubit scale via semiconductor fabs.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Valuation:</strong> ~$7.5B<br>
+                <strong>Funding:</strong> >$1.3B (Total)
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The Manufacturing Play</div>
+                <div class="thesis-text">If light-based qubits scale, PsiQuantum bypasses the cryogenic wall entirely.</div>
+            </div>
+        </div>
+        <!-- D-Wave -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>D-Wave Quantum</strong>
+                <span class="ticker-badge">NYSE: QBTS</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-qa">Quantum Annealing</span>
+                <div class="tech-detail"><em>Advantage2</em> system. Solving optimization problems now for DHL and Volkswagen.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Market Cap:</strong> ~$5.4B<br>
+                <strong>Backlog:</strong> Growing in Logistics
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">Commercial Realism</div>
+                <div class="thesis-text">While others chase general math, D-Wave delivers 15-20% efficiency gains in real-world optimization.</div>
+            </div>
+        </div>
+        <!-- QuEra -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>QuEra Computing</strong>
+                <span class="ticker-badge private-badge">Private (VC)</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-na">Neutral Atom</span>
+                <div class="tech-detail"><em>Aquila</em> system on AWS. Reconfigurable 2D atom arrays for analog quantum simulation.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Funding:</strong> Series B<br>
+                <strong>Backed by:</strong> Rakuten<br>
+                <strong>Status:</strong> Leading analog sim
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">Scientific Utility</div>
+                <div class="thesis-text">World leader in analog quantum simulation for material discovery.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ SECTION 3: ARCHITECTURE ENABLERS ═══════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-titles">
+            <h2>Architecture Enablers</h2>
+            <p>The primordial infrastructure. Without these, the qubits cannot exist.</p>
+        </div>
+    </div>
+    <div class="entity-grid">
+        <div class="entity-row header-row">
+            <div class="entity-cell">Entity</div>
+            <div class="entity-cell">Contribution</div>
+            <div class="entity-cell">2026 Fiscal Realities</div>
+            <div class="entity-cell">Strategic Thesis</div>
+        </div>
+        <!-- NVIDIA -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>NVIDIA Quantum</strong>
+                <span class="ticker-badge">NASDAQ: NVDA</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-sc">Simulation & Control</span>
+                <div class="tech-detail"><em>cuQuantum</em> SDK and <em>Grace Hopper</em> hybrid nodes. The classical compute power that controls quantum chips.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Status:</strong> Market Leader<br>
+                <strong>Quantum SW Rev:</strong> Scaling
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The Bridge</div>
+                <div class="thesis-text">The connective tissue between classical and quantum. Provides the compute backbone for qubit control.</div>
+            </div>
+        </div>
+        <!-- Bluefors -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Bluefors</strong>
+                <span class="ticker-badge private-badge">Private (Finland)</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-topo">Cryogenics</span>
+                <div class="tech-detail">Dilution refrigerators housing superconducting qubits. >60% global market share.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Market Share:</strong> >60%<br>
+                <strong>Revenue:</strong> Highly Profitable
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The "ASML" of Quantum</div>
+                <div class="thesis-text">They own the environment. If you want a superconducting computer, you must buy a Bluefors.</div>
+            </div>
+        </div>
+        <!-- Keysight -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Keysight Tech</strong>
+                <span class="ticker-badge">NYSE: KEYS</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-sc">Control Electronics</span>
+                <div class="tech-detail">Precision microwave signals for qubit manipulation. Core of the quantum control stack.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Market Cap:</strong> ~$32B<br>
+                <strong>Focus:</strong> Quantum Control Stack
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">Infrastructure Stability</div>
+                <div class="thesis-text">A diversified industrial play that captures the hardware boom without the hardware risk.</div>
+            </div>
+        </div>
+        <!-- Quantum Machines -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Quantum Machines</strong>
+                <span class="ticker-badge private-badge">Private (Israel)</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-ti">OPX+ Hardware</span>
+                <div class="tech-detail">The "Brain" orchestrating qubit pulses in real-time. Building the universal control layer.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Valuation:</strong> ~$850M (Est.)<br>
+                <strong>Series C:</strong> $170M (2025)
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The OS of Pulses</div>
+                <div class="thesis-text">Building the universal control layer that talks to every type of qubit.</div>
+            </div>
+        </div>
+        <!-- Riverlane -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Riverlane</strong>
+                <span class="ticker-badge private-badge">Private (UK)</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-na">Deltaflow.OS</span>
+                <div class="tech-detail">The operating system dedicated to error correction. Partners with Rigetti and Alice&Bob.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Funding:</strong> Series C<br>
+                <strong>Partners:</strong> Rigetti, Alice&Bob
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The Software Guard</div>
+                <div class="thesis-text">As logical qubits emerge, Riverlane's error-correction IP becomes the new gold standard.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ SECTION 4: SECURITY & NETWORKING ═══════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-titles">
+            <h2>Quantum Security & Networking</h2>
+            <p>Protecting the global economy from the "Quantum Apocalypse" &mdash; Shor's Algorithm and the Y2Q layer.</p>
+        </div>
+    </div>
+    <div class="entity-grid">
+        <div class="entity-row header-row">
+            <div class="entity-cell">Entity</div>
+            <div class="entity-cell">Solution Type</div>
+            <div class="entity-cell">2026 Fiscal Realities</div>
+            <div class="entity-cell">Strategic Thesis</div>
+        </div>
+        <!-- SandboxAQ -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>SandboxAQ</strong>
+                <span class="ticker-badge private-badge">Private (Spin-off)</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-sc">Post-Quantum Crypto</span>
+                <div class="tech-detail">AI-driven security audits and PQC migration tools. Governments and banks are forced to quantum-proof legacy data.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Valuation:</strong> ~$4.5B<br>
+                <strong>Funding:</strong> >$500M
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The "Y2K" of 2026</div>
+                <div class="thesis-text">Capturing the compliance wave as PQC migration becomes a regulatory mandate.</div>
+            </div>
+        </div>
+        <!-- SEALSQ -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>SEALSQ</strong>
+                <span class="ticker-badge">NASDAQ: LAES</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-topo">Quantum-Safe Chips</span>
+                <div class="tech-detail">Hardware-level Root of Trust for IoT and Defense. Protecting cars, power grids, and critical infrastructure.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Market Cap:</strong> ~$900M<br>
+                <strong>Rev:</strong> Growth in Gov Sector
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The Edge Defender</div>
+                <div class="thesis-text">Protecting the physical world from quantum hacking at the hardware level.</div>
+            </div>
+        </div>
+        <!-- ID Quantique -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>ID Quantique</strong>
+                <span class="ticker-badge private-badge">Private (Switzerland)</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-ph">Quantum Key Distribution</span>
+                <div class="tech-detail">Using quantum mechanics to create unhackable communication. Global leader in QKD with SK Telecom.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Partner:</strong> SK Telecom<br>
+                <strong>Status:</strong> Global Lead in QKD
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The Physical Link</div>
+                <div class="thesis-text">While PQC is software, IDQ builds the physical "Quantum Internet" infrastructure.</div>
+            </div>
+        </div>
+        <!-- Qubitekk -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Qubitekk</strong>
+                <span class="ticker-badge private-badge">Private (Acquired)</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-ti">Quantum Networking</span>
+                <div class="tech-detail">Entanglement distribution for secure power grids. Acquired by IonQ in 2025.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Acquired:</strong> IonQ (2025)<br>
+                <strong>Status:</strong> Defense/Gov Focus
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The Connected Grid</div>
+                <div class="thesis-text">IonQ's acquisition signals the shift from computing to quantum networking.</div>
+            </div>
+        </div>
+        <!-- Arqit -->
+        <div class="entity-row">
+            <div class="entity-cell entity-name">
+                <strong>Arqit Quantum</strong>
+                <span class="ticker-badge">NASDAQ: ARQQ</span>
+            </div>
+            <div class="entity-cell">
+                <span class="modality-tag mod-na">Symmetric Key Agreement</span>
+                <div class="tech-detail">Cloud-based unhackable encryption for corporate VPNs. SaaS-focused pivot in 2025.</div>
+            </div>
+            <div class="entity-cell financials">
+                <strong>Market Cap:</strong> ~$1.2B<br>
+                <strong>Pivot:</strong> SaaS focus (2025)
+            </div>
+            <div class="entity-cell">
+                <div class="thesis-label">The Enterprise Shield</div>
+                <div class="thesis-text">Simple, software-based PQC available to global corporations today.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ TIMELINE ═══════════ -->
+<div class="section timeline-section reveal">
+    <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-titles">
+            <h2>The Road to Fault Tolerance</h2>
+            <p>A monolithic timeline from utility to universal computation</p>
+        </div>
+    </div>
+    <div class="timeline-track">
+        <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2026</div>
+            <div class="tl-title">Utility Era</div>
+            <div class="tl-desc">Hybrid quantum-classical systems solve real logistics and chemical benchmarks. Logical qubits become the standard metric.</div>
+        </div>
+        <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2027</div>
+            <div class="tl-title">The IPO Wave</div>
+            <div class="tl-desc">PsiQuantum and SandboxAQ go public. Quantum market cap exceeds $200B globally.</div>
+        </div>
+        <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2028</div>
+            <div class="tl-title">Material Alpha</div>
+            <div class="tl-desc">First commercially relevant battery chemistry discovered entirely via quantum simulation.</div>
+        </div>
+        <div class="tl-node">
+            <div class="tl-dot"></div>
+            <div class="tl-year">2030</div>
+            <div class="tl-title">Fault Tolerance</div>
+            <div class="tl-desc">The universal computer arrives. RSA-2048 encryption becomes obsolete without PQC migration.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ DISRUPTION ═══════════ -->
+<div class="section reveal">
+    <div class="section-header">
+        <div class="section-num">06</div>
+        <div class="section-titles">
+            <h2>Industry Disruption Hierarchy</h2>
+            <p>Where quantum impact hits first, hardest, and most profitably</p>
+        </div>
+    </div>
+    <div class="disruption-grid">
+        <div class="disrupt-card">
+            <span class="disrupt-priority priority-critical">Critical Priority</span>
+            <h4>Global Defense & Banking</h4>
+            <p>Data integrity is the primary concern. Migration to Post-Quantum Cryptography is no longer optional &mdash; it is a regulatory mandate as of 2026.</p>
+        </div>
+        <div class="disrupt-card">
+            <span class="disrupt-priority priority-commercial">Commercial Alpha</span>
+            <h4>Materials & Energy</h4>
+            <p>The era of synthetic chemistry. Quantum computers model carbon capture and solid-state batteries that classical supercomputers simply cannot simulate.</p>
+        </div>
+        <div class="disrupt-card">
+            <span class="disrupt-priority priority-efficiency">Efficiency Gain</span>
+            <h4>Logistics & Supply Chain</h4>
+            <p>The global minimum. Companies like D-Wave deliver 15-20% efficiency gains in scheduling that directly impact Fortune 500 EBITDA.</p>
+        </div>
+    </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- ═══════════ MANDATE ═══════════ -->
+<div class="mandate reveal">
+    <h2>The 2026 Strategic Mandate</h2>
+    <p>Quantum Computing is no longer a science project; it is an <strong>Industrial Pivot</strong>. In 2026, the winners are those who have vertically integrated their supply chains (IonQ, IBM) or captured the "Anxiety Premium" of the security migration (SandboxAQ, Arqit).</p>
+    <p>Investors should view Quantum not as a replacement for AI, but as the <strong>Physical Accelerator</strong> that allows AI to move from processing language to processing the laws of physics itself.</p>
+</div>
+
+<script>
+// Scroll reveal
+// Scroll reveal with fallback
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+<noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
+<script>
+(function() {
+    function showAll() {
+        document.querySelectorAll('.reveal').forEach(function(el) {
+            el.classList.add('visible');
+        });
+    }
+    // Fallback: show everything after 300ms regardless
+    var fallback = setTimeout(showAll, 300);
+    if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) e.target.classList.add('visible');
+            });
+        }, { threshold: 0.05 });
+        document.querySelectorAll('.reveal').forEach(function(el) {
+            observer.observe(el);
+        });
+    } else {
+        showAll();
+    }
+})();
+</script>
+</body>
+</html>
