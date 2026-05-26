@@ -355,6 +355,15 @@
   /* SIGNAL's own sticky topbar/catnav — offset them below the Tonypedia nav */
   .topbar { top: 64px; }
   .catnav { top: 125px; }
+  /* Feed: Tonypedia nav is the only navigation. Hide SIGNAL's brand, view
+     toggle, and stat-mini so only the search remains. Elements stay in the
+     DOM so existing JS (entryCount/updated text writes, viewToggle handlers)
+     doesn't crash on missing nodes. */
+  .topbar .brand,
+  .topbar .viewtoggle,
+  .topbar .stat-mini { display: none !important; }
+  .topbar-inner { justify-content: center; }
+  .topbar .search { max-width: 720px; }
 </style>
 </head>
 <body>
