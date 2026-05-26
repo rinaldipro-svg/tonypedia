@@ -393,6 +393,22 @@
   @media(max-width:640px){
     .wrap{padding:0 16px}
   }
+
+  /* Fix 2: sticky filter bar on mobile.
+     SIGNAL uses .catnav (sticky outer) + .catnav-inner (scroll row). On
+     mobile the SIGNAL .topbar is mostly empty (its children are hidden by
+     the Tonypedia injection) and reduces to ~20px of padding, so the catnav
+     stick offset = Tonypedia nav (~64px) + empty topbar (~20px) ≈ 88px.
+     Overrides the desktop top:125px set in the Tonypedia injection below.
+     Desktop behavior is untouched. */
+  @media(max-width:640px){
+    .catnav { top: 88px; z-index: 900; background: var(--bg); }
+    .catnav-inner {
+      padding: 10px 16px;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
 </style>
 <!-- Tonypedia shared nav (injected) -->
 <style>
