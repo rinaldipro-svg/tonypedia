@@ -10,6 +10,7 @@ interface Props {
 }
 
 const { article } = Astro.props;
+const { body } = article;
 const {
   title,
   description,
@@ -19,7 +20,6 @@ const {
   tags,
   heroImage,
   readingTime: rt,
-  body,
 } = article.data;
 
 const getReadingTime = (text: string) => {
