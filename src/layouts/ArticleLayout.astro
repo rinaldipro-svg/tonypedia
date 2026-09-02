@@ -37,7 +37,7 @@ const shareUrl = encodeURIComponent(currentUrl);
 const shareTitle = encodeURIComponent(title);
 ---
 
-<BaseLayout title={title} description={description} ogImage={heroImage}>
+<BaseLayout title={title} description={description} ogImage={heroImage || undefined}>
   <article class="mx-auto max-w-prose px-6 pt-8 pb-20">
     <!-- Eyebrow -->
     <div class="flex items-center gap-3 mb-6">
