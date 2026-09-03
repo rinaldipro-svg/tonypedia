@@ -6,7 +6,7 @@ import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://tonypedia.pages.dev',
+  site: 'https://tonypedia.rinaldipro.workers.dev',
   integrations: [tailwind(), mdx()],
 
   markdown: {

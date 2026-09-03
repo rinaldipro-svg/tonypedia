@@ -117,7 +117,7 @@ npx wrangler deploy
 
 ```toml
 [env.production]
-vars = { SITE_URL = "https://tonypedia.pages.dev" }
+vars = { SITE_URL = "https://tonypedia.rinaldipro.workers.dev" }
 ```
 
 4. Set the Worker URL in your Astro site's environment:
@@ -172,7 +172,7 @@ npx wrangler secret put ANTHROPIC_API_KEY
 npx wrangler deploy --env production
 ```
 
-Once deployed, your site will be live at your custom domain (if configured) or `https://your-project.pages.dev`.
+Once deployed, your site will be live at your custom domain (if configured) or `https://tonypedia.rinaldipro.workers.dev`.
 
 ## 📊 Project Structure
 
