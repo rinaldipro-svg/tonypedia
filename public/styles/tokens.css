@@ -37,6 +37,8 @@
   --gold: #FBBF24;      /* the studies' gold --amber (#fbbf24), distinct from --amber orange */
   --teal: #2FD4C0;      /* placeholder for the --sky role — not a recolour yet */
   --teal-soft: #7FE7DB; /* placeholder */
+  --paper: #E8F4F5;     /* brightest ink; absorbs the studies' --white (DESIGN-TOKENS §2) */
+  --shadow: 0 18px 50px -18px rgba(0,0,0,.85); /* absorbs the studies' / signal's --shadow */
 
   /* Per-Hub-category accent (sourced from accents above) */
   --cat-tech: var(--amber);

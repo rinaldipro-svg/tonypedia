@@ -189,6 +189,17 @@ ROADMAP.md and DECISIONS.md quote the strings they document, so they match the g
 
 ---
 
+## D18 — `--paper` and `--shadow` added to the canonical token file
+**2026-09** · *Roadmap P1-01b*
+
+`public/styles/tokens.css` now defines `--paper: #E8F4F5` and `--shadow: 0 18px 50px -18px rgba(0,0,0,.85)`, both copied verbatim from `docs/DESIGN-TOKENS.md` §2.
+
+D8 and D10 list `--paper` and `--shadow` as canonical vocabulary and D10 calls `--white` "not an unmappable after all" — but P1-03 recon found neither token in the actual file. §4 maps `--white` (5 studies) → `--paper` and `--shadow` (signal, hbr) → `--shadow`, so the gap blocked P1-03, P1-04, P1-05, P1-07 and P1-09. Adding the two tokens closes it; the P1-01 additions group in the file now carries all six new names.
+
+**Rules out:** re-deriving `--paper` / `--shadow` values per file. `docs/DESIGN-TOKENS.md` §2 is the source; alias blocks point at `var(--paper)` / `var(--shadow)`, never at a literal.
+
+---
+
 ## Open
 
 - **Canonical host** — P0-02 needs the answer: `workers.dev` or a custom domain? Blocks that ticket.
