@@ -42,7 +42,7 @@ One ticket per session. `/clear` between. Tickets are self-contained — CC shou
 
 Branch per phase: `phase/p1-tokens`. One PR per phase, squash-merged to `main`.
 
-**Acceptance greps run against a fresh `dist/`, not the committed one** (which P0-01 removes).
+**Acceptance greps run against a fresh `dist/`.** `dist/` is git-ignored and was never tracked (D16), so a stale checkout is the only risk — rebuild before grepping.
 
 ---
 
@@ -65,21 +65,7 @@ If the build now surfaces genuine SOURCE errors (as opposed to the two
 environmental ones), report them and STOP. Do not fix them in this ticket.
 ```
 
-**Accept:** `npm run build` and `npx astro check` both exit 0.
-
----
-
-### P0-01 — Untrack `dist/`
-
-A stale build is committed: 159 `pages.dev` hits across ~130 files, plus `_worker.js` chunks. It poisons every grep and every acceptance gate in this roadmap.
-
-```
-Confirm Cloudflare builds from source (check .pages.yml / wrangler.jsonc)
-and does not depend on the committed dist/. Then add dist/ to .gitignore
-and run: git rm -r --cached dist/
-```
-
-**Accept:** `git ls-files dist/ | wc -l` returns `0`; `grep -rl "pages.dev" . --exclude-dir=node_modules --exclude-dir=dist` returns 5 files.
+**Accept:** `npm run build` exits 0, and `npx astro check` runs to completion. A source error surfaced by `astro check` — one not caused by the environmental `node_modules` mismatch — becomes its own ticket rather than failing P0-00.
 
 ---
 
@@ -102,7 +88,15 @@ new URL(Astro.request.url).href and contains no pages.dev literal. Rev 1
 of this roadmap was wrong about that. Leave it alone.
 ```
 
-**Accept:** zero `pages.dev` in source; fresh `dist/` clean.
+**Accept:** after the fix,
+
+```
+grep -rl "pages.dev" . --exclude-dir=node_modules --exclude-dir=dist \
+  --exclude=ROADMAP.md --exclude=DECISIONS.md --exclude=CLAUDE.md \
+  --exclude=DESIGN-TOKENS.md
+```
+
+returns nothing. It flags **5 files today**: `README.md`, `astro.config.mjs`, `public/robots.txt`, `workers/chatbot-api/index.ts`, `workers/chatbot-api/wrangler.toml`. The governance docs quote `tonypedia.pages.dev` as the string they document and are excluded — never reword doc prose to pass a grep (D17). Fresh `dist/` also clean.
 
 ---
 
@@ -342,7 +336,15 @@ DO NOT touch the word "signal" in article prose, the Newsletter headline
 ("The signal — not the noise."), or USGS references. Those are English.
 ```
 
-**Accept:** `/signal/` 301s to `/feed/`; no `href="/signal/"` anywhere.
+**Accept:** `/signal/` 301s to `/feed/`; and
+
+```
+grep -rl 'href="/signal/"' . --exclude-dir=node_modules --exclude-dir=dist \
+  --exclude=ROADMAP.md --exclude=DECISIONS.md --exclude=CLAUDE.md \
+  --exclude=DESIGN-TOKENS.md
+```
+
+returns nothing. This ticket body quotes `href="/signal/"`, so the governance docs are excluded from the gate (D17).
 
 ---
 
