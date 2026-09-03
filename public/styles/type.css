@@ -1,0 +1,12 @@
+/* Tonypedia — font loading. ONE Google Fonts request for the whole site.
+ * This is the UNION of what BaseLayout.astro and public/signal/index.html
+ * requested before P1-02:
+ *   Fraunces      — opsz 9..144 · upright 400/600/900 · italic 400/600
+ *   Space Grotesk — 400/500/600/700
+ *   JetBrains Mono — 400/500/600/700   (700 came from signal's request)
+ *
+ * The --font-display / --font-ui / --font-mono family tokens are defined in
+ * public/styles/tokens.css — do NOT duplicate them here.
+ * Standalone HTML files get linked to this file in P1-03…P1-09.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
