@@ -187,9 +187,9 @@ Available **only on article and study pages** — the two long-form reading cont
 Single source: `public/styles/type.css`. One Google Fonts request site-wide.
 
 ```css
---font-display: 'Fraunces', Georgia, serif;
---font-sans:    'Space Grotesk', system-ui, sans-serif;
---font-mono:    'JetBrains Mono', ui-monospace, monospace;
+--font-display: 'Fraunces', ui-serif, Georgia, serif;
+--font-ui:      'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+--font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 ```
 
 The request must be the **union** of BaseLayout's and SIGNAL's, not a copy of either. SIGNAL omits the italic axis and weights 500/600 that Astro components use (`.italic-accent`, `font-medium`); BaseLayout omits Space Grotesk 700 and JetBrains 700.

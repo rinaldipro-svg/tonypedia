@@ -205,7 +205,7 @@ UNION of BaseLayout.astro's request and public/signal/index.html's:
   Space Grotesk — 400/500/600/700
   JetBrains Mono — 400/500/600/700
 
-Define --font-display / --font-sans / --font-mono. Check whether
+Define --font-display / --font-ui / --font-mono. Check whether
 BaseLayout or tokens.css already defines these names; reuse if so.
 
 Then remove the Google Fonts <link> from BaseLayout.astro and link
