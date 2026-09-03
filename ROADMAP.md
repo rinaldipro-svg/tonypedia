@@ -1,7 +1,7 @@
 # Tonypedia v3 — UX/UI Unification Roadmap
 
 **Status:** active · **Owner:** Tony (rinaldipro-svg) · **Executor:** Claude Code (VS Code)
-**Rev 2** — corrected against the repo recon of Sep 2026. Rev 1 was written from the live site and got several paths and mechanisms wrong; see `docs/DECISIONS.md` D8–D12.
+**Rev 2** — corrected against the repo recon of Sep 2026. Rev 1 was written from the live site and got several paths and mechanisms wrong; see `docs/DECISIONS.md` D8–D17.
 
 ---
 
@@ -23,7 +23,7 @@ Secondary goals: unbreak the local build, correct the canonical domain, retire t
 
 | Phase | Name | Tickets | Blocked by |
 |---|---|---|---|
-| **P0** | Environment + metadata hotfix | 4 | — |
+| **P0** | Environment + metadata hotfix | 8 | — |
 | **P1** | Token + type unification | 10 | P0-00 |
 | **P2** | Teal palette + light mode | 4 | P1 |
 | **P3** | SIGNAL removal → "AI Feed" | 3 | P1 |
@@ -48,7 +48,7 @@ Branch per phase: `phase/p1-tokens`. One PR per phase, squash-merged to `main`.
 
 # P0 — Environment + metadata hotfix
 
-> Branch: `phase/p0-hotfix` · 4 commits
+> Branch: `phase/p0-hotfix` · 8 commits
 
 ### P0-00 — Restore a working local build ⚠️ BLOCKER
 
@@ -113,6 +113,48 @@ Do not edit the 16 article .md files.
 ```
 
 **Accept:** fresh `dist/`; `grep -rc 'og:image" content=""\|og:image" content>' dist/` returns `0`.
+
+---
+
+> **P0-01 was withdrawn** (D16) — `dist/` was never tracked; `.gitignore` line 2 already covers it. The 00 → 02 gap is intentional. **P0-04 … P0-08 below are retrospective** — run from pasted ticket bodies before being written into this file, reconstructed from the commits that shipped them.
+
+### P0-04 — `CLAUDE.md` and `ROADMAP.md` to repo root
+
+Both governance files existed only as untracked copies under `docs/`. Claude Code auto-loads `CLAUDE.md` from the repo root and `.claude/` only, so every session opening with "Read CLAUDE.md" loaded nothing, and `ROADMAP.md` is referenced as a root path throughout. Both were committed at the repo root; `docs/DESIGN-TOKENS.md` and `docs/DECISIONS.md` stay under `docs/` — referenced explicitly, never auto-loaded. A grep of both moved files for `docs/CLAUDE.md` / `docs/ROADMAP.md` path references found none needing correction. See `docs/DECISIONS.md` D15.
+
+**Accept:** `CLAUDE.md` and `ROADMAP.md` resolve at repo root; no `docs/CLAUDE.md` or `docs/ROADMAP.md` reference remains in either — shipped in `df55281`.
+
+---
+
+### P0-05 — Normalize line endings to LF; add `.gitattributes`
+
+The working tree carried a pre-existing whitespace-only LF→CRLF conversion across ~79 files (`git diff --ignore-all-space` empty; symmetric insertion/deletion counts). Every acceptance gate in this roadmap is a grep or a diff, so this corrupted all of them. Added `.gitattributes` pinning `* text=auto eol=lf`, plus pre-emptive `*.png … *.mp3 binary` lines (no binary files are tracked yet). `git add --renormalize .` staged nothing — every committed blob was already LF — so the commit is `.gitattributes` alone; the working tree was then rewritten to LF. See `docs/DECISIONS.md` D14.
+
+**Accept:** `git ls-files --eol | grep -c "w/crlf"` returns `0` — shipped in `3e4ff77`.
+
+---
+
+### P0-06 — Fix `ArticleLayout.astro` `ts(2339)`
+
+`body` is a property of the collection entry, not of `entry.data` (which is the Zod frontmatter schema). Destructuring it from `article.data` gave `undefined` and tripped `ts(2339)` under `astro check` — a pre-existing bug surfaced once P0-00 stopped the Rollup crash from masking it. The read moved to `const { body } = article`. No behaviour change: `body` feeds only the `rt || getReadingTime(body || '')` fallback, and all 16 articles set `readingTime` frontmatter so that branch never runs.
+
+**Accept:** `npx astro check` exits 0 — shipped in `9fac18f`.
+
+---
+
+### P0-07 — Correct P0 gates; withdraw P0-01; log D14–D17
+
+P0-02's ACCEPT and P3-01's "no `href="/signal/"` anywhere" gate were string greps that matched this file's own ticket prose. Both were rewritten to exclude the governance docs (`--exclude=ROADMAP.md --exclude=DECISIONS.md --exclude=CLAUDE.md --exclude=DESIGN-TOKENS.md`). P0-00's ACCEPT was relaxed to "`npm run build` exits 0, `npx astro check` runs to completion" with a source error it surfaces becoming its own ticket. The P0-01 ticket was deleted. D14–D17 were appended to `docs/DECISIONS.md`.
+
+**Accept:** the P0-02 grep returns exactly its five documented files; the P3-01 grep no longer matches this file — shipped in `6a1a0a8`.
+
+---
+
+### P0-08 — Track `docs/DESIGN-TOKENS.md`
+
+The file was untracked despite every P1 ticket reading from it as an authoritative repo file that must survive a fresh clone. It was staged and committed with nothing else swept in.
+
+**Accept:** `git ls-files docs/DESIGN-TOKENS.md` is non-empty — shipped in `a2238eb`.
 
 ---
 
