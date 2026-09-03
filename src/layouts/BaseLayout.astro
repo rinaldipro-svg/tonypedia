@@ -10,7 +10,10 @@ interface Props {
   ogImage?: string;
 }
 
-const { title, description = 'Your World, Explained', ogImage = '/og-image.jpg' } = Astro.props;
+const { title, description = 'Your World, Explained' } = Astro.props;
+// Fall back for both undefined and empty-string callers — a destructuring
+// default only covers undefined, and articles pass heroImage: "".
+const ogImage = Astro.props.ogImage || '/og-image.jpg';
 
 const currentUrl = new URL(Astro.request.url).href;
 ---

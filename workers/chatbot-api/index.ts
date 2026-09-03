@@ -49,7 +49,7 @@ export default {
       }
 
       // Fetch search index from deployed site
-      const siteUrl = env.SITE_URL || 'https://tonypedia.pages.dev';
+      const siteUrl = env.SITE_URL || 'https://tonypedia.rinaldipro.workers.dev';
       const indexRes = await fetch(`${siteUrl}/search-index.json`);
 
       if (!indexRes.ok) {

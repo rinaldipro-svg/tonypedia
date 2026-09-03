@@ -1,0 +1,26 @@
+# Normalize all text files to LF in the repository.
+# Git still checks out with the platform's native EOL unless overridden;
+# eol=lf keeps working trees LF on every platform so grep/diff gates are stable.
+* text=auto eol=lf
+
+# Binary types — never run EOL or diff normalization on these.
+# (git ls-files currently tracks none of these; listed pre-emptively so the
+#  first committed image/font/archive is handled correctly.)
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+*.pdf   binary
+*.zip   binary
+*.gz    binary
+*.mp4   binary
+*.webm  binary
+*.mp3   binary
