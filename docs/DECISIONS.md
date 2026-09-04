@@ -200,6 +200,17 @@ D8 and D10 list `--paper` and `--shadow` as canonical vocabulary and D10 calls `
 
 ---
 
+## D19 — "Unchanged" in §4 means omit from the alias block, not self-reference
+**2026-09** · *Roadmap P1-03b*
+
+`docs/DESIGN-TOKENS.md` §4 rows marked "unchanged" (`--sky`, `--rose`, `--violet`, `--acid`, `--shadow`, `--bg`) now say explicitly: omit that variable from the file's alias `:root` entirely, so it inherits the canonical value from the linked `/styles/tokens.css`.
+
+P1-03 recon on `uranium_nuclear.html` found the literal reading — writing `--sky: var(--sky)` in the alias block — produces a self-referential custom property, invalid at computed-value time per the CSS Custom Properties spec (§2.1, Cycles). The property (and anything computed from it, e.g. `--sky-dim`) silently resolves to its inherited value instead of the canonical colour; every consumer breaks with no build error.
+
+**Rules out:** writing `--x: var(--x)` anywhere in a P1-03…P1-09 alias block. Same-named tokens are handled by omission, not by declaration.
+
+---
+
 ## Open
 
 - **Canonical host** — P0-02 needs the answer: `workers.dev` or a custom domain? Blocks that ticket.

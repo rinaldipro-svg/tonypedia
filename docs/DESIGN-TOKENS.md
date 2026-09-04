@@ -124,6 +124,8 @@ Reference for the P1-03…P1-08 alias tickets. **Verify against the actual file 
 | `--acid` | signal | `--acid` | unchanged |
 | `--shadow` | signal, hbr | `--shadow` | unchanged |
 
+A row mapping a legacy name to an identically-named canonical token (`--sky`, `--rose`, `--violet`, `--acid`, `--shadow`, `--bg`) means: omit that variable from the file's alias block entirely, so it inherits the canonical value from the linked `/styles/tokens.css`. Do NOT write `--sky: var(--sky)` — that is a self-reference, invalid at computed-value time per the CSS spec, and every consumer silently falls back to inherited colour instead. This applies retroactively to every P1-03…P1-09 alias block.
+
 ### ⚠️ The `--amber` collision
 
 `--amber` means **two different things** in this repo:
