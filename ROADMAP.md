@@ -161,7 +161,9 @@ The file was untracked despite every P1 ticket reading from it as an authoritati
 # P1 — Token + type unification
 
 > Branch: `phase/p1-tokens` · 10 commits
-> **Zero visual change except typeface.**
+> **Typeface unification, plus each file's accent and surface colours
+> settling onto their assigned canonical hue. Full palette recolor
+> (base/surface values) is P2 — see docs/DECISIONS.md D4.**
 
 ### P1-01 — Relocate and extend the canonical token file
 
