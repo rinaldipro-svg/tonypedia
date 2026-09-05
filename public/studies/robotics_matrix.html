@@ -4,40 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top 50 Robotics Companies Matrix — 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/tokens.css">
+    <link rel="stylesheet" href="/styles/type.css">
     <style>
         :root {
-            --bg:           #080c10;
-            --bg-raised:    #0d1117;
-            --bg-card:      #121820;
-            --bg-hover:     #181f28;
-            --border:       rgba(255,255,255,0.05);
-            --border-hi:    rgba(255,255,255,0.09);
-            --text:         #d8e0e8;
-            --text-dim:     #7a8896;
-            --text-muted:   #485260;
-            --white:        #eef2f6;
+            /* renamed → canonical */
+            --bg-raised: var(--panel);
+            --bg-card: var(--panel2);
+            --bg-hover: var(--panel3);
+            --border: var(--line);
+            --border-hi: var(--line2);
+            --text: var(--ink);
+            --text-dim: var(--ink-dim);
+            --text-muted: var(--ink-faint);
+            --white: var(--paper);
 
-            --accent:       #38bdf8;   /* sky blue — robotics/tech */
-            --accent-dim:   rgba(56,189,248,0.10);
-            --accent-glow:  rgba(56,189,248,0.20);
+            --accent: var(--teal);        /* sky blue — robotics/tech */
+            --accent-dim: color-mix(in srgb, var(--teal) 10%, transparent);
+            --accent-glow: color-mix(in srgb, var(--teal) 20%, transparent);
 
-            --emerald:      #34d399;
-            --emerald-dim:  rgba(52,211,153,0.10);
-            --amber:        #fbbf24;
-            --amber-dim:    rgba(251,191,36,0.10);
-            --rose:         #fb7185;
-            --rose-dim:     rgba(251,113,133,0.10);
-            --violet:       #a78bfa;
-            --violet-dim:   rgba(167,139,250,0.10);
-            --orange:       #fb923c;
-            --orange-dim:   rgba(251,146,60,0.10);
+            --emerald: var(--green);
+            --emerald-dim: color-mix(in srgb, var(--green) 10%, transparent);
+            --amber: var(--gold);
+            --amber-dim: color-mix(in srgb, var(--gold) 10%, transparent);
+            --rose-dim: color-mix(in srgb, var(--rose) 10%, transparent);
+            --violet-dim: color-mix(in srgb, var(--violet) 10%, transparent);
+            /* --bg, --rose, --violet: identical to canonical — omitted per D19 */
+            /* --orange: identical to canonical literal — omitted per D19 */
+            --orange-dim: color-mix(in srgb, var(--orange) 10%, transparent);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-ui);
             background: var(--bg);
             color: var(--text);
             line-height: 1.65;
@@ -79,7 +79,7 @@
         }
 
         .hero-eyebrow {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.68rem; letter-spacing: 5px; text-transform: uppercase;
             color: var(--accent); display: flex; align-items: center; gap: 14px;
             margin-bottom: 36px; opacity: 0; animation: fadeUp .8s ease .2s forwards;
@@ -88,7 +88,7 @@
             content: ''; width: 44px; height: 1px; background: var(--accent); flex-shrink: 0;
         }
         .hero h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: clamp(2.8rem, 6vw, 6.6rem); font-weight: 400;
             line-height: 1.05; letter-spacing: -2px; color: var(--white); max-width: 980px;
             opacity: 0; animation: fadeUp 1s ease .4s forwards;
@@ -104,11 +104,11 @@
             opacity: 0; animation: fadeUp 1s ease .8s forwards;
         }
         .hero-stat span:first-child {
-            font-family: 'Playfair Display', serif; font-size: 2.5rem;
+            font-family: var(--font-display); font-size: 2.5rem;
             color: var(--white); display: block; letter-spacing: -1px;
         }
         .hero-stat span:last-child {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            font-family: var(--font-mono); font-size: 0.6rem;
             letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
         }
 
@@ -139,7 +139,7 @@
             font-size: 1.4rem; flex-shrink: 0;
         }
         .sector-text h2 {
-            font-family: 'Playfair Display', serif; font-size: 1.85rem;
+            font-family: var(--font-display); font-size: 1.85rem;
             font-weight: 400; color: var(--white); letter-spacing: -0.5px;
         }
         .sector-text p { font-size: 0.82rem; color: var(--text-muted); margin-top: 3px; }
@@ -172,18 +172,18 @@
             display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
         }
         .card-num {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+            font-family: var(--font-mono); font-size: 0.58rem;
             font-weight: 600; letter-spacing: 1px; color: var(--text-muted);
             background: rgba(255,255,255,0.04); padding: 2px 7px;
             border-radius: 4px; flex-shrink: 0;
         }
         .card-name {
-            font-family: 'Playfair Display', serif; font-size: 1.1rem;
+            font-family: var(--font-display); font-size: 1.1rem;
             font-weight: 400; color: var(--white); white-space: nowrap;
             overflow: hidden; text-overflow: ellipsis;
         }
         .ticker-badge {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+            font-family: var(--font-mono); font-size: 0.62rem;
             font-weight: 600; color: var(--accent); background: var(--accent-dim);
             padding: 3px 9px; border-radius: 5px; white-space: nowrap; flex-shrink: 0;
         }
@@ -193,7 +193,7 @@
         }
         .card-field {}
         .field-label {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.55rem;
+            font-family: var(--font-mono); font-size: 0.55rem;
             letter-spacing: 1.5px; text-transform: uppercase;
             color: var(--text-muted); margin-bottom: 3px;
         }
@@ -221,7 +221,7 @@
             opacity: 0.10; pointer-events: none;
         }
         .mandate h2 {
-            font-family: 'Playfair Display', serif; font-size: 2.2rem;
+            font-family: var(--font-display); font-size: 2.2rem;
             font-weight: 400; color: var(--white); margin-bottom: 20px; letter-spacing: -0.5px;
         }
         .mandate p {
@@ -302,9 +302,6 @@
     </style>
 
 <!-- Tonypedia shared nav (injected) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
 <style>
   .tp-nav, .tp-nav * { box-sizing: border-box; }
   .tp-nav {
