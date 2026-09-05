@@ -37,7 +37,7 @@
   --gold: #FBBF24;      /* the studies' gold --amber (#fbbf24), distinct from --amber orange */
   --teal: #2FD4C0;      /* placeholder for the --sky role — not a recolour yet */
   --teal-soft: #7FE7DB; /* placeholder */
-  --paper: #E8F4F5;     /* brightest ink; absorbs the studies' --white (DESIGN-TOKENS §2) */
+  --paper: #f4ede0;     /* brightest ink; absorbs studies' --white. Matches current --ink value, per signal's reference implementation. P2 target is #E8F4F5 (DESIGN-TOKENS §2) — deferred, not shipped early. See D23. */
   --shadow: 0 18px 50px -18px rgba(0,0,0,.85); /* absorbs the studies' / signal's --shadow */
   --orange: #ff7a2f;      /* === --amber's current value, hand-kept in sync. NOT a var() reference — see D21. When P2 repaints --amber, repaint --orange to the same new value in the same edit. */
 

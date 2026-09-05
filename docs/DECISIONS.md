@@ -246,6 +246,19 @@ P1-AUDIT found both files declare `--accent` alongside a sibling variable (`--em
 
 ---
 
+## D23 — Canonical `--paper` corrected from `#E8F4F5` to `#f4ede0`
+**2026-09** · *Roadmap P1-01c · corrects P1-01b*
+
+`public/styles/tokens.css` now defines `--paper: #f4ede0` (equal to the current `--ink`), not `#E8F4F5`.
+
+P1-01b added `--paper` by copying `#E8F4F5` verbatim from `docs/DESIGN-TOKENS.md` §2 — but §2 is the **P2 teal-palette target**, not the current warm palette. `#E8F4F5` is a cool near-white that belongs with P2's `--ink #E8F4F5`; against the current warm palette it renders as a visible cool cast on every `var(--paper)` consumer. `public/signal/index.html` — one of the two files that defined canonical "vocabulary A" (D8) — carries `--paper: #f4ede0` locally, identical to its own `--ink`; that is the correct current value. `#E8F4F5` lands at P2-01 alongside the rest of §2.
+
+This is the **second** time a future §2 value was pulled into `tokens.css` before P2 shipped it — after P1-04b's `--orange` (`#FF8A45` vs current `#ff7a2f`).
+
+**Rules out:** sourcing any canonical `tokens.css` colour value from `docs/DESIGN-TOKENS.md` §2 before P2-01. §2 is the target palette; P1 canonical values come from the current warm palette (or a reference standalone file), and §2 values are applied only when P2-01 flips the whole file at once.
+
+---
+
 ## Open
 
 - **Canonical host** — P0-02 needs the answer: `workers.dev` or a custom domain? Blocks that ticket.

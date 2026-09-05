@@ -39,7 +39,7 @@ Contrast measured against `--bg`. All body-text and accent pairings meet WCAG AA
   --ink:       #E8F4F5;   /* 15.9:1 */
   --ink-dim:   #9DB8BD;   /*  8.5:1 */
   --ink-faint: #6B888E;   /*  4.7:1 on --bg — see note */
-  --paper:     #E8F4F5;   /* brightest ink; absorbs studies' --white */
+  --paper:     #E8F4F5;   /* brightest ink; absorbs studies' --white. tokens.css ships #f4ede0 (current --ink) until P2-01 — see D23. */
 
   /* primary — teal */
   --teal:      #2FD4C0;   /*  9.6:1 */
