@@ -97,7 +97,7 @@ export default {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-3-5-haiku-20241022',
+          model: 'claude-haiku-4-5',
           max_tokens: 500,
           system: `You are Tonypedia AI, the friendly assistant for the Tonypedia knowledge hub. 
 Answer questions using ONLY the provided article content. 
