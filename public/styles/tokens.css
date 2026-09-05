@@ -61,6 +61,49 @@
   --max-prose: 44rem;
 }
 
+/* Light mode — opt-in via [data-theme="light"] on <html>. Scope: Astro
+ * article pages only (P2-04, D24). Values per DESIGN-TOKENS.md §5.
+ * The attribute is the only gate; this block is inert until it is set.
+ */
+[data-theme="light"] {
+  --bg:        #F2F7F7;
+  --bg2:       #EDF4F4;
+  --panel:     #FFFFFF;
+  --panel2:    #E9F1F1;
+  --line:      rgba(11,33,41,0.10);
+
+  --ink:       #0B2129;   /* 15.4:1 */
+  --ink-dim:   #4A6670;   /*  5.7:1 */
+  --ink-faint: #6B7F86;
+  --paper:     #04171C;
+
+  --teal:      #0F766E;   /*  5.1:1 */
+  --sky:       #1D6FA5;   /*  5.0:1 */
+  --amber:     #B44A12;   /*  4.9:1 */
+
+  --on-accent: #FFFFFF;
+
+  /* P2-04 additions — §5 was silent on these; values locked in Step 0.
+   * --line2: dark keeps --line's RGB at 1.8x alpha (.10 -> .18); mirror
+   *   that ratio against §5's light --line.
+   * --amber-soft: the dark "soft = lighter" affordance inverts on a light
+   *   ground (lighter = lower contrast), so it collapses to --amber's
+   *   light value; .prose a default and :hover are one colour in light.
+   */
+  --line2:     rgba(11,33,41,0.18);
+  --amber-soft: #B44A12;
+
+  /* --cat-society/-music/-movies/-events reference --violet/--rose/--green/
+   * --acid, none of which have an AA-safe light value. Flatten to --ink for
+   * the article eyebrow chip. --cat-tech/-geopolitics need no override —
+   * they reference --amber/--sky, redefined above.
+   */
+  --cat-society: var(--ink);
+  --cat-music:   var(--ink);
+  --cat-movies:  var(--ink);
+  --cat-events:  var(--ink);
+}
+
 /* Base body styling — applied via Tailwind base in global.css */
 html {
   background-color: var(--bg);
