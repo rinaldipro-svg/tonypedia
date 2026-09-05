@@ -704,11 +704,11 @@
   .tp-nav, .tp-nav * { box-sizing: border-box; }
   .tp-nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
-    background: rgba(12, 10, 8, 0.85);
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
     -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
-    border-bottom: 1px solid #2a251c;
+    border-bottom: 1px solid var(--line);
     font-family: 'Space Grotesk', system-ui, sans-serif;
-    color: #f4ede0;
+    color: var(--ink);
   }
   .tp-nav-inner {
     max-width: 72rem; margin: 0 auto; padding: 14px 24px;
@@ -717,24 +717,24 @@
   .tp-nav-brand {
     display: inline-flex; align-items: center; gap: 8px;
     font-family: 'Fraunces', Georgia, serif; font-weight: 900; font-size: 20px;
-    color: #f4ede0; text-decoration: none; letter-spacing: -0.02em;
+    color: var(--ink); text-decoration: none; letter-spacing: -0.02em;
     transition: opacity 200ms ease;
   }
   .tp-nav-brand:hover { opacity: 0.9; }
-  .tp-nav-brand-dot { color: #ff7a2f; }
+  .tp-nav-brand-dot { color: var(--teal); }
   .tp-nav-switcher {
     display: inline-flex; align-items: center; gap: 4px;
-    background: #16130e; border: 1px solid #2a251c;
+    background: var(--panel); border: 1px solid var(--line);
     padding: 4px; border-radius: 999px;
   }
   .tp-nav-link {
     padding: 6px 16px; border-radius: 999px;
     font-size: 14px; font-weight: 500; line-height: 1;
-    color: #a89a82; text-decoration: none; font-family: inherit;
+    color: var(--ink-dim); text-decoration: none; font-family: inherit;
     transition: color 200ms ease, background 200ms ease;
   }
-  .tp-nav-link:hover { color: #f4ede0; }
-  .tp-nav-link.is-active { background: #f4ede0; color: #0c0a08; }
+  .tp-nav-link:hover { color: var(--ink); }
+  .tp-nav-link.is-active { background: var(--teal); color: var(--on-accent); }
   .tp-nav-spacer { width: 80px; }
   @media (max-width: 767px) {
     .tp-nav-switcher { display: none; }
@@ -747,14 +747,14 @@
     width: 44px; height: 44px;
     padding: 10px;
     background: transparent;
-    border: 1px solid #2a251c;
+    border: 1px solid var(--line);
     border-radius: 999px;
-    color: #f4ede0;
+    color: var(--ink);
     cursor: pointer;
     align-items: center; justify-content: center;
     flex-shrink: 0;
   }
-  .tp-nav-hamburger:hover { border-color: #37301f; }
+  .tp-nav-hamburger:hover { border-color: var(--line2); }
   .tp-nav-hamburger svg { width: 22px; height: 22px; }
   @media (max-width: 640px) {
     .tp-nav-hamburger { display: inline-flex; }
@@ -786,10 +786,10 @@
 </nav>
 
 <!-- Mobile overlay menu (controlled by inline script below) -->
-<div id="tp-mobile-overlay" style="display:none;position:fixed;inset:0;background:#0c0a08;z-index:9998;padding:80px 32px 40px;flex-direction:column;gap:32px;">
-  <a href="/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:#f4ede0;text-decoration:none;">Hub</a>
-  <a href="/signal/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:#f4ede0;text-decoration:none;">Feed</a>
-  <a href="/studies/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:#ff7a2f;text-decoration:none;">Deep Dives</a>
+<div id="tp-mobile-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9998;padding:80px 32px 40px;flex-direction:column;gap:32px;">
+  <a href="/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:var(--ink);text-decoration:none;">Hub</a>
+  <a href="/signal/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:var(--ink);text-decoration:none;">Feed</a>
+  <a href="/studies/" style="font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:var(--teal);text-decoration:none;">Deep Dives</a>
 </div>
 
 <script>
