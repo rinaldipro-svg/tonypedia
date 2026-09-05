@@ -15,7 +15,7 @@
     @apply antialiased;
   }
   ::selection {
-    background-color: color-mix(in oklab, var(--amber) 35%, transparent);
+    background-color: color-mix(in oklab, var(--teal) 35%, transparent);
     color: var(--ink);
   }
 }

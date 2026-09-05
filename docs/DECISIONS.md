@@ -259,9 +259,21 @@ This is the **second** time a future §2 value was pulled into `tokens.css` befo
 
 ---
 
+## D24 — Light mode: localStorage + `[data-theme]`, Astro article pages only
+**2026-09** · *Roadmap P2-04*
+
+Light mode ships with: storage in `localStorage` key `theme` (`"light"`/`"dark"`, absent = dark); marker `[data-theme="light"]` on `<html>` (never a class); a blocking `<script is:inline>` first in `<head>` that reads storage and sets the attribute before first paint; a single toggle in `src/components/ThemeToggle.astro` rendered by `ArticleLayout.astro` only. No `prefers-color-scheme` detection. Scope is **Astro article pages only** — Hub, AI Feed, category, tag, about, 404, studies index stay dark; `--cat-society/-music/-movies/-events` flatten to `var(--ink)` under `[data-theme="light"]` so the article eyebrow chip stays legible.
+
+`src/scripts/theme.ts` was the pre-existing candidate — dead (zero importers) and a different mechanism on every axis: cookie not localStorage, `html.classList` `.light` not `[data-theme]`, post-load not pre-paint, unscoped not article-only. Zero salvage value, so it was deleted rather than ported, along with the unused `getCookie`/`setCookie` in `src/utils/helpers.ts`. localStorage beats a cookie because the build is static (`output: static`) — a cookie would only pay off for server/edge prerendering, which is not planned.
+
+The 7 standalone study files were considered in-scope mid-session (§5 said "study pages") and rolled back: they run a 6-colour category taxonomy (`--gold --acid --violet --rose --green --orange`) with no AA-safe light values, and inventing four-plus freehand colours was rejected in favour of the smaller, reversible articles-only cut. `--line2` (light) is `rgba(11,33,41,0.18)` — `--line`'s RGB at the same 1.8× alpha ratio the dark pair uses. `--amber-soft` (light) collapses to `--amber`'s `#B44A12`: the dark "soft = lighter" affordance inverts on a light ground.
+
+**Rules out:** cookie-based theming; `prefers-color-scheme` auto-detection; any theme toggle outside `ThemeToggle.astro` (in particular the global nav); a class-based marker; light mode on the 7 standalone study files or on `signal` / Hub / category / tag / about / 404 / studies-index — until a future ticket adds AA-safe light values for the category taxonomy.
+
+---
+
 ## Open
 
 - **Canonical host** — P0-02 needs the answer: `workers.dev` or a custom domain? Blocks that ticket.
-- **Light-mode mechanism** — `src/scripts/theme.ts` (dead, cookie + class) vs. the spec (`[data-theme]` + localStorage). P2-04 picks one.
 - **`claude-3-5-haiku-20241022`** in `workers/chatbot-api/index.ts:100` — migrate alongside Sonnet, or leave?
 - **Movies category** — filter the empty lane out of the homepage, or keep the empty state? P5-04.

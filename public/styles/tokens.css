@@ -8,38 +8,40 @@
 
 :root {
   /* Surfaces */
-  --bg: #0c0a08;
-  --bg2: #12100c;
-  --panel: #16130e;
-  --panel2: #1c1810;
+  --bg: #071A1F;
+  --bg2: #0A2027;
+  --panel: #0C242B;
+  --panel2: #102E36;
 
   /* Ink */
-  --ink: #f4ede0;
-  --ink-dim: #a89a82;
-  --ink-faint: #6f6353;
+  --ink: #E8F4F5;
+  --ink-dim: #9DB8BD;
+  --ink-faint: #6B888E;
 
   /* Lines */
-  --line: #2a251c;
-  --line2: #37301f;
+  --line: rgba(127,231,219,0.10);
+  --line2: rgba(127,231,219,0.18);
 
   /* Accents */
-  --amber: #ff7a2f;
-  --amber-soft: #f7b267;
-  --sky: #5cc8ff;
-  --acid: #c8ff4d;
-  --violet: #b89bff;
-  --rose: #ff6f91;
-  --green: #6fdc8c;
+  --amber: #FF8A45;
+  --amber-soft: #FFB07A;
+  --sky: #56A9E8;
+  --acid: #A3E635;
+  --violet: #A78BFA;
+  --rose: #FB7185;
+  --green: #4ADE80;
 
-  /* P1 vocabulary additions — placeholders; unconsumed until P1-03…P1-08 alias
-     the standalone files to them. P2 assigns final palette values (DESIGN-TOKENS §2). */
+  /* Extended vocabulary — absorbs the standalone files' local names (studies'
+     --bg-hover, gold --amber, --white; signal's --shadow). Palette values
+     finalized in P2-01 per DESIGN-TOKENS §2. */
   --panel3: #163A44;    /* absorbs the studies' --bg-hover */
   --gold: #FBBF24;      /* the studies' gold --amber (#fbbf24), distinct from --amber orange */
-  --teal: #2FD4C0;      /* placeholder for the --sky role — not a recolour yet */
-  --teal-soft: #7FE7DB; /* placeholder */
-  --paper: #f4ede0;     /* brightest ink; absorbs studies' --white. Matches current --ink value, per signal's reference implementation. P2 target is #E8F4F5 (DESIGN-TOKENS §2) — deferred, not shipped early. See D23. */
+  --teal: #2FD4C0;      /* primary — identity role (logo dot, active nav, rules, hover) */
+  --teal-soft: #7FE7DB; /* lifted teal for large fills / hairlines */
+  --paper: #E8F4F5;     /* brightest ink; absorbs studies' --white. Matches --ink. */
   --shadow: 0 18px 50px -18px rgba(0,0,0,.85); /* absorbs the studies' / signal's --shadow */
-  --orange: #ff7a2f;      /* === --amber's current value, hand-kept in sync. NOT a var() reference — see D21. When P2 repaints --amber, repaint --orange to the same new value in the same edit. */
+  --orange: #FF8A45;      /* === --amber's value, hand-kept in sync. NOT a var() reference — see D21. When P2 repaints --amber, repaint --orange to the same new value in the same edit. */
+  --on-accent: #04171C;   /* foreground on --teal (9.9:1) / --amber (7.8:1) fills — new in P2-01 */
 
   /* Per-Hub-category accent (sourced from accents above) */
   --cat-tech: var(--amber);
@@ -57,6 +59,49 @@
   /* Layout */
   --max-content: 72rem;
   --max-prose: 44rem;
+}
+
+/* Light mode — opt-in via [data-theme="light"] on <html>. Scope: Astro
+ * article pages only (P2-04, D24). Values per DESIGN-TOKENS.md §5.
+ * The attribute is the only gate; this block is inert until it is set.
+ */
+[data-theme="light"] {
+  --bg:        #F2F7F7;
+  --bg2:       #EDF4F4;
+  --panel:     #FFFFFF;
+  --panel2:    #E9F1F1;
+  --line:      rgba(11,33,41,0.10);
+
+  --ink:       #0B2129;   /* 15.4:1 */
+  --ink-dim:   #4A6670;   /*  5.7:1 */
+  --ink-faint: #6B7F86;
+  --paper:     #04171C;
+
+  --teal:      #0F766E;   /*  5.1:1 */
+  --sky:       #1D6FA5;   /*  5.0:1 */
+  --amber:     #B44A12;   /*  4.9:1 */
+
+  --on-accent: #FFFFFF;
+
+  /* P2-04 additions — §5 was silent on these; values locked in Step 0.
+   * --line2: dark keeps --line's RGB at 1.8x alpha (.10 -> .18); mirror
+   *   that ratio against §5's light --line.
+   * --amber-soft: the dark "soft = lighter" affordance inverts on a light
+   *   ground (lighter = lower contrast), so it collapses to --amber's
+   *   light value; .prose a default and :hover are one colour in light.
+   */
+  --line2:     rgba(11,33,41,0.18);
+  --amber-soft: #B44A12;
+
+  /* --cat-society/-music/-movies/-events reference --violet/--rose/--green/
+   * --acid, none of which have an AA-safe light value. Flatten to --ink for
+   * the article eyebrow chip. --cat-tech/-geopolitics need no override —
+   * they reference --amber/--sky, redefined above.
+   */
+  --cat-society: var(--ink);
+  --cat-music:   var(--ink);
+  --cat-movies:  var(--ink);
+  --cat-events:  var(--ink);
 }
 
 /* Base body styling — applied via Tailwind base in global.css */

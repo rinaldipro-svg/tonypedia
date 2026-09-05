@@ -166,9 +166,11 @@ This keeps the canonical file small instead of adding ~20 near-duplicate tokens 
 
 ---
 
-## 5. Light mode (opt-in, reading contexts only)
+## 5. Light mode (opt-in, Astro article pages only)
 
-Available **only on article and study pages** — the two long-form reading contexts, where a dark theme costs most in daylight on a phone. Hub, AI Feed, category and tag pages stay dark permanently. No toggle in the global nav.
+Available **only on Astro article pages** — the long-form reading context where a dark theme costs most in daylight on a phone. Hub, AI Feed, category, tag, about, 404 and the studies index stay dark permanently. No toggle in the global nav.
+
+The **7 standalone study HTML files are out of scope** (P2-04, this session): they run a 6-colour category taxonomy (`--gold --acid --violet --rose --green --orange`) with no AA-safe light equivalents, and adding those was rejected in favour of shipping articles-only. Extending light mode to them is a future ticket that must first give §5 those taxonomy light values — it is explicitly excluded here, not deferred by omission.
 
 ```css
 [data-theme="light"] {
@@ -188,10 +190,28 @@ Available **only on article and study pages** — the two long-form reading cont
   --amber:     #B44A12;   /*  4.9:1 */
 
   --on-accent: #FFFFFF;
+
+  /* P2-04 — §5 was silent on these; derived / locked in the P2-04 Step 0 recon. */
+  --line2:     rgba(11,33,41,0.18);  /* dark --line2 is --line's RGB at 1.8x alpha
+                                        (.10 -> .18); same ratio against light --line. */
+  --amber-soft: #B44A12;             /* dark's "soft = lighter" inverts on a light
+                                        ground (lighter = less contrast), so it
+                                        collapses to --amber's light value —
+                                        .prose a default and :hover become one colour. */
+
+  /* --cat-society/-music/-movies/-events resolve to --violet/--rose/--green/--acid,
+     none of which have an AA-safe light value. Flatten to --ink (article eyebrow
+     chip stays legible; loses per-category colour in light only). --cat-tech and
+     --cat-geopolitics need no override — they reference --amber / --sky, redefined
+     above. */
+  --cat-society: var(--ink);
+  --cat-music:   var(--ink);
+  --cat-movies:  var(--ink);
+  --cat-events:  var(--ink);
 }
 ```
 
-**Mechanism is unresolved.** `src/scripts/theme.ts` already exists, is imported nowhere, and uses cookie `theme` + `html.classList` `light` — not `[data-theme]`, not `localStorage`. P2-04 requires picking one and updating this section to match. Whichever wins, the read must happen in an inline `<head>` script before first paint, or every load flashes dark.
+**Mechanism (locked, P2-04 / D24).** Storage: `localStorage` key `theme`, values `"light"` / `"dark"`; **absent = dark**. Marker: `[data-theme="light"]` on `<html>` (never a class). Anti-FOUC: a **blocking `<script is:inline>` first in `<head>`**, before the `tokens.css` link, reads `localStorage` and sets the attribute during head parse. Toggle: `src/components/ThemeToggle.astro`, a fixed bottom-left pill rendered by `ArticleLayout.astro` only — **no toggle in the global nav**. No `prefers-color-scheme` detection (opt-in only). `src/scripts/theme.ts` (cookie + `.light` class, dead) was removed, along with the unused `getCookie`/`setCookie` in `src/utils/helpers.ts`.
 
 ---
 

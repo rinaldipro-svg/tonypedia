@@ -8,9 +8,12 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  /** Opt this page into light mode (localStorage `theme` + [data-theme]).
+   *  Article pages only — see docs/DECISIONS.md D24. */
+  themeable?: boolean;
 }
 
-const { title, description = 'Your World, Explained' } = Astro.props;
+const { title, description = 'Your World, Explained', themeable = false } = Astro.props;
 // Fall back for both undefined and empty-string callers — a destructuring
 // default only covers undefined, and articles pass heroImage: "".
 const ogImage = Astro.props.ogImage || '/og-image.jpg';
@@ -23,9 +26,14 @@ const currentUrl = new URL(Astro.request.url).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {themeable && (
+      <script is:inline set:html={
+        "try{var t=localStorage.getItem('theme');if(t==='light')document.documentElement.dataset.theme='light';}catch(e){}"
+      } />
+    )}
     <meta name="description" content={description} />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0c0a08" />
+    <meta name="color-scheme" content={themeable ? 'light dark' : 'dark'} />
+    <meta name="theme-color" content="#071A1F" />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
