@@ -4,42 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rare Materials Financial Analysis 2021–2024</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/tokens.css">
+    <link rel="stylesheet" href="/styles/type.css">
     <style>
         :root {
-            --bg:           #080a08;
-            --bg-raised:    #0d100d;
-            --bg-card:      #121512;
-            --bg-hover:     #181c18;
-            --border:       rgba(255,255,255,0.05);
-            --border-hi:    rgba(255,255,255,0.09);
-            --text:         #d8e0d4;
-            --text-dim:     #7a8876;
-            --text-muted:   #4a524a;
-            --white:        #eef4ea;
+            /* renamed → canonical */
+            --bg-raised: var(--panel);
+            --bg-card: var(--panel2);
+            --bg-hover: var(--panel3);
+            --border: var(--line);
+            --border-hi: var(--line2);
+            --text: var(--ink);
+            --text-dim: var(--ink-dim);
+            --text-muted: var(--ink-faint);
+            --white: var(--paper);
 
-            --accent:       #4ade80;   /* green — growth/materials */
-            --accent-dim:   rgba(74,222,128,0.10);
-            --accent-glow:  rgba(74,222,128,0.18);
+            /* --accent → --acid, not --green: avoids colliding with --emerald (D22) */
+            --accent: var(--acid);        /* green — growth/materials */
+            --accent-dim: color-mix(in srgb, var(--acid) 10%, transparent);
+            --accent-glow: color-mix(in srgb, var(--acid) 18%, transparent);
 
-            --emerald:      #34d399;
-            --emerald-dim:  rgba(52,211,153,0.10);
-            --amber:        #fbbf24;
-            --amber-dim:    rgba(251,191,36,0.10);
-            --rose:         #fb7185;
-            --rose-dim:     rgba(251,113,133,0.10);
-            --sky:          #38bdf8;
-            --sky-dim:      rgba(56,189,248,0.10);
-            --violet:       #a78bfa;
-            --violet-dim:   rgba(167,139,250,0.10);
-            --orange:       #fb923c;
-            --orange-dim:   rgba(251,146,60,0.10);
+            --emerald: var(--green);
+            /* --emerald-dim omitted: zero consumers in this file (dead token, per audit) */
+
+            --amber: var(--gold);
+            --amber-dim: color-mix(in srgb, var(--gold) 10%, transparent);
+            --rose-dim: color-mix(in srgb, var(--rose) 10%, transparent);
+            --sky-dim: color-mix(in srgb, var(--sky) 10%, transparent);
+            --violet-dim: color-mix(in srgb, var(--violet) 10%, transparent);
+            /* --bg, --rose, --sky, --violet: identical to canonical — omitted per D19 */
+            /* --orange: identical to canonical literal — omitted per D19 */
+            --orange-dim: color-mix(in srgb, var(--orange) 10%, transparent);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-ui);
             background: var(--bg);
             color: var(--text);
             line-height: 1.65;
@@ -75,14 +76,14 @@
             to   { opacity:1; transform:translateY(0); }
         }
         .hero-eyebrow {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.68rem; letter-spacing: 5px; text-transform: uppercase;
             color: var(--accent); display: flex; align-items: center; gap: 14px;
             margin-bottom: 36px; opacity: 0; animation: fadeUp .8s ease .2s forwards;
         }
         .hero-eyebrow::before { content: ''; width: 44px; height: 1px; background: var(--accent); flex-shrink: 0; }
         .hero h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: clamp(2.8rem, 6vw, 6.4rem); font-weight: 400;
             line-height: 1.05; letter-spacing: -2px; color: var(--white); max-width: 960px;
             opacity: 0; animation: fadeUp 1s ease .4s forwards;
@@ -98,11 +99,11 @@
             opacity: 0; animation: fadeUp 1s ease .8s forwards;
         }
         .hero-stat span:first-child {
-            font-family: 'Playfair Display', serif; font-size: 2.5rem;
+            font-family: var(--font-display); font-size: 2.5rem;
             color: var(--white); display: block; letter-spacing: -1px;
         }
         .hero-stat span:last-child {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            font-family: var(--font-mono); font-size: 0.6rem;
             letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
         }
 
@@ -126,13 +127,13 @@
             margin-bottom: 44px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
         }
         .section-num {
-            font-family: 'Playfair Display', serif; font-size: 4rem; line-height: 0.85;
+            font-family: var(--font-display); font-size: 4rem; line-height: 0.85;
             color: var(--bg-card); -webkit-text-stroke: 1px var(--text-muted);
             letter-spacing: -3px; flex-shrink: 0;
         }
         .section-titles { flex: 1; }
         .section-titles h2 {
-            font-family: 'Playfair Display', serif; font-size: 1.85rem;
+            font-family: var(--font-display); font-size: 1.85rem;
             font-weight: 400; color: var(--white); letter-spacing: -0.5px;
         }
         .section-titles p { font-size: 0.85rem; color: var(--text-dim); margin-top: 4px; }
@@ -154,7 +155,7 @@
             grid-template-columns: 52px 1fr 140px 150px 150px 180px;
         }
         .rank-row.header .rank-cell {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            font-family: var(--font-mono); font-size: 0.6rem;
             letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
             padding: 14px 18px;
         }
@@ -164,19 +165,19 @@
         }
         .rank-cell:last-child { border-right: none; }
         .rank-num {
-            font-family: 'Playfair Display', serif; font-size: 1.6rem;
+            font-family: var(--font-display); font-size: 1.6rem;
             color: var(--bg-hover); -webkit-text-stroke: 1px var(--text-muted);
             text-align: center; padding: 20px 10px;
             border-right: 1px solid var(--border);
         }
         .rank-company strong { color: var(--white); font-size: 0.95rem; font-weight: 600; display: block; margin-bottom: 3px; }
         .rank-ticker {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+            font-family: var(--font-mono); font-size: 0.62rem;
             color: var(--accent); background: var(--accent-dim);
             padding: 2px 8px; border-radius: 4px; display: inline-block;
         }
         .rank-material {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            font-family: var(--font-mono); font-size: 0.7rem;
             color: var(--text-dim);
         }
         .rev-pos  { color: var(--emerald) !important; font-weight: 500; }
@@ -220,21 +221,21 @@
             gap: 10px; margin-bottom: 14px;
         }
         .cc-rank-badge {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            font-family: var(--font-mono); font-size: 0.6rem;
             font-weight: 600; letter-spacing: 1px; color: var(--text-muted);
             background: rgba(255,255,255,0.04); padding: 2px 8px; border-radius: 4px;
         }
         .cc-ticker {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+            font-family: var(--font-mono); font-size: 0.65rem;
             font-weight: 600; color: var(--accent); background: var(--accent-dim);
             padding: 3px 10px; border-radius: 5px; white-space: nowrap;
         }
         .cc-name {
-            font-family: 'Playfair Display', serif; font-size: 1.2rem;
+            font-family: var(--font-display); font-size: 1.2rem;
             font-weight: 400; color: var(--white); margin-bottom: 4px;
         }
         .cc-material {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            font-family: var(--font-mono); font-size: 0.6rem;
             letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted);
             margin-bottom: 14px;
         }
@@ -244,7 +245,7 @@
             border-top: 1px solid var(--border); padding-top: 14px;
         }
         .cc-metric .m-label {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.55rem;
+            font-family: var(--font-mono); font-size: 0.55rem;
             letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px;
         }
         .cc-metric .m-value { font-size: 0.82rem; line-height: 1.4; }
@@ -266,14 +267,14 @@
         .trend-card:nth-child(3)::before { background: var(--rose); }
         .trend-card:hover { background: var(--bg-hover); }
         .trend-label {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+            font-family: var(--font-mono); font-size: 0.58rem;
             letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;
         }
         .trend-card:nth-child(1) .trend-label { color: var(--emerald); }
         .trend-card:nth-child(2) .trend-label { color: var(--amber); }
         .trend-card:nth-child(3) .trend-label { color: var(--rose); }
         .trend-card h4 {
-            font-family: 'Playfair Display', serif; font-size: 1.2rem;
+            font-family: var(--font-display); font-size: 1.2rem;
             font-weight: 400; color: var(--white); margin-bottom: 10px;
         }
         .trend-card p { font-size: 0.83rem; color: var(--text-dim); line-height: 1.68; }
@@ -282,7 +283,7 @@
             margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px;
         }
         .tc-badge {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            font-family: var(--font-mono); font-size: 0.6rem;
             font-weight: 600; padding: 3px 8px; border-radius: 4px;
             background: rgba(255,255,255,0.05); color: var(--text-dim);
         }
@@ -299,7 +300,7 @@
         .outlook-card:hover { background: var(--bg-hover); }
         .outlook-icon { font-size: 1.6rem; margin-bottom: 12px; }
         .outlook-card h4 {
-            font-family: 'Playfair Display', serif; font-size: 1.1rem;
+            font-family: var(--font-display); font-size: 1.1rem;
             font-weight: 400; color: var(--white); margin-bottom: 8px;
         }
         .outlook-card p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.68; }
@@ -320,7 +321,7 @@
             opacity: 0.10; pointer-events: none;
         }
         .mandate h2 {
-            font-family: 'Playfair Display', serif; font-size: 2.2rem;
+            font-family: var(--font-display); font-size: 2.2rem;
             font-weight: 400; color: var(--white); margin-bottom: 20px; letter-spacing: -0.5px;
         }
         .mandate p { font-size: 0.98rem; color: var(--text-dim); line-height: 1.82; max-width: 820px; margin-bottom: 14px; }
@@ -366,7 +367,7 @@
             .rank-cell:last-child { border-bottom: none; padding-bottom: 16px; }
             .rank-cell::before {
                 content: attr(data-label);
-                font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+                font-family: var(--font-mono); font-size: 0.58rem;
                 letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent);
                 white-space: nowrap; padding-top: 2px;
             }
@@ -419,9 +420,6 @@
     </style>
 
 <!-- Tonypedia shared nav (injected) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
 <style>
   .tp-nav, .tp-nav * { box-sizing: border-box; }
   .tp-nav {
