@@ -4,31 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Why Great Innovations Fail to Scale — HBR Mar–Apr 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,900;9..144,1,400;9..144,1,600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/tokens.css">
+<link rel="stylesheet" href="/styles/type.css">
 <style>
   :root {
-    --bg: #0c0a08;
-    --bg2: #12100c;
-    --panel: #16130e;
-    --panel2: #1c1810;
-    --ink: #f4ede0;
-    --ink-dim: #a89a82;
-    --ink-faint: #6f6353;
-    --line: #2a251c;
-    --line2: #37301f;
-    --amber: #ff7a2f;
-    --amber-soft: #f7b267;
-    --acid: #c8ff4d;
-    --sky: #5cc8ff;
-    --violet: #b89bff;
-    --rose: #ff6f91;
-    --green: #6fdc8c;
-    --accent: #5cc8ff;
-    --accent-dim: rgba(92,200,255,.12);
-    --accent-glow: rgba(92,200,255,.2);
-    --shadow: 0 18px 50px -18px rgba(0,0,0,.85);
+    /* local accent (= canonical --sky); every other token now comes from
+       the linked /styles/tokens.css — the identical local copies were removed */
+    --accent: var(--sky);
+    --accent-dim: color-mix(in srgb, var(--sky) 12%, transparent);
+    --accent-glow: color-mix(in srgb, var(--sky) 20%, transparent);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,7 +21,7 @@
   body {
     background: var(--bg);
     color: var(--ink);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-ui);
     line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -68,7 +52,7 @@
   }
 
   .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px; letter-spacing: 3px; color: var(--accent);
     text-transform: uppercase; margin-bottom: 24px;
     display: flex; align-items: center; gap: 12px;
@@ -76,7 +60,7 @@
   .eyebrow::before { content: ""; width: 34px; height: 1px; background: var(--accent); }
 
   .hero h1 {
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-display);
     font-weight: 900; line-height: .93; letter-spacing: -2px;
     font-size: clamp(42px, 7vw, 96px);
     max-width: 880px;
@@ -92,7 +76,7 @@
 
   .hero-meta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
   .pill {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    font-family: var(--font-mono); font-size: 11px;
     border: 1px solid var(--line2); color: var(--ink-dim);
     padding: 6px 13px; border-radius: 30px;
     display: flex; align-items: center; gap: 7px;
@@ -110,11 +94,11 @@
     display: flex; flex-direction: column; gap: 6px;
   }
   .stat-cell b {
-    font-family: 'Fraunces', serif; font-weight: 900;
+    font-family: var(--font-display); font-weight: 900;
     font-size: 38px; line-height: 1; color: var(--accent); letter-spacing: -1.5px;
   }
   .stat-cell span {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-family: var(--font-mono); font-size: 10px;
     letter-spacing: .5px; color: var(--ink-faint); text-transform: uppercase;
     line-height: 1.4;
   }
@@ -135,7 +119,7 @@
     width: 3px; background: var(--accent);
   }
   .brief-label {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-family: var(--font-mono); font-size: 10px;
     letter-spacing: 2px; color: var(--accent); text-transform: uppercase;
     margin-bottom: 12px; font-weight: 700;
   }
@@ -149,9 +133,9 @@
     display: flex; align-items: flex-end; gap: 18px;
     margin-bottom: 32px; border-bottom: 1px solid var(--line); padding-bottom: 18px;
   }
-  .section-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-faint); }
+  .section-num { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
   .section-title {
-    font-family: 'Fraunces', serif; font-weight: 900;
+    font-family: var(--font-display); font-weight: 900;
     font-size: clamp(26px, 3.5vw, 42px); letter-spacing: -1px; line-height: 1;
   }
   .section-title .accent { color: var(--accent); }
@@ -162,7 +146,7 @@
   .prose p b { color: var(--ink); }
   .prose p em { color: var(--ink-dim); font-style: italic; }
   .prose h3 {
-    font-family: 'Fraunces', serif; font-weight: 600;
+    font-family: var(--font-display); font-weight: 600;
     font-size: 22px; letter-spacing: -.3px; color: var(--ink);
     margin: 36px 0 14px;
   }
@@ -175,7 +159,7 @@
     background: var(--panel); border-radius: 0 12px 12px 0;
   }
   .pullquote p {
-    font-family: 'Fraunces', serif; font-style: italic;
+    font-family: var(--font-display); font-style: italic;
     font-size: 19px; color: var(--ink); line-height: 1.45; margin: 0;
   }
 
@@ -192,18 +176,18 @@
   }
   .aware-cell:hover { background: var(--panel2); }
   .aware-letter {
-    font-family: 'Fraunces', serif; font-weight: 900;
+    font-family: var(--font-display); font-weight: 900;
     font-size: 52px; line-height: 1; color: var(--accent);
     letter-spacing: -2px;
   }
   .aware-word {
-    font-family: 'JetBrains Mono', monospace; font-weight: 700;
+    font-family: var(--font-mono); font-weight: 700;
     font-size: 12px; letter-spacing: 1px; color: var(--ink);
     text-transform: uppercase;
   }
   .aware-desc { font-size: 12.5px; color: var(--ink-dim); line-height: 1.55; }
   .aware-action {
-    font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+    font-family: var(--font-mono); font-size: 10.5px;
     color: var(--ink-faint); margin-top: auto; line-height: 1.5;
     border-top: 1px solid var(--line); padding-top: 12px;
   }
@@ -228,14 +212,14 @@
     font-size: 26px; margin-bottom: 14px; position: relative; z-index: 1;
   }
   .need-title {
-    font-family: 'Fraunces', serif; font-weight: 700;
+    font-family: var(--font-display); font-weight: 700;
     font-size: 20px; color: var(--ink); margin-bottom: 10px;
     position: relative; z-index: 1;
   }
   .need-card p { font-size: 13px; color: var(--ink-dim); line-height: 1.6; position: relative; z-index: 1; }
   .need-tag {
     display: inline-flex; margin-top: 14px;
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-family: var(--font-mono); font-size: 10px;
     letter-spacing: 1px; text-transform: uppercase;
     border: 1px solid var(--line2); border-radius: 20px;
     padding: 4px 10px; color: var(--ink-faint);
@@ -252,10 +236,10 @@
     border-radius: 12px; padding: 22px 20px; text-align: center;
   }
   .data-item .dn {
-    font-family: 'Fraunces', serif; font-weight: 900;
+    font-family: var(--font-display); font-weight: 900;
     font-size: 44px; line-height: 1; color: var(--amber-soft); letter-spacing: -2px;
   }
-  .data-item .dl { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .5px; margin-top: 6px; line-height: 1.4; }
+  .data-item .dl { font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .5px; margin-top: 6px; line-height: 1.4; }
   @media(max-width: 600px) { .data-row { grid-template-columns: 1fr; } }
 
   /* ── COMPANY EXAMPLES ── */
@@ -266,7 +250,7 @@
     border-radius: 12px; padding: 20px 22px;
   }
   .ex-logo {
-    font-family: 'Fraunces', serif; font-weight: 900; font-size: 16px;
+    font-family: var(--font-display); font-weight: 900; font-size: 16px;
     color: var(--accent); flex-shrink: 0; width: 100px;
     padding-top: 2px;
   }
@@ -286,7 +270,7 @@
     pointer-events: none;
   }
   .conclusion .ct {
-    font-family: 'Fraunces', serif; font-weight: 900;
+    font-family: var(--font-display); font-weight: 900;
     font-size: clamp(22px, 3vw, 34px); letter-spacing: -1px;
     margin-bottom: 18px; position: relative; z-index: 1;
   }
@@ -298,7 +282,7 @@
     border-top: 1px solid var(--line); padding-top: 36px; margin-top: 56px;
     display: flex; flex-direction: column; gap: 8px;
   }
-  .authors-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--ink-faint); text-transform: uppercase; margin-bottom: 8px; }
+  .authors-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--ink-faint); text-transform: uppercase; margin-bottom: 8px; }
   .authors p { font-size: 13px; color: var(--ink-dim); line-height: 1.6; }
   .authors p b { color: var(--ink-dim); font-weight: 600; }
 
@@ -307,9 +291,9 @@
     margin-top: 80px; border-top: 1px solid var(--line); padding: 40px 0 60px;
   }
   .foot-grid { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
-  .foot-brand { font-family: 'Fraunces', serif; font-weight: 900; font-size: 28px; letter-spacing: -1px; }
+  .foot-brand { font-family: var(--font-display); font-weight: 900; font-size: 28px; letter-spacing: -1px; }
   .foot-brand .em { color: var(--amber); font-style: italic; }
-  .foot-note { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-faint); max-width: 360px; line-height: 1.7; }
+  .foot-note { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); max-width: 360px; line-height: 1.7; }
   .foot-note b { color: var(--amber-soft); }
 
   /* ── REVEAL ── */
@@ -354,9 +338,6 @@
   }
 </style>
 <!-- Tonypedia shared nav (injected) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
 <style>
   .tp-nav, .tp-nav * { box-sizing: border-box; }
   .tp-nav {
@@ -568,7 +549,7 @@
     <div class="pullquote">
       <p>"If we can have some protections where we, the workers, can control the automation, then the automation can be used to help us do our jobs. We're not saying we want to go back to the rotary phone. We're saying we need to hold the keys."</p>
     </div>
-    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint);margin-top:-8px;margin-bottom:32px">— Raphael Bob-Waksberg, creator of BoJack Horseman, on the 2023 writers' strike</p>
+    <p style="font-family:var(--font-mono);font-size:11px;color:var(--ink-faint);margin-top:-8px;margin-bottom:32px">— Raphael Bob-Waksberg, creator of BoJack Horseman, on the 2023 writers' strike</p>
 
     <div class="data-row">
       <div class="data-item">

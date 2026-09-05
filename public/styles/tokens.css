@@ -1,4 +1,10 @@
-/* Tonypedia v3 design tokens — dark editorial. Single source of truth. */
+/* Tonypedia v3 design tokens — dark editorial.
+ * SINGLE SOURCE OF TRUTH for colour values. No other file — Astro stylesheet
+ * or standalone HTML — may define a colour value in a :root block; consuming
+ * files alias these names only.
+ * Vocabulary is un-prefixed (--bg, --ink, --amber). No --tp-* prefix — see
+ * docs/DECISIONS.md D8.
+ */
 
 :root {
   /* Surfaces */
@@ -24,6 +30,16 @@
   --violet: #b89bff;
   --rose: #ff6f91;
   --green: #6fdc8c;
+
+  /* P1 vocabulary additions — placeholders; unconsumed until P1-03…P1-08 alias
+     the standalone files to them. P2 assigns final palette values (DESIGN-TOKENS §2). */
+  --panel3: #163A44;    /* absorbs the studies' --bg-hover */
+  --gold: #FBBF24;      /* the studies' gold --amber (#fbbf24), distinct from --amber orange */
+  --teal: #2FD4C0;      /* placeholder for the --sky role — not a recolour yet */
+  --teal-soft: #7FE7DB; /* placeholder */
+  --paper: #f4ede0;     /* brightest ink; absorbs studies' --white. Matches current --ink value, per signal's reference implementation. P2 target is #E8F4F5 (DESIGN-TOKENS §2) — deferred, not shipped early. See D23. */
+  --shadow: 0 18px 50px -18px rgba(0,0,0,.85); /* absorbs the studies' / signal's --shadow */
+  --orange: #ff7a2f;      /* === --amber's current value, hand-kept in sync. NOT a var() reference — see D21. When P2 repaints --amber, repaint --orange to the same new value in the same edit. */
 
   /* Per-Hub-category accent (sourced from accents above) */
   --cat-tech: var(--amber);

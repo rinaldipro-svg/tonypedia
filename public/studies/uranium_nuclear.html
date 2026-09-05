@@ -4,36 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uranium & Nuclear — Strategic Investment Study 2024</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/tokens.css">
+    <link rel="stylesheet" href="/styles/type.css">
     <style>
         :root {
-            --bg: #09090e;
-            --bg-raised: #0f1018;
-            --bg-card: #14151f;
-            --bg-hover: #1a1b28;
-            --border: rgba(255,255,255,0.05);
-            --border-hi: rgba(255,255,255,0.09);
-            --text: #dcdce8;
-            --text-dim: #7e7e95;
-            --text-muted: #4e4e62;
-            --white: #f0f0f8;
-            --accent: #f59e0b;        /* amber — uranium glow */
-            --accent-dim: rgba(245,158,11,0.10);
-            --accent-glow: rgba(245,158,11,0.22);
-            --emerald: #34d399;
-            --emerald-dim: rgba(52,211,153,0.10);
-            --sky: #38bdf8;
-            --sky-dim: rgba(56,189,248,0.10);
-            --rose: #fb7185;
-            --rose-dim: rgba(251,113,133,0.10);
-            --violet: #a78bfa;
-            --violet-dim: rgba(167,139,250,0.10);
+            /* renamed → canonical */
+            --bg-raised: var(--panel);
+            --bg-card: var(--panel2);
+            --bg-hover: var(--panel3);
+            --border: var(--line);
+            --border-hi: var(--line2);
+            --text: var(--ink);
+            --text-dim: var(--ink-dim);
+            --text-muted: var(--ink-faint);
+            --white: var(--paper);
+            --accent: var(--amber);        /* amber — uranium glow */
+            --emerald: var(--green);
+            /* dim / glow — computed locally, opacity preserved (this file: dim 0.10, glow 0.22) */
+            --accent-dim: color-mix(in srgb, var(--amber) 10%, transparent);
+            --accent-glow: color-mix(in srgb, var(--amber) 22%, transparent);
+            --emerald-dim: color-mix(in srgb, var(--green) 10%, transparent);
+            --sky-dim: color-mix(in srgb, var(--sky) 10%, transparent);
+            --rose-dim: color-mix(in srgb, var(--rose) 10%, transparent);
+            --violet-dim: color-mix(in srgb, var(--violet) 10%, transparent);
+            /* --bg, --sky, --rose, --violet: names identical to canonical — omitted
+               per docs/DESIGN-TOKENS.md §4 note (D19), so they inherit
+               /styles/tokens.css instead of self-referencing. */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-ui);
             background: var(--bg);
             color: var(--text);
             line-height: 1.65;
@@ -83,7 +85,7 @@
         }
 
         .hero-eyebrow {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.68rem;
             letter-spacing: 5px;
             text-transform: uppercase;
@@ -102,7 +104,7 @@
         }
 
         .hero h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: clamp(2.6rem, 6vw, 6.4rem);
             font-weight: 400;
             line-height: 1.06;
@@ -130,14 +132,14 @@
             opacity: 0; animation: fadeUp 1s ease .8s forwards;
         }
         .hero-stat span:first-child {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 2.5rem;
             color: var(--white);
             display: block;
             letter-spacing: -1px;
         }
         .hero-stat span:last-child {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.6rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -178,7 +180,7 @@
             border-bottom: 1px solid var(--border);
         }
         .section-num {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 4rem;
             line-height: 0.85;
             color: var(--bg-card);
@@ -188,7 +190,7 @@
         }
         .section-titles { flex: 1; }
         .section-titles h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.85rem;
             font-weight: 400;
             color: var(--white);
@@ -226,7 +228,7 @@
             margin-bottom: 10px;
         }
         .card-num {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.6rem;
             font-weight: 600;
             letter-spacing: 1px;
@@ -236,7 +238,7 @@
             border-radius: 4px;
         }
         .card-badge {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.57rem;
             font-weight: 600;
             letter-spacing: 1.5px;
@@ -251,14 +253,14 @@
         .badge-jv      { background: var(--violet-dim); color: var(--violet); }
 
         .company-card h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.2rem;
             font-weight: 400;
             color: var(--white);
             margin-bottom: 4px;
         }
         .ticker {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.72rem;
             color: var(--accent);
             background: var(--accent-dim);
@@ -279,7 +281,7 @@
             flex-wrap: wrap;
         }
         .stat-item {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.72rem;
             color: var(--text-dim);
         }
@@ -315,7 +317,7 @@
         .factor-card:hover { background: var(--bg-hover); }
 
         .factor-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.58rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -323,7 +325,7 @@
             margin-bottom: 10px;
         }
         .factor-card h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.15rem;
             font-weight: 400;
             color: var(--white);
@@ -358,14 +360,14 @@
             padding: 14px 28px;
         }
         .reserve-row.header span {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--text-muted);
         }
         .reserve-rank {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.4rem;
             color: var(--bg-hover);
             -webkit-text-stroke: 1px var(--text-muted);
@@ -373,14 +375,14 @@
         .reserve-country { font-weight: 500; color: var(--white); font-size: 0.95rem; }
         .reserve-note { font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; }
         .reserve-mt {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.82rem;
             color: var(--accent);
             text-align: right;
             white-space: nowrap;
         }
         .reserve-pct {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.78rem;
             color: var(--text-muted);
             text-align: right;
@@ -403,7 +405,7 @@
         }
         .etf-card:hover { background: var(--bg-hover); }
         .etf-ticker {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.78rem;
             color: var(--accent);
             background: var(--accent-dim);
@@ -413,7 +415,7 @@
             margin-bottom: 10px;
         }
         .etf-card h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.05rem;
             font-weight: 400;
             color: var(--white);
@@ -440,14 +442,14 @@
             pointer-events: none;
         }
         .cameco-box h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.7rem;
             font-weight: 400;
             color: var(--white);
             margin-bottom: 6px;
         }
         .cameco-box .sub {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.65rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -467,7 +469,7 @@
             padding: 18px 20px;
         }
         .reason-item .r-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.58rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -496,7 +498,7 @@
             pointer-events: none;
         }
         .mandate h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 2.2rem;
             font-weight: 400;
             color: var(--white);
@@ -560,7 +562,7 @@
             .reserve-mt, .reserve-pct { display: none; }
             .reserve-country::after {
                 display: block;
-                font-family: 'JetBrains Mono', monospace;
+                font-family: var(--font-mono);
                 font-size: 0.7rem;
                 color: var(--accent);
             }
@@ -614,9 +616,6 @@
     </style>
 
 <!-- Tonypedia shared nav (injected) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
 <style>
   .tp-nav, .tp-nav * { box-sizing: border-box; }
   .tp-nav {

@@ -189,6 +189,76 @@ ROADMAP.md and DECISIONS.md quote the strings they document, so they match the g
 
 ---
 
+## D18 — `--paper` and `--shadow` added to the canonical token file
+**2026-09** · *Roadmap P1-01b*
+
+`public/styles/tokens.css` now defines `--paper: #E8F4F5` and `--shadow: 0 18px 50px -18px rgba(0,0,0,.85)`, both copied verbatim from `docs/DESIGN-TOKENS.md` §2.
+
+D8 and D10 list `--paper` and `--shadow` as canonical vocabulary and D10 calls `--white` "not an unmappable after all" — but P1-03 recon found neither token in the actual file. §4 maps `--white` (5 studies) → `--paper` and `--shadow` (signal, hbr) → `--shadow`, so the gap blocked P1-03, P1-04, P1-05, P1-07 and P1-09. Adding the two tokens closes it; the P1-01 additions group in the file now carries all six new names.
+
+**Rules out:** re-deriving `--paper` / `--shadow` values per file. `docs/DESIGN-TOKENS.md` §2 is the source; alias blocks point at `var(--paper)` / `var(--shadow)`, never at a literal.
+
+---
+
+## D19 — "Unchanged" in §4 means omit from the alias block, not self-reference
+**2026-09** · *Roadmap P1-03b*
+
+`docs/DESIGN-TOKENS.md` §4 rows marked "unchanged" (`--sky`, `--rose`, `--violet`, `--acid`, `--shadow`, `--bg`) now say explicitly: omit that variable from the file's alias `:root` entirely, so it inherits the canonical value from the linked `/styles/tokens.css`.
+
+P1-03 recon on `uranium_nuclear.html` found the literal reading — writing `--sky: var(--sky)` in the alias block — produces a self-referential custom property, invalid at computed-value time per the CSS Custom Properties spec (§2.1, Cycles). The property (and anything computed from it, e.g. `--sky-dim`) silently resolves to its inherited value instead of the canonical colour; every consumer breaks with no build error.
+
+**Rules out:** writing `--x: var(--x)` anywhere in a P1-03…P1-09 alias block. Same-named tokens are handled by omission, not by declaration.
+
+---
+
+## D20 — Canonical `--orange` alias resolves the `--amber` collision
+**2026-09** · *Roadmap P1-04a*
+
+`public/styles/tokens.css` now defines `--orange: var(--amber)` in the P1-01 additions group. Studies with both an orange/copper accent and a gold accent alias the former to `var(--orange)` and the latter with the collision line `--amber: var(--gold)`.
+
+P1-04 recon found §4's original fix — `--amber: var(--gold); --orange: var(--amber);` written into one study `:root` — self-shadows: the local `--amber` override wins the cascade, so the `--orange` line resolves `var(--amber)` to the gold, not canonical orange. `--copper`/`--orange` and the gold `--amber` then collapse to a single colour (`coppernico.html` uses copper vs. gold to separate adjacent timeline items and risk cards). Routing the orange accent through a canonical `--orange` — declared where nothing shadows it — keeps the two distinct. No new hex: `--orange` only ever points at `--amber`, so P2 repainting `--amber` repaints `--orange` automatically (D9).
+
+**Rules out:** writing the collision fix inline in each study without a canonical `--orange` — the self-shadow bug recurs every time. Also rules out a second literal orange value; `--orange` is an alias, never a hex.
+
+---
+
+## D21 — `--orange` is an independent literal, not a `var(--amber)` alias
+**2026-09** · *Roadmap P1-04b · corrects D20's mechanism*
+
+`public/styles/tokens.css` now defines `--orange: #ff7a2f` (a literal equal to `--amber`'s current value), not `--orange: var(--amber)`.
+
+D20 added `--orange` as `var(--amber)` on the assumption that, being declared in canonical `tokens.css`, it would resolve to the canonical orange even when a study locally overrides `--amber: var(--gold)`. P1-04 recon disproved this: `var()` substitution is lazy and per-element — `--orange` computes on `:root` by dereferencing whatever `--amber` *won the cascade* there, which is the study's `var(--gold)` override. So `--copper: var(--orange)` and `--amber: var(--gold)` both resolved to `#FBBF24`, collapsing the two accents exactly as before. Only a literal breaks the reference chain.
+
+D20's **goal** stands (route every study orange/copper through one canonical name so P2 repaints once); its **implementation** was wrong. Cost of the fix: `--orange` and `--amber` are two literals that must be kept equal by hand — enforced by a comment in `tokens.css`, a note in docs/DESIGN-TOKENS.md §2, and a P2-01 checklist item.
+
+**Rules out:** any `var()`-based expression of this collision fix. `--orange` carries a hex, kept manually in sync with `--amber`; revisited at P2-01.
+
+---
+
+## D22 — `rare_materials` and `Global_Dom` alias `--accent` to `--acid`
+**2026-09** · *Roadmap P1-05/07-PRE*
+
+In `rare_materials.html` and `Global_Dom.html`, the file's own `--accent` aliases to `var(--acid)` — not the target its ROADMAP P1 table row names (`--green` for rare_materials, `--violet` for Global_Dom).
+
+P1-AUDIT found both files declare `--accent` alongside a sibling variable (`--emerald` / `--violet`) that already maps to the same canonical token, and both files use the two distinctly (e.g. rare_materials' `.cc-1`/`.cc-2` bars side by side). Canonical vocabulary has exactly one green and one violet, so one of the two must move. The sibling name — `--emerald`, `--violet` — recurs across the other studies and keeps its standard §4 mapping for cross-study consistency; `--accent`, the more file-specific role, takes `--acid`, the one canonical taxonomy slot no file currently uses. Not a shadowing bug (unlike the `--amber` collision) — just two names competing for one colour.
+
+**Rules out:** adding a second `--green` or `--violet` canonical token for a two-file edge case.
+
+---
+
+## D23 — Canonical `--paper` corrected from `#E8F4F5` to `#f4ede0`
+**2026-09** · *Roadmap P1-01c · corrects P1-01b*
+
+`public/styles/tokens.css` now defines `--paper: #f4ede0` (equal to the current `--ink`), not `#E8F4F5`.
+
+P1-01b added `--paper` by copying `#E8F4F5` verbatim from `docs/DESIGN-TOKENS.md` §2 — but §2 is the **P2 teal-palette target**, not the current warm palette. `#E8F4F5` is a cool near-white that belongs with P2's `--ink #E8F4F5`; against the current warm palette it renders as a visible cool cast on every `var(--paper)` consumer. `public/signal/index.html` — one of the two files that defined canonical "vocabulary A" (D8) — carries `--paper: #f4ede0` locally, identical to its own `--ink`; that is the correct current value. `#E8F4F5` lands at P2-01 alongside the rest of §2.
+
+This is the **second** time a future §2 value was pulled into `tokens.css` before P2 shipped it — after P1-04b's `--orange` (`#FF8A45` vs current `#ff7a2f`).
+
+**Rules out:** sourcing any canonical `tokens.css` colour value from `docs/DESIGN-TOKENS.md` §2 before P2-01. §2 is the target palette; P1 canonical values come from the current warm palette (or a reference standalone file), and §2 values are applied only when P2-01 flips the whole file at once.
+
+---
+
 ## Open
 
 - **Canonical host** — P0-02 needs the answer: `workers.dev` or a custom domain? Blocks that ticket.

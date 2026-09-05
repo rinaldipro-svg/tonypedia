@@ -4,42 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coppernico Metals — Strategic Investment Analysis 2025</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/tokens.css">
+    <link rel="stylesheet" href="/styles/type.css">
     <style>
         :root {
-            --bg:           #0a0806;
-            --bg-raised:    #100e0b;
-            --bg-card:      #161310;
-            --bg-hover:     #1d1a16;
-            --border:       rgba(255,255,255,0.05);
-            --border-hi:    rgba(255,255,255,0.09);
-            --text:         #e2ddd8;
-            --text-dim:     #8a8278;
-            --text-muted:   #524d47;
-            --white:        #f5f0eb;
+            /* renamed → canonical */
+            --bg-raised: var(--panel);
+            --bg-card: var(--panel2);
+            --bg-hover: var(--panel3);
+            --border: var(--line);
+            --border-hi: var(--line2);
+            --text: var(--ink);
+            --text-dim: var(--ink-dim);
+            --text-muted: var(--ink-faint);
+            --white: var(--paper);
 
-            /* Copper palette */
-            --copper:       #e07d3c;
-            --copper-dim:   rgba(224,125,60,0.10);
-            --copper-glow:  rgba(224,125,60,0.22);
-            --copper-light: #f0a060;
+            /* Copper palette — collision-resolved (D20/D21): --copper routes through
+               the unshadowed canonical literal --orange, --amber through --gold, so
+               the two accents stay distinct. */
+            --copper: var(--orange);
+            --copper-dim: color-mix(in srgb, var(--orange) 10%, transparent);
+            --copper-glow: color-mix(in srgb, var(--orange) 22%, transparent);
+            --copper-light: var(--amber-soft);
 
-            --emerald:      #34d399;
-            --emerald-dim:  rgba(52,211,153,0.10);
-            --rose:         #fb7185;
-            --rose-dim:     rgba(251,113,133,0.10);
-            --sky:          #38bdf8;
-            --sky-dim:      rgba(56,189,248,0.10);
-            --amber:        #fbbf24;
-            --amber-dim:    rgba(251,191,36,0.10);
-            --violet:       #a78bfa;
-            --violet-dim:   rgba(167,139,250,0.10);
+            --emerald: var(--green);
+            --emerald-dim: color-mix(in srgb, var(--green) 10%, transparent);
+            --amber: var(--gold);
+            --amber-dim: color-mix(in srgb, var(--gold) 10%, transparent);
+            --rose-dim: color-mix(in srgb, var(--rose) 10%, transparent);
+            --sky-dim: color-mix(in srgb, var(--sky) 10%, transparent);
+            --violet-dim: color-mix(in srgb, var(--violet) 10%, transparent);
+            /* --bg, --rose, --sky, --violet: identical to canonical — omitted per D19 */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-ui);
             background: var(--bg);
             color: var(--text);
             line-height: 1.65;
@@ -87,7 +88,7 @@
         }
 
         .hero-eyebrow {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.68rem;
             letter-spacing: 5px;
             text-transform: uppercase;
@@ -106,7 +107,7 @@
         }
 
         .hero h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: clamp(2.8rem, 6vw, 6.6rem);
             font-weight: 400;
             line-height: 1.05;
@@ -134,14 +135,14 @@
             opacity: 0; animation: fadeUp 1s ease .8s forwards;
         }
         .hero-stat span:first-child {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 2.5rem;
             color: var(--white);
             display: block;
             letter-spacing: -1px;
         }
         .hero-stat span:last-child {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.6rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -163,7 +164,7 @@
         .verdict-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
         .verdict-content { flex: 1; }
         .verdict-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -190,7 +191,7 @@
             border-bottom: 1px solid var(--border);
         }
         .section-num {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 4rem;
             line-height: 0.85;
             color: var(--bg-card);
@@ -200,7 +201,7 @@
         }
         .section-titles { flex: 1; }
         .section-titles h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.85rem;
             font-weight: 400;
             color: var(--white);
@@ -239,13 +240,13 @@
             flex-shrink: 0;
         }
         .asset-header h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.5rem;
             font-weight: 400;
             color: var(--white);
         }
         .asset-header .asset-sub {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -265,7 +266,7 @@
         .asset-cell:nth-child(even) { border-right: none; }
         .asset-cell:nth-last-child(-n+2) { border-bottom: none; }
         .asset-cell-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.58rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -273,7 +274,7 @@
             margin-bottom: 8px;
         }
         .asset-cell h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.05rem;
             font-weight: 400;
             color: var(--white);
@@ -304,7 +305,7 @@
             background: var(--bg-card);
         }
         .metric-row.header .metric-cell {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -321,7 +322,7 @@
         .metric-cell strong { color: var(--white); font-weight: 500; }
         .metric-name { font-weight: 600; color: var(--text); font-size: 0.92rem; }
         .metric-value {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             color: var(--copper);
             font-size: 0.88rem;
         }
@@ -359,7 +360,7 @@
         .tl-item:nth-child(4) .tl-dot { border-color: var(--sky);     box-shadow: 0 0 10px rgba(56,189,248,0.3); }
 
         .tl-period {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -371,7 +372,7 @@
         .tl-item:nth-child(4) .tl-period { color: var(--sky); }
 
         .tl-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.25rem;
             font-weight: 400;
             color: var(--white);
@@ -388,7 +389,7 @@
             align-items: center;
             gap: 6px;
             margin-top: 10px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.58rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -426,7 +427,7 @@
         .risk-card:nth-child(3)::before { background: var(--violet); }
 
         .risk-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.58rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -438,7 +439,7 @@
         .risk-card:nth-child(3) .risk-label { color: var(--violet); }
 
         .risk-card h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.15rem;
             font-weight: 400;
             color: var(--white);
@@ -469,7 +470,7 @@
             pointer-events: none;
         }
         .macro-text h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.6rem;
             font-weight: 400;
             color: var(--white);
@@ -490,7 +491,7 @@
             padding: 20px 22px;
         }
         .macro-stat-card .ms-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.58rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -498,7 +499,7 @@
             margin-bottom: 6px;
         }
         .macro-stat-card .ms-value {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.8rem;
             color: var(--copper-light);
             letter-spacing: -1px;
@@ -531,13 +532,13 @@
             flex-shrink: 0;
         }
         .mgmt-info h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.5rem;
             font-weight: 400;
             color: var(--white);
         }
         .mgmt-info .mgmt-role {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -552,7 +553,7 @@
             gap: 8px;
         }
         .track-badge {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             font-weight: 600;
             letter-spacing: 1px;
@@ -587,7 +588,7 @@
         .ud-card.up::before   { background: var(--emerald); }
         .ud-card.down::before { background: var(--rose); }
         .ud-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.6rem;
             letter-spacing: 2.5px;
             text-transform: uppercase;
@@ -596,7 +597,7 @@
         .ud-card.up   .ud-label { color: var(--emerald); }
         .ud-card.down .ud-label { color: var(--rose); }
         .ud-value {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 2.6rem;
             letter-spacing: -1px;
             margin-bottom: 8px;
@@ -629,7 +630,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.65rem;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -641,7 +642,7 @@
             margin-bottom: 20px;
         }
         .mandate h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 2.2rem;
             font-weight: 400;
             color: var(--white);
@@ -727,7 +728,7 @@
             .metric-cell:last-child { border-bottom: none; }
             .metric-cell::before {
                 content: attr(data-label);
-                font-family: 'JetBrains Mono', monospace;
+                font-family: var(--font-mono);
                 font-size: 0.6rem;
                 letter-spacing: 1.5px;
                 text-transform: uppercase;
@@ -812,9 +813,6 @@
     </style>
 
 <!-- Tonypedia shared nav (injected) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
 <style>
   .tp-nav, .tp-nav * { box-sizing: border-box; }
   .tp-nav {

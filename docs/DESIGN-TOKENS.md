@@ -22,6 +22,8 @@ Aligned with the arcsharing.com family — same temperature, lighter and warmer 
 
 Contrast measured against `--bg`. All body-text and accent pairings meet WCAG AA.
 
+**P2-01 note:** `--orange` is a hand-kept literal copy of `--amber` (see §4 / D21). Any commit that repaints `--amber` must repaint `--orange` to the identical new value.
+
 ```css
 :root {
   /* base */
@@ -37,7 +39,7 @@ Contrast measured against `--bg`. All body-text and accent pairings meet WCAG AA
   --ink:       #E8F4F5;   /* 15.9:1 */
   --ink-dim:   #9DB8BD;   /*  8.5:1 */
   --ink-faint: #6B888E;   /*  4.7:1 on --bg — see note */
-  --paper:     #E8F4F5;   /* brightest ink; absorbs studies' --white */
+  --paper:     #E8F4F5;   /* brightest ink; absorbs studies' --white. tokens.css ships #f4ede0 (current --ink) until P2-01 — see D23. */
 
   /* primary — teal */
   --teal:      #2FD4C0;   /*  9.6:1 */
@@ -49,6 +51,7 @@ Contrast measured against `--bg`. All body-text and accent pairings meet WCAG AA
   /* accent — orange, rationed */
   --amber:     #FF8A45;   /*  7.6:1 */
   --amber-soft:#FFB07A;
+  --orange:    #FF8A45;   /* === --amber; hand-kept in sync, NOT a var() reference — see D21 */
 
   /* category accents */
   --gold:      #FBBF24;   /* 10.7:1 — new in P1-01; the studies' --amber */
@@ -111,18 +114,22 @@ Reference for the P1-03…P1-08 alias tickets. **Verify against the actual file 
 | Legacy | Files | → | Note |
 |---|---|---|---|
 | `--accent` | per-file | see ROADMAP P1 table | differs per study |
+| `--accent` (rare_materials only) | rare_materials | `var(--acid)` | overrides the generic `--accent` row for this file — see collision note above |
+| `--accent` (Global_Dom only) | Global_Dom | `var(--acid)` | same |
 | `--emerald` | 5 studies | `--green` | |
 | `--sky`, `--blue` | several, quantum | `--sky` | quantum calls it `--blue` (`#4d8bff`) |
 | `--violet`, `--purple` | several, quantum | `--violet` | |
 | `--rose` | 5 studies | `--rose` | |
-| `--orange` | Global_Dom, robotics, rare_materials | `--amber` | ⚠️ see collision below |
+| `--orange` | Global_Dom, robotics, rare_materials | `var(--orange)` | ⚠️ see collision below |
 | `--amber` (studies, `#fbbf24`) | Global_Dom, coppernico, robotics, rare_materials | `--gold` | ⚠️ see collision below |
 | `--yellow` (quantum, `#fbbf24`) | quantum | `--gold` | |
 | `--warm` (quantum, `#ff6b4a`) | quantum | `--amber` | |
-| `--copper` | coppernico | `--amber` | |
+| `--copper` | coppernico | `var(--orange)` | ⚠️ see collision below |
 | `--copper-light` | coppernico | `--amber-soft` | |
 | `--acid` | signal | `--acid` | unchanged |
 | `--shadow` | signal, hbr | `--shadow` | unchanged |
+
+A row mapping a legacy name to an identically-named canonical token (`--sky`, `--rose`, `--violet`, `--acid`, `--shadow`, `--bg`) means: omit that variable from the file's alias block entirely, so it inherits the canonical value from the linked `/styles/tokens.css`. Do NOT write `--sky: var(--sky)` — that is a self-reference, invalid at computed-value time per the CSS spec, and every consumer silently falls back to inherited colour instead. This applies retroactively to every P1-03…P1-09 alias block.
 
 ### ⚠️ The `--amber` collision
 
@@ -131,14 +138,20 @@ Reference for the P1-03…P1-08 alias tickets. **Verify against the actual file 
 - In `tokens.css` / SIGNAL: `#ff7a2f`, the **primary orange**.
 - In four studies: `#fbbf24`, a **gold**, sitting alongside a *separate* `--orange` (`#fb923c`).
 
-Resolution: canonical `--amber` stays the orange. The studies' gold becomes `--gold`. So in those four files the alias block reads:
+Resolution: canonical `--amber` stays the orange, and canonical `--orange` (added in P1-04a, made a literal in P1-04b) is an independent copy of its value. The studies' gold becomes `--gold`. So in those four files the alias block reads:
 
 ```css
---amber:  var(--gold);    /* their gold */
---orange: var(--amber);   /* their orange */
+--copper: var(--orange);   /* or --orange: … if that is the study's own name for this accent */
+--amber:  var(--gold);     /* the collision line — only --amber is overridden locally */
 ```
 
-Read that twice before writing it. It is the single most error-prone line in P1.
+`--orange` must be a literal equal to `--amber`'s value, not a `var(--amber)` reference — a reference would resolve against `--amber`'s cascade-shadowed value inside the study's own block, collapsing both accents to the same colour. See D21. (A study whose accent is literally named `--orange` omits that line entirely per D19 — its `--orange` already resolves to canonical.)
+
+Read the `--amber: var(--gold)` line twice before writing it. It is still the single most error-prone line in P1.
+
+### Accent/sibling collisions (`--green`, `--violet`)
+
+Two files declare an `--accent` alongside another named variable that already targets the same canonical token: `rare_materials.html` (`--accent` + `--emerald` → `--green`) and `Global_Dom.html` (`--accent` + `--violet` → `--violet`). Resolution: that file's `--accent` aliases to `--acid` instead (canonical, currently unused, taxonomy-only per §3). The sibling (`--emerald` / `--violet`) keeps its normal mapping. This preserves visual distinctness without adding new canonical vocabulary. See D22.
 
 ### `--*-dim` and `--*-glow`
 
@@ -187,9 +200,9 @@ Available **only on article and study pages** — the two long-form reading cont
 Single source: `public/styles/type.css`. One Google Fonts request site-wide.
 
 ```css
---font-display: 'Fraunces', Georgia, serif;
---font-sans:    'Space Grotesk', system-ui, sans-serif;
---font-mono:    'JetBrains Mono', ui-monospace, monospace;
+--font-display: 'Fraunces', ui-serif, Georgia, serif;
+--font-ui:      'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+--font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 ```
 
 The request must be the **union** of BaseLayout's and SIGNAL's, not a copy of either. SIGNAL omits the italic axis and weights 500/600 that Astro components use (`.italic-accent`, `font-medium`); BaseLayout omits Space Grotesk 700 and JetBrains 700.

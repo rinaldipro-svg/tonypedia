@@ -4,40 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The 30 Technologies Defining Global Leadership — 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/tokens.css">
+    <link rel="stylesheet" href="/styles/type.css">
     <style>
         :root {
-            --bg: #08090c;
-            --bg-raised: #0f1015;
-            --bg-card: #14151c;
-            --bg-hover: #1a1b24;
-            --border: rgba(255,255,255,0.05);
-            --border-hi: rgba(255,255,255,0.09);
-            --text: #dcdce5;
-            --text-dim: #7e7e90;
-            --text-muted: #4e4e5e;
-            --white: #f0f0f5;
-            --accent: #6366f1;
-            --accent-dim: rgba(99,102,241,0.1);
-            --accent-glow: rgba(99,102,241,0.25);
-            --emerald: #34d399;
-            --emerald-dim: rgba(52,211,153,0.1);
-            --amber: #fbbf24;
-            --amber-dim: rgba(251,191,36,0.1);
-            --rose: #fb7185;
-            --rose-dim: rgba(251,113,133,0.1);
-            --sky: #38bdf8;
-            --sky-dim: rgba(56,189,248,0.1);
-            --violet: #a78bfa;
-            --violet-dim: rgba(167,139,250,0.1);
-            --orange: #fb923c;
-            --orange-dim: rgba(251,146,60,0.1);
+            /* renamed → canonical */
+            --bg-raised: var(--panel);
+            --bg-card: var(--panel2);
+            --bg-hover: var(--panel3);
+            --border: var(--line);
+            --border-hi: var(--line2);
+            --text: var(--ink);
+            --text-dim: var(--ink-dim);
+            --text-muted: var(--ink-faint);
+            --white: var(--paper);
+
+            /* --accent → --acid, not --violet: avoids colliding with --violet (D22) */
+            --accent: var(--acid);
+            --accent-dim: color-mix(in srgb, var(--acid) 10%, transparent);
+            --accent-glow: color-mix(in srgb, var(--acid) 25%, transparent);
+
+            --emerald: var(--green);
+            --emerald-dim: color-mix(in srgb, var(--green) 10%, transparent);
+            --amber: var(--gold);
+            --amber-dim: color-mix(in srgb, var(--gold) 10%, transparent);
+            --rose-dim: color-mix(in srgb, var(--rose) 10%, transparent);
+            --sky-dim: color-mix(in srgb, var(--sky) 10%, transparent);
+            --violet-dim: color-mix(in srgb, var(--violet) 10%, transparent);
+            /* --bg, --rose, --sky, --violet: identical to canonical — omitted per D19 */
+            /* --orange: identical to canonical literal — omitted per D19 */
+            --orange-dim: color-mix(in srgb, var(--orange) 10%, transparent);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-ui);
             background: var(--bg);
             color: var(--text);
             line-height: 1.65;
@@ -87,7 +89,7 @@
         }
 
         .hero-eyebrow {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.68rem;
             letter-spacing: 5px;
             text-transform: uppercase;
@@ -107,7 +109,7 @@
         }
 
         .hero h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: clamp(2.8rem, 6.5vw, 6.8rem);
             font-weight: 400;
             line-height: 1.05;
@@ -137,7 +139,7 @@
         }
 
         .hero-stat span:first-child {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 2.6rem;
             color: var(--white);
             display: block;
@@ -145,7 +147,7 @@
         }
 
         .hero-stat span:last-child {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.6rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -179,7 +181,7 @@
         }
 
         .geo-card h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.15rem;
             color: var(--white);
             margin-bottom: 8px;
@@ -219,7 +221,7 @@
         }
 
         .domain-titles h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.9rem;
             font-weight: 400;
             color: var(--white);
@@ -267,7 +269,7 @@
         }
 
         .tech-num {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             font-weight: 600;
             letter-spacing: 1px;
@@ -279,7 +281,7 @@
         }
 
         .maturity-badge {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.58rem;
             font-weight: 600;
             letter-spacing: 1.5px;
@@ -296,7 +298,7 @@
         .mat-critical { background: var(--rose-dim); color: var(--rose); }
 
         .tech-card h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 1.3rem;
             font-weight: 400;
             color: var(--white);
@@ -318,7 +320,7 @@
         }
 
         .geo-lead {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.58rem;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -343,7 +345,7 @@
         }
 
         .company-ticker {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.65rem;
             font-weight: 600;
             color: var(--accent);
@@ -399,7 +401,7 @@
         }
 
         .footer-section h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 2rem;
             color: var(--white);
             margin-bottom: 20px;
@@ -562,9 +564,6 @@
     </style>
 
 <!-- Tonypedia shared nav (injected) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
 <style>
   .tp-nav, .tp-nav * { box-sizing: border-box; }
   .tp-nav {

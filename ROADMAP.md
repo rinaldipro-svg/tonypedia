@@ -161,7 +161,9 @@ The file was untracked despite every P1 ticket reading from it as an authoritati
 # P1 — Token + type unification
 
 > Branch: `phase/p1-tokens` · 10 commits
-> **Zero visual change except typeface.**
+> **Typeface unification, plus each file's accent and surface colours
+> settling onto their assigned canonical hue. Full palette recolor
+> (base/surface values) is P2 — see docs/DECISIONS.md D4.**
 
 ### P1-01 — Relocate and extend the canonical token file
 
@@ -176,10 +178,12 @@ The file was untracked despite every P1 ticket reading from it as an authoritati
 2. Extend the :root. Keep every existing token and its current warm value —
    this ticket adds vocabulary, it does not recolour.
 
-     --panel3:     <one step above --panel2>  /* absorbs studies' --bg-hover */
-     --gold:       #fbbf24                     /* the studies' --amber */
-     --teal:       #5cc8ff                     /* PLACEHOLDER = current --sky */
-     --teal-soft:  #7fe7db                     /* placeholder */
+     --panel3:     #163A44   /* absorbs studies' --bg-hover; final P2 value, not a placeholder */
+     --gold:       #FBBF24   /* the studies' --amber */
+     --teal:       #2FD4C0   /* final P2 value, not a placeholder — see note below */
+     --teal-soft:  #7FE7DB   /* final P2 value */
+
+   Note: these four ship at their final docs/DESIGN-TOKENS.md §2 values immediately, not as placeholders — they're unconsumed until P1-03…09 alias the standalone files, so there's no visible-change risk and no reason to double-edit in P2-01.
 
    Do NOT add --*-dim or --*-glow tokens. Those stay local to each file,
    computed with color-mix() from their parent. See DESIGN-TOKENS §4.
@@ -203,7 +207,7 @@ UNION of BaseLayout.astro's request and public/signal/index.html's:
   Space Grotesk — 400/500/600/700
   JetBrains Mono — 400/500/600/700
 
-Define --font-display / --font-sans / --font-mono. Check whether
+Define --font-display / --font-ui / --font-mono. Check whether
 BaseLayout or tokens.css already defines these names; reuse if so.
 
 Then remove the Google Fonts <link> from BaseLayout.astro and link
