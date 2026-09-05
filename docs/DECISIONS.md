@@ -211,6 +211,17 @@ P1-03 recon on `uranium_nuclear.html` found the literal reading — writing `--s
 
 ---
 
+## D20 — Canonical `--orange` alias resolves the `--amber` collision
+**2026-09** · *Roadmap P1-04a*
+
+`public/styles/tokens.css` now defines `--orange: var(--amber)` in the P1-01 additions group. Studies with both an orange/copper accent and a gold accent alias the former to `var(--orange)` and the latter with the collision line `--amber: var(--gold)`.
+
+P1-04 recon found §4's original fix — `--amber: var(--gold); --orange: var(--amber);` written into one study `:root` — self-shadows: the local `--amber` override wins the cascade, so the `--orange` line resolves `var(--amber)` to the gold, not canonical orange. `--copper`/`--orange` and the gold `--amber` then collapse to a single colour (`coppernico.html` uses copper vs. gold to separate adjacent timeline items and risk cards). Routing the orange accent through a canonical `--orange` — declared where nothing shadows it — keeps the two distinct. No new hex: `--orange` only ever points at `--amber`, so P2 repainting `--amber` repaints `--orange` automatically (D9).
+
+**Rules out:** writing the collision fix inline in each study without a canonical `--orange` — the self-shadow bug recurs every time. Also rules out a second literal orange value; `--orange` is an alias, never a hex.
+
+---
+
 ## Open
 
 - **Canonical host** — P0-02 needs the answer: `workers.dev` or a custom domain? Blocks that ticket.

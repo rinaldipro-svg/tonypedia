@@ -39,6 +39,7 @@
   --teal-soft: #7FE7DB; /* placeholder */
   --paper: #E8F4F5;     /* brightest ink; absorbs the studies' --white (DESIGN-TOKENS §2) */
   --shadow: 0 18px 50px -18px rgba(0,0,0,.85); /* absorbs the studies' / signal's --shadow */
+  --orange: var(--amber); /* alias — every study's orange/copper accent routes through the single rationed amber (D20) */
 
   /* Per-Hub-category accent (sourced from accents above) */
   --cat-tech: var(--amber);

@@ -49,6 +49,7 @@ Contrast measured against `--bg`. All body-text and accent pairings meet WCAG AA
   /* accent — orange, rationed */
   --amber:     #FF8A45;   /*  7.6:1 */
   --amber-soft:#FFB07A;
+  --orange:    var(--amber);   /* alias; every study orange/copper routes here (D20) */
 
   /* category accents */
   --gold:      #FBBF24;   /* 10.7:1 — new in P1-01; the studies' --amber */
@@ -115,11 +116,11 @@ Reference for the P1-03…P1-08 alias tickets. **Verify against the actual file 
 | `--sky`, `--blue` | several, quantum | `--sky` | quantum calls it `--blue` (`#4d8bff`) |
 | `--violet`, `--purple` | several, quantum | `--violet` | |
 | `--rose` | 5 studies | `--rose` | |
-| `--orange` | Global_Dom, robotics, rare_materials | `--amber` | ⚠️ see collision below |
+| `--orange` | Global_Dom, robotics, rare_materials | `var(--orange)` | ⚠️ see collision below |
 | `--amber` (studies, `#fbbf24`) | Global_Dom, coppernico, robotics, rare_materials | `--gold` | ⚠️ see collision below |
 | `--yellow` (quantum, `#fbbf24`) | quantum | `--gold` | |
 | `--warm` (quantum, `#ff6b4a`) | quantum | `--amber` | |
-| `--copper` | coppernico | `--amber` | |
+| `--copper` | coppernico | `var(--orange)` | ⚠️ see collision below |
 | `--copper-light` | coppernico | `--amber-soft` | |
 | `--acid` | signal | `--acid` | unchanged |
 | `--shadow` | signal, hbr | `--shadow` | unchanged |
@@ -133,14 +134,16 @@ A row mapping a legacy name to an identically-named canonical token (`--sky`, `-
 - In `tokens.css` / SIGNAL: `#ff7a2f`, the **primary orange**.
 - In four studies: `#fbbf24`, a **gold**, sitting alongside a *separate* `--orange` (`#fb923c`).
 
-Resolution: canonical `--amber` stays the orange. The studies' gold becomes `--gold`. So in those four files the alias block reads:
+Resolution: canonical `--amber` stays the orange, and canonical `--orange` (added in P1-04a) is a permanent alias to it. The studies' gold becomes `--gold`. So in those four files the alias block reads:
 
 ```css
---amber:  var(--gold);    /* their gold */
---orange: var(--amber);   /* their orange */
+--copper: var(--orange);   /* or --orange: … if that is the study's own name for this accent */
+--amber:  var(--gold);     /* the collision line — only --amber is overridden locally */
 ```
 
-Read that twice before writing it. It is the single most error-prone line in P1.
+Order doesn't matter here because `--orange` is canonical and never shadowed by the local block — only `--amber` is being overridden. (A study whose accent is literally named `--orange` omits that line entirely per D19 — its `--orange` already resolves to canonical.)
+
+Read the `--amber: var(--gold)` line twice before writing it. It is still the single most error-prone line in P1.
 
 ### `--*-dim` and `--*-glow`
 
