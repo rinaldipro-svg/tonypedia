@@ -4,35 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quantum Computing: The 2026 Industrial State</title>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/tokens.css">
+    <link rel="stylesheet" href="/styles/type.css">
     <style>
         :root {
-            --bg: #0b0b0f;
-            --bg-elevated: #131318;
-            --bg-card: #18181f;
-            --bg-hover: #1e1e27;
-            --border: rgba(255,255,255,0.06);
-            --border-accent: rgba(255,255,255,0.1);
-            --text: #e8e8ec;
-            --text-dim: #85858f;
-            --text-muted: #55555f;
-            --accent: #00e4a0;
-            --accent-dim: rgba(0,228,160,0.12);
-            --accent-glow: rgba(0,228,160,0.25);
-            --warm: #ff6b4a;
-            --warm-dim: rgba(255,107,74,0.12);
-            --blue: #4d8bff;
-            --blue-dim: rgba(77,139,255,0.12);
-            --purple: #a78bfa;
-            --purple-dim: rgba(167,139,250,0.12);
-            --yellow: #fbbf24;
-            --yellow-dim: rgba(251,191,36,0.12);
+            /* renamed → canonical */
+            --bg-elevated: var(--panel);
+            --bg-card: var(--panel2);
+            --bg-hover: var(--panel3);
+            --border: var(--line);
+            --border-accent: var(--line2);
+            --text: var(--ink);
+            --text-dim: var(--ink-dim);
+            --text-muted: var(--ink-faint);
+
+            /* colour aliases — this file's names differ from canonical */
+            --accent: var(--teal);
+            --warm: var(--amber);
+            --blue: var(--sky);
+            --purple: var(--violet);
+            --yellow: var(--gold);
+
+            /* dim / glow — computed locally; this file uses 0.12 dims, 0.25 glow */
+            --accent-dim: color-mix(in srgb, var(--teal) 12%, transparent);
+            --accent-glow: color-mix(in srgb, var(--teal) 25%, transparent);
+            --warm-dim: color-mix(in srgb, var(--amber) 12%, transparent);
+            --blue-dim: color-mix(in srgb, var(--sky) 12%, transparent);
+            --purple-dim: color-mix(in srgb, var(--violet) 12%, transparent);
+            --yellow-dim: color-mix(in srgb, var(--gold) 12%, transparent);
+            /* --bg: identical to canonical — omitted per D19 */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-ui);
             background: var(--bg);
             color: var(--text);
             line-height: 1.65;
@@ -83,7 +89,7 @@
         }
 
         .hero-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.72rem;
             letter-spacing: 4px;
             text-transform: uppercase;
@@ -104,7 +110,7 @@
         }
 
         .hero h1 {
-            font-family: 'Instrument Serif', serif;
+            font-family: var(--font-display);
             font-size: clamp(3.2rem, 7vw, 7.5rem);
             font-weight: 400;
             line-height: 1.05;
@@ -146,14 +152,14 @@
         }
 
         .hero-stat span:first-child {
-            font-family: 'Instrument Serif', serif;
+            font-family: var(--font-display);
             font-size: 2.4rem;
             color: #fff;
             letter-spacing: -1px;
         }
 
         .hero-stat span:last-child {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.65rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -207,7 +213,7 @@
         }
 
         .section-num {
-            font-family: 'Instrument Serif', serif;
+            font-family: var(--font-display);
             font-size: 4.5rem;
             line-height: 0.85;
             color: var(--bg-card);
@@ -220,7 +226,7 @@
         }
 
         .section-titles h2 {
-            font-family: 'Instrument Serif', serif;
+            font-family: var(--font-display);
             font-size: 2rem;
             font-weight: 400;
             color: #fff;
@@ -256,7 +262,7 @@
         }
 
         .entity-row.header-row .entity-cell {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.65rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -290,7 +296,7 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.68rem;
             font-weight: 500;
             color: var(--accent);
@@ -307,7 +313,7 @@
 
         .modality-tag {
             display: inline-block;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.62rem;
             font-weight: 600;
             letter-spacing: 1.5px;
@@ -334,7 +340,7 @@
         .tech-detail em { color: var(--text); font-style: normal; font-weight: 500; }
 
         .financials {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.78rem;
             line-height: 2;
             color: var(--text-dim);
@@ -346,7 +352,7 @@
         }
 
         .thesis-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.6rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -408,7 +414,7 @@
         .tl-node:nth-child(4) .tl-dot { border-color: var(--warm); box-shadow: 0 0 12px rgba(255,107,74,0.3); }
 
         .tl-year {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.7rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -421,7 +427,7 @@
         .tl-node:nth-child(4) .tl-year { color: var(--warm); }
 
         .tl-title {
-            font-family: 'Instrument Serif', serif;
+            font-family: var(--font-display);
             font-size: 1.4rem;
             color: #fff;
             margin: 8px 0;
@@ -465,7 +471,7 @@
         .disrupt-card:nth-child(3)::before { background: var(--accent); }
 
         .disrupt-priority {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 0.6rem;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -481,7 +487,7 @@
         .priority-efficiency { background: var(--accent-dim); color: var(--accent); }
 
         .disrupt-card h4 {
-            font-family: 'Instrument Serif', serif;
+            font-family: var(--font-display);
             font-size: 1.5rem;
             font-weight: 400;
             color: #fff;
@@ -518,7 +524,7 @@
         }
 
         .mandate h2 {
-            font-family: 'Instrument Serif', serif;
+            font-family: var(--font-display);
             font-size: 2.4rem;
             font-weight: 400;
             color: #fff;
@@ -604,9 +610,9 @@
             .entity-cell:last-child { border-bottom: none; }
 
             /* Show label chips before each cell on mobile */
-            .entity-cell:nth-child(2)::before { content: 'Technology'; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
-            .entity-cell:nth-child(3)::before { content: 'Financials'; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
-            .entity-cell:nth-child(4)::before { content: 'Thesis'; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+            .entity-cell:nth-child(2)::before { content: 'Technology'; display: block; font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+            .entity-cell:nth-child(3)::before { content: 'Financials'; display: block; font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+            .entity-cell:nth-child(4)::before { content: 'Thesis'; display: block; font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
 
             /* Add subtle top border to visually group entity cards */
             .entity-row:not(.header-row) {
@@ -694,9 +700,6 @@
     </style>
 
 <!-- Tonypedia shared nav (injected) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@900&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
 <style>
   .tp-nav, .tp-nav * { box-sizing: border-box; }
   .tp-nav {
