@@ -222,6 +222,19 @@ P1-04 recon found §4's original fix — `--amber: var(--gold); --orange: var(--
 
 ---
 
+## D21 — `--orange` is an independent literal, not a `var(--amber)` alias
+**2026-09** · *Roadmap P1-04b · corrects D20's mechanism*
+
+`public/styles/tokens.css` now defines `--orange: #ff7a2f` (a literal equal to `--amber`'s current value), not `--orange: var(--amber)`.
+
+D20 added `--orange` as `var(--amber)` on the assumption that, being declared in canonical `tokens.css`, it would resolve to the canonical orange even when a study locally overrides `--amber: var(--gold)`. P1-04 recon disproved this: `var()` substitution is lazy and per-element — `--orange` computes on `:root` by dereferencing whatever `--amber` *won the cascade* there, which is the study's `var(--gold)` override. So `--copper: var(--orange)` and `--amber: var(--gold)` both resolved to `#FBBF24`, collapsing the two accents exactly as before. Only a literal breaks the reference chain.
+
+D20's **goal** stands (route every study orange/copper through one canonical name so P2 repaints once); its **implementation** was wrong. Cost of the fix: `--orange` and `--amber` are two literals that must be kept equal by hand — enforced by a comment in `tokens.css`, a note in DESIGN-TOKENS.md §2, and a P2-01 checklist item.
+
+**Rules out:** any `var()`-based expression of this collision fix. `--orange` carries a hex, kept manually in sync with `--amber`; revisited at P2-01.
+
+---
+
 ## Open
 
 - **Canonical host** — P0-02 needs the answer: `workers.dev` or a custom domain? Blocks that ticket.

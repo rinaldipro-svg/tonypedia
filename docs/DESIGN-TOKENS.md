@@ -22,6 +22,8 @@ Aligned with the arcsharing.com family — same temperature, lighter and warmer 
 
 Contrast measured against `--bg`. All body-text and accent pairings meet WCAG AA.
 
+**P2-01 note:** `--orange` is a hand-kept literal copy of `--amber` (see §4 / D21). Any commit that repaints `--amber` must repaint `--orange` to the identical new value.
+
 ```css
 :root {
   /* base */
@@ -49,7 +51,7 @@ Contrast measured against `--bg`. All body-text and accent pairings meet WCAG AA
   /* accent — orange, rationed */
   --amber:     #FF8A45;   /*  7.6:1 */
   --amber-soft:#FFB07A;
-  --orange:    var(--amber);   /* alias; every study orange/copper routes here (D20) */
+  --orange:    #FF8A45;   /* === --amber; hand-kept in sync, NOT a var() reference — see D21 */
 
   /* category accents */
   --gold:      #FBBF24;   /* 10.7:1 — new in P1-01; the studies' --amber */
@@ -134,14 +136,14 @@ A row mapping a legacy name to an identically-named canonical token (`--sky`, `-
 - In `tokens.css` / SIGNAL: `#ff7a2f`, the **primary orange**.
 - In four studies: `#fbbf24`, a **gold**, sitting alongside a *separate* `--orange` (`#fb923c`).
 
-Resolution: canonical `--amber` stays the orange, and canonical `--orange` (added in P1-04a) is a permanent alias to it. The studies' gold becomes `--gold`. So in those four files the alias block reads:
+Resolution: canonical `--amber` stays the orange, and canonical `--orange` (added in P1-04a, made a literal in P1-04b) is an independent copy of its value. The studies' gold becomes `--gold`. So in those four files the alias block reads:
 
 ```css
 --copper: var(--orange);   /* or --orange: … if that is the study's own name for this accent */
 --amber:  var(--gold);     /* the collision line — only --amber is overridden locally */
 ```
 
-Order doesn't matter here because `--orange` is canonical and never shadowed by the local block — only `--amber` is being overridden. (A study whose accent is literally named `--orange` omits that line entirely per D19 — its `--orange` already resolves to canonical.)
+`--orange` must be a literal equal to `--amber`'s value, not a `var(--amber)` reference — a reference would resolve against `--amber`'s cascade-shadowed value inside the study's own block, collapsing both accents to the same colour. See D21. (A study whose accent is literally named `--orange` omits that line entirely per D19 — its `--orange` already resolves to canonical.)
 
 Read the `--amber: var(--gold)` line twice before writing it. It is still the single most error-prone line in P1.
 
