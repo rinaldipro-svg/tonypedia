@@ -34,7 +34,7 @@ export async function generateArticle(
     },
     body: JSON.stringify({
       model: 'claude-sonnet-5',
-      max_tokens: 4096,
+      max_tokens: 8192,
       system: `${killerPrompt}
 
 Return only valid JSON with this exact shape:
