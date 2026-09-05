@@ -229,9 +229,20 @@ P1-04 recon found §4's original fix — `--amber: var(--gold); --orange: var(--
 
 D20 added `--orange` as `var(--amber)` on the assumption that, being declared in canonical `tokens.css`, it would resolve to the canonical orange even when a study locally overrides `--amber: var(--gold)`. P1-04 recon disproved this: `var()` substitution is lazy and per-element — `--orange` computes on `:root` by dereferencing whatever `--amber` *won the cascade* there, which is the study's `var(--gold)` override. So `--copper: var(--orange)` and `--amber: var(--gold)` both resolved to `#FBBF24`, collapsing the two accents exactly as before. Only a literal breaks the reference chain.
 
-D20's **goal** stands (route every study orange/copper through one canonical name so P2 repaints once); its **implementation** was wrong. Cost of the fix: `--orange` and `--amber` are two literals that must be kept equal by hand — enforced by a comment in `tokens.css`, a note in DESIGN-TOKENS.md §2, and a P2-01 checklist item.
+D20's **goal** stands (route every study orange/copper through one canonical name so P2 repaints once); its **implementation** was wrong. Cost of the fix: `--orange` and `--amber` are two literals that must be kept equal by hand — enforced by a comment in `tokens.css`, a note in docs/DESIGN-TOKENS.md §2, and a P2-01 checklist item.
 
 **Rules out:** any `var()`-based expression of this collision fix. `--orange` carries a hex, kept manually in sync with `--amber`; revisited at P2-01.
+
+---
+
+## D22 — `rare_materials` and `Global_Dom` alias `--accent` to `--acid`
+**2026-09** · *Roadmap P1-05/07-PRE*
+
+In `rare_materials.html` and `Global_Dom.html`, the file's own `--accent` aliases to `var(--acid)` — not the target its ROADMAP P1 table row names (`--green` for rare_materials, `--violet` for Global_Dom).
+
+P1-AUDIT found both files declare `--accent` alongside a sibling variable (`--emerald` / `--violet`) that already maps to the same canonical token, and both files use the two distinctly (e.g. rare_materials' `.cc-1`/`.cc-2` bars side by side). Canonical vocabulary has exactly one green and one violet, so one of the two must move. The sibling name — `--emerald`, `--violet` — recurs across the other studies and keeps its standard §4 mapping for cross-study consistency; `--accent`, the more file-specific role, takes `--acid`, the one canonical taxonomy slot no file currently uses. Not a shadowing bug (unlike the `--amber` collision) — just two names competing for one colour.
+
+**Rules out:** adding a second `--green` or `--violet` canonical token for a two-file edge case.
 
 ---
 

@@ -183,7 +183,7 @@ The file was untracked despite every P1 ticket reading from it as an authoritati
      --teal:       #2FD4C0   /* final P2 value, not a placeholder — see note below */
      --teal-soft:  #7FE7DB   /* final P2 value */
 
-   Note: these four ship at their final DESIGN-TOKENS.md §2 values immediately, not as placeholders — they're unconsumed until P1-03…09 alias the standalone files, so there's no visible-change risk and no reason to double-edit in P2-01.
+   Note: these four ship at their final docs/DESIGN-TOKENS.md §2 values immediately, not as placeholders — they're unconsumed until P1-03…09 alias the standalone files, so there's no visible-change risk and no reason to double-edit in P2-01.
 
    Do NOT add --*-dim or --*-glow tokens. Those stay local to each file,
    computed with color-mix() from their parent. See DESIGN-TOKENS §4.

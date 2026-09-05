@@ -114,6 +114,8 @@ Reference for the P1-03…P1-08 alias tickets. **Verify against the actual file 
 | Legacy | Files | → | Note |
 |---|---|---|---|
 | `--accent` | per-file | see ROADMAP P1 table | differs per study |
+| `--accent` (rare_materials only) | rare_materials | `var(--acid)` | overrides the generic `--accent` row for this file — see collision note above |
+| `--accent` (Global_Dom only) | Global_Dom | `var(--acid)` | same |
 | `--emerald` | 5 studies | `--green` | |
 | `--sky`, `--blue` | several, quantum | `--sky` | quantum calls it `--blue` (`#4d8bff`) |
 | `--violet`, `--purple` | several, quantum | `--violet` | |
@@ -146,6 +148,10 @@ Resolution: canonical `--amber` stays the orange, and canonical `--orange` (adde
 `--orange` must be a literal equal to `--amber`'s value, not a `var(--amber)` reference — a reference would resolve against `--amber`'s cascade-shadowed value inside the study's own block, collapsing both accents to the same colour. See D21. (A study whose accent is literally named `--orange` omits that line entirely per D19 — its `--orange` already resolves to canonical.)
 
 Read the `--amber: var(--gold)` line twice before writing it. It is still the single most error-prone line in P1.
+
+### Accent/sibling collisions (`--green`, `--violet`)
+
+Two files declare an `--accent` alongside another named variable that already targets the same canonical token: `rare_materials.html` (`--accent` + `--emerald` → `--green`) and `Global_Dom.html` (`--accent` + `--violet` → `--violet`). Resolution: that file's `--accent` aliases to `--acid` instead (canonical, currently unused, taxonomy-only per §3). The sibling (`--emerald` / `--violet`) keeps its normal mapping. This preserves visual distinctness without adding new canonical vocabulary. See D22.
 
 ### `--*-dim` and `--*-glow`
 
