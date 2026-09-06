@@ -54,7 +54,7 @@ src/pages/studies/[slug].astro:16  redirects clean-slug → .html (backwards)
 src/scripts/theme.ts          exists, imported NOWHERE, cookie+class mechanism
 public/signal/index.html      the AI Feed page (a directory index, not a flat file)
 public/studies/*.html         8 standalone studies (not 7 — hbr-* is easy to miss)
-workers/chatbot-api/          own SITE_URL default + wrangler.toml var
+src/pages/api/chat.ts         chatbot endpoint (on-demand route; needs ANTHROPIC_API_KEY secret)
 scripts/content-agent/        the /hub pipeline
 workers/content-feed-bot/     the Telegram bot
 ```

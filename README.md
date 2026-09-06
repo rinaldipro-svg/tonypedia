@@ -98,31 +98,28 @@ Write in Markdown. Code blocks will be syntax-highlighted.
 
 ## 🤖 AI Chatbot
 
-The chatbot runs on Claude Haiku and uses semantic search over your articles.
+The chatbot runs on Claude Haiku and does keyword search over your articles. It
+is served same-origin by the Astro API route `src/pages/api/chat.ts` (an
+on-demand route, `prerender = false`) — there is no separate Worker to deploy.
 
 ### Setup
 
 1. Get an [Anthropic API key](https://console.anthropic.com/)
 
-2. Deploy the Cloudflare Worker:
+2. Set it as a secret on the site's Worker, from the repo root:
 
 ```bash
-cd workers/chatbot-api
-npm install
 npx wrangler secret put ANTHROPIC_API_KEY
-npx wrangler deploy
 ```
 
-3. Update your site URL in `workers/chatbot-api/wrangler.toml`:
+   For local `astro dev`, put `ANTHROPIC_API_KEY=sk-ant-...` in a git-ignored
+   `.dev.vars` file at the repo root instead.
 
-```toml
-[env.production]
-vars = { SITE_URL = "https://tonypedia.rinaldipro.workers.dev" }
-```
+3. Deploy the site normally (see Deployment below). The route reads the article
+   corpus straight from the content collection, so no `SITE_URL` is needed.
 
-4. Set the Worker URL in your Astro site's environment:
-
-For local development, the chatbot will error gracefully. For production, point to your deployed Worker.
+Without the key set, the route returns a graceful error and the widget shows a
+"try again later" message.
 
 ## 🛠️ Content Automation
 
@@ -159,17 +156,12 @@ git push -u origin main
 - Output directory: `dist`
 - Click "Save and Deploy"
 
-3. **Set environment variables** (if using chatbot)
+3. **Set environment variables** (if using the chatbot)
 
-In your Cloudflare Pages project settings, add:
-- `SITE_URL`: `https://your-domain.com`
-
-4. **Deploy the chatbot Worker**
+Add the Anthropic API key as a secret on the site's Worker:
 
 ```bash
-cd workers/chatbot-api
 npx wrangler secret put ANTHROPIC_API_KEY
-npx wrangler deploy --env production
 ```
 
 Once deployed, your site will be live at your custom domain (if configured) or `https://tonypedia.rinaldipro.workers.dev`.
@@ -197,6 +189,8 @@ tonypedia/
 │   │   ├── articles/          # Article pages & listing
 │   │   ├── category/          # Category pages
 │   │   ├── tags/              # Tag pages
+│   │   ├── api/
+│   │   │   └── chat.ts        # Chatbot endpoint (on-demand, prerender = false)
 │   │   ├── search-index.json.ts
 │   │   ├── rss.xml.ts
 │   │   └── 404.astro
@@ -211,10 +205,7 @@ tonypedia/
 │   ├── robots.txt
 │   └── images/
 ├── workers/
-│   └── chatbot-api/           # Cloudflare Worker
-│       ├── index.ts
-│       ├── wrangler.toml
-│       └── package.json
+│   └── content-feed-bot/      # Telegram intake Worker (content automation)
 ├── astro.config.mjs
 ├── tailwind.config.mjs
 ├── tsconfig.json
