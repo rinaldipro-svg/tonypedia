@@ -33,8 +33,8 @@ export async function generateArticle(
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 4096,
+      model: 'claude-sonnet-5',
+      max_tokens: 8192,
       system: `${killerPrompt}
 
 Return only valid JSON with this exact shape:

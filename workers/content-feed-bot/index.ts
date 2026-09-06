@@ -166,8 +166,8 @@ async function parseFreeformIdea(env: Env, text: string): Promise<ParsedIdea> {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
+      model: 'claude-sonnet-5',
+      max_tokens: 3000,
       system: `You are a content brief parser for Tonypedia.
 
 Return only valid JSON with this shape:
