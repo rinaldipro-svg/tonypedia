@@ -592,7 +592,7 @@ function cardHTML(e,i){
     inner+=`<p>${e.blurb}</p>`;
   }
   inner+=`<div class="meta"><span class="src"><span class="d"></span>${e.source}</span><span class="more">open ↗</span></div>`;
-  return `<div class="card ${e.size||''}" data-i="${i}" data-cat="${e.cat}" style="--accent:${e.accent};--glow:${e.glow}">${inner}</div>`;
+  return `<article class="card ${e.size||''}" data-i="${i}" data-cat="${e.cat}" style="--accent:${e.accent};--glow:${e.glow}">${inner}</article>`;
 }
 
 function tableHTML(kind){
@@ -661,12 +661,12 @@ function render(){
     html+=`<div class="grid">`;
     items.forEach((o,idx)=>{
       if(o.e.table){
-        html+=`<div class="card ${o.e.size}" data-i="${o.i}" data-cat="${o.e.cat}" style="--accent:${o.e.accent};--glow:${o.e.glow}">
+        html+=`<article class="card ${o.e.size}" data-i="${o.i}" data-cat="${o.e.cat}" style="--accent:${o.e.accent};--glow:${o.e.glow}">
           <div class="card-tag"><span class="bar"></span>${c.name} · interactive</div>
           <h3>${o.e.title}</h3><p style="margin-bottom:18px">${o.e.blurb}</p>
           ${tableHTML(o.e.table)}
           <div class="meta" style="margin-top:16px"><span class="src"><span class="d"></span>${o.e.source}</span><span class="more" data-i="${o.i}">details ↗</span></div>
-        </div>`;
+        </article>`;
       } else if(!o.e.feature){
         html+=cardHTML(o.e,o.i);
       }
