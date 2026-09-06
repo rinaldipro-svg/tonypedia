@@ -1,0 +1,10 @@
+{
+  "cat": "industry",
+  "title": "Anthropic asked a priest for help",
+  "source": "Evolving AI",
+  "blurb": "A priest helped write the ethical rules for one of the most powerful AIs ever built.",
+  "size": "col4",
+  "accent": "var(--rose)",
+  "glow": "rgba(255,111,145,.1)",
+  "body": "<p>A striking footnote in AI-safety culture: a priest reportedly helped write some of the ethical rules guiding Claude — \"Anthropic built one of the most powerful AI models on Earth, then asked a priest for help.\"</p>\n  <p>Whatever the specifics, it captures a real theme: as models grow more capable, alignment work increasingly draws on moral philosophy, theology and the humanities — not just ML.</p>\n  <div class=\"srcline\">SOURCE · Evolving AI, LinkedIn.</div>"
+}

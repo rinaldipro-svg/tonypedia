@@ -1,0 +1,10 @@
+{
+  "cat": "tools",
+  "title": "Dataiku",
+  "source": "dataiku.com",
+  "blurb": "Enterprise platform pitching \"the AI success formula\" — people, process, tooling — used by SLB, J&J and Novartis.",
+  "size": "col4",
+  "accent": "var(--amber)",
+  "glow": "rgba(255,122,47,.1)",
+  "body": "<p><b>Dataiku</b> positions itself around an \"AI success formula\" with people at the center — an enterprise platform for building, governing and scaling AI/analytics workflows.</p>\n  <p>Named enterprise case studies include SLB, Johnson & Johnson and Novartis. A useful reference point for the enterprise-AI-platform category (vs. the developer-CLI tools elsewhere in this base).</p>\n  <div class=\"srcline\">SOURCE · dataiku.com landing page.</div>"
+}

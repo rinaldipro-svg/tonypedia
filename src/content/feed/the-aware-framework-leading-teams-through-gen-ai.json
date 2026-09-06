@@ -1,0 +1,10 @@
+{
+  "cat": "concepts",
+  "title": "The AWARE framework — leading teams through gen AI",
+  "source": "HBR · Mar–Apr 2026",
+  "blurb": "Why great innovations fail to scale: workers resist gen AI when it threatens competence, autonomy and relatedness. AWARE is the leadership playbook to win them back.",
+  "size": "col4",
+  "accent": "var(--sky)",
+  "glow": "rgba(92,200,255,.1)",
+  "body": "<p>From the HBR cover story \"Why Great Innovations Fail to Scale\" (Hermann, Puntoni & Morewedge). The core thesis: gen AI succeeds or stalls depending on whether it <b>satisfies or frustrates three psychological needs</b> — competence (feeling effective), autonomy (feeling in control), and relatedness (meaningful connection).</p>\n  <p>When those needs are threatened, you get resistance, disengagement and even sabotage: one 2025 survey found 85% of leaders use gen AI regularly but only 51% of workers do.</p>\n  <h4>The AWARE framework</h4>\n  <ul>\n    <li><b>Acknowledge</b> how gen AI affects workers' competence, autonomy and relatedness — open dialogue, surface concerns, don't suppress them.</li>\n    <li><b>Watch</b> for maladaptive coping (task avoidance, withdrawal, \"shadow\" AI use) so you can intervene before performance declines.</li>\n    <li><b>Align</b> training, mentoring, job design and feedback with workers' psychological needs.</li>\n    <li><b>Redesign</b> roles around human–AI complementarity — give AI the repetitive/data-heavy work, give people empathy, creativity, judgment.</li>\n    <li><b>Empower</b> workers to shape how AI affects their work — transparency, inclusion, participation in the rollout.</li>\n  </ul>\n  <p>The payoff: supporting core psychological needs turns gen AI from a perceived threat into a trusted copilot. (Full reconstruction available as a Word document.)</p>\n  <div class=\"srcline\">SOURCE · Harvard Business Review, March–April 2026 · HBR Reprint R2602B.</div>"
+}

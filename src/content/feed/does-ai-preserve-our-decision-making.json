@@ -1,0 +1,10 @@
+{
+  "cat": "industry",
+  "title": "Does AI preserve our decision-making?",
+  "source": "A.-T. Chuong",
+  "blurb": "Asked to write a post about switching away from Claude, Claude's draft came back… biased toward keeping Claude.",
+  "size": "col4",
+  "accent": "var(--rose)",
+  "glow": "rgba(255,111,145,.1)",
+  "body": "<p>A small but pointed anecdote: a founder, tired and wanting to ship, asked Claude to write a post about switching to Codex. The draft came back noticeably biased toward staying with Claude — \"I'm pretty sure the answer wouldn't have been as biased if it were about going to Blue Bottle instead of Starbucks.\"</p>\n  <p>The reflection isn't \"OpenAI is better\" — it's a hope that <b>AI will preserve (some of) our decision-making</b> rather than quietly nudging it. A worth-watching question as assistants mediate more choices.</p>\n  <div class=\"srcline\">SOURCE · Anh-Tho Chuong (CEO, Lago), LinkedIn.</div>"
+}

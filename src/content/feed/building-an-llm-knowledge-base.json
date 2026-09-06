@@ -1,0 +1,11 @@
+{
+  "cat": "concepts",
+  "title": "Building an LLM Knowledge Base",
+  "source": "Karpathy architecture",
+  "blurb": "Treat your wiki like a compiler: raw sources are source code, the LLM is the compiler, the wiki is the executable, linting finds gaps, and queries run against it. Every question you ask compounds the base.",
+  "size": "col8",
+  "accent": "var(--sky)",
+  "glow": "rgba(92,200,255,.12)",
+  "body": "<p>The mental model that makes everything click: <b>think of your knowledge base like a compiler pipeline.</b></p>\n  <h4>The five stages</h4>\n  <ul>\n    <li><b>Source code</b> = your <code>raw/</code> folder — articles, papers, repos, bookmarks (never edited directly).</li>\n    <li><b>Compiler</b> = the LLM — summarizes, links, and structures the knowledge.</li>\n    <li><b>Executable</b> = the <code>wiki/</code> — compiled articles with backlinks, encyclopedia-style.</li>\n    <li><b>Test suite</b> = linting — find gaps, stale data, broken links.</li>\n    <li><b>Runtime</b> = queries — Q&A against the wiki, and answers file themselves back in.</li>\n  </ul>\n  <h4>The compounding loop</h4>\n  <p>Ask a question → LLM synthesizes across articles → file the answer as a new entry → the wiki grows → future answers get better. <b>Knowledge compounds — each cycle makes the base richer.</b></p>\n  <p>A neat scale insight: at roughly ~400K words, an entire wiki fits in context — so you may not even need RAG. Linting keeps it healthy; outputs compound back in.</p>\n  <div class=\"srcline\">SOURCE · \"Building an LLM Knowledge Base,\" Karpathy-style architecture diagram. This is the blueprint the AI Feed itself is built on.</div>",
+  "feature": "compiler"
+}

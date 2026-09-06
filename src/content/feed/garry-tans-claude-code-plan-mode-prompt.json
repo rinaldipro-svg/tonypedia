@@ -1,0 +1,10 @@
+{
+  "cat": "prompts",
+  "title": "Garry Tan's Claude Code Plan-Mode prompt",
+  "source": "via P. Perrone",
+  "blurb": "The Y Combinator CEO's review prompt: opinionated tradeoffs, four review lenses, and a structured interaction protocol.",
+  "size": "col6",
+  "accent": "var(--violet)",
+  "glow": "rgba(184,155,255,.12)",
+  "body": "<p>Garry Tan (CEO, Y Combinator) shared his Claude Code prompt for Plan Mode — a structured code-review template.</p>\n  <h4>Engineering preferences (the guardrails)</h4>\n  <ul>\n    <li>DRY is important — flag repetition aggressively</li>\n    <li>Well-tested code is non-negotiable; rather too many tests than too few</li>\n    <li>\"Engineered enough\" — not fragile/hacky, not over-abstracted</li>\n    <li>Err on handling more edge cases, not fewer; thoughtfulness > speed</li>\n    <li>Bias toward explicit over clever</li>\n  </ul>\n  <h4>Four review lenses</h4>\n  <p><b>1. Architecture</b> (system design, coupling, bottlenecks, security) · <b>2. Code quality</b> (organization, DRY, error handling, tech debt) · <b>3. Tests</b> (coverage gaps, assertion strength, edge cases) · <b>4. Performance</b> (N+1 queries, memory, caching).</p>\n  <h4>Interaction protocol</h4>\n  <p>For each issue: describe it concretely with file/line; present 2–3 options (including \"do nothing\"); give a recommended option mapped to the preferences; then explicitly ask before proceeding. Number issues, letter the options, make the recommended option first.</p>\n  <div class=\"srcline\">SOURCE · Garry Tan, shared by Paolo Perrone (ML Engineer).</div>"
+}

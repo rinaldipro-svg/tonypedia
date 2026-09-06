@@ -1,0 +1,10 @@
+{
+  "cat": "industry",
+  "title": "Apple pays Google ~$1B/yr for Siri's brain",
+  "source": "reported deal",
+  "blurb": "The \"privacy-first\" brand will license Gemini and host a custom 1.2-trillion-parameter model on Google infrastructure — while collecting $20B/yr from Google for search.",
+  "size": "col6",
+  "accent": "var(--rose)",
+  "glow": "rgba(255,111,145,.12)",
+  "body": "<p>Apple — which built a decade of identity on privacy (\"what happens on your iPhone stays on your iPhone\") — is reported to be paying Google ~$1 billion a year to license Gemini AI and host a custom <b>1.2-trillion-parameter</b> model on Google infrastructure to power Siri.</p>\n  <p>The financial picture is wilder still: Google simultaneously pays Apple ~<b>$20 billion a year</b> to remain the default iPhone search engine — roughly 20% of Apple's Services revenue, its main growth segment. So Apple collects Google's largest distribution payment <i>and</i> pays Google to power its flagship AI feature, at the same time.</p>\n  <p>The contradiction is sharp: Apple's software chief had previously banned engineers from Google Cloud over privacy. <b>The take:</b> it signals Apple's vertical-integration bet cracking under AI's compute demands — when the privacy promise meets the arms race, the arms race wins.</p>\n  <div class=\"srcline\">SOURCE · Zachary Boland, LinkedIn commentary on reported Apple–Google deal.</div>"
+}

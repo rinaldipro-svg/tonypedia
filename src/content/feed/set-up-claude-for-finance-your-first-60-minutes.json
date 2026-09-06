@@ -1,0 +1,10 @@
+{
+  "cat": "guides",
+  "title": "Set up Claude for Finance — your first 60 minutes",
+  "source": "A. Mysko, FuelFinance",
+  "blurb": "A weekend setup ritual: install, configure, build context files, set profile preferences, projects, writing style and memory.",
+  "size": "col6",
+  "accent": "var(--acid)",
+  "glow": "rgba(200,255,77,.1)",
+  "body": "<p>\"Block the time. Do it this weekend.\" A 60-minute setup for finance work:</p>\n  <ol>\n    <li><b>0–10 · Install Claude</b> — get the desktop app (unlocks Cowork, Code, Skills + access across your local files); Pro is too limited for real finance work.</li>\n    <li><b>10–15 · Model & settings</b> — Opus 4.6 for deep analysis, Sonnet 4.6 for quick formatting/summaries; enable Code Execution & File Creation, Skills, Web Search, Memory.</li>\n    <li><b>15–30 · Context files</b> — the step most skip, and the one that matters most. Create a <code>Claude-Finance</code> folder with markdown files: about you, your rules, your templates.</li>\n    <li><b>30–40 · Profile preferences</b> — your universal instruction set, written in second person (\"You are a senior finance professional… include source citations & reconciliation checks…\").</li>\n    <li><b>40–50 · First Project</b> — e.g. \"Monthly Board Reporting\": name it, upload relevant docs (financials, board-deck template, SOPs), write custom instructions.</li>\n    <li><b>50–60 · Writing Style</b> — create a custom style so Claude sounds like you, not like AI.</li>\n    <li><b>60+ · Memory</b> — turn it on; Claude builds a synthesis of what it knows about you, updated regularly. You can add memories manually and import from ChatGPT.</li>\n  </ol>\n  <div class=\"srcline\">SOURCE · Alyona Mysko (Founder, FuelFinance), \"How to set up Claude for finance.\"</div>"
+}
