@@ -1,0 +1,10 @@
+{
+  "cat": "industry",
+  "title": "BDC launches LIFT — a C$500M AI push for SMEs",
+  "source": "BDC · Canada",
+  "blurb": "The question is no longer whether AI belongs in an SME's business plan, but how. BDC commits half a billion to move firms from intention to action.",
+  "size": "col6",
+  "accent": "var(--rose)",
+  "glow": "rgba(255,111,145,.1)",
+  "body": "<p>The Business Development Bank of Canada (BDC) launched <b>LIFT</b>, a C$500M program to help small and mid-sized enterprises move \"from intention to action\" on AI and concretely raise productivity.</p>\n  <p>The framing: today the question isn't <i>whether</i> AI should be part of an SME's business plan, but <i>how</i> it gets implemented — yet too many SMEs struggle to take the first step. One of the biggest brakes on adoption is simply not knowing where to start or how to extract value.</p>\n  <div class=\"srcline\">SOURCE · Isabelle Hudon (President & CEO, BDC), LinkedIn.</div>"
+}

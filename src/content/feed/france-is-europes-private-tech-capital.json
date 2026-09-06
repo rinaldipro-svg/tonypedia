@@ -1,0 +1,11 @@
+{
+  "cat": "data",
+  "title": "France is Europe's private tech capital",
+  "source": "Multiples.vc · Apr 2026",
+  "blurb": "Seven French private tech firms now valued above $5B. Mistral AI is the standout — $13.8B at a 34.5× revenue multiple.",
+  "size": "col6",
+  "accent": "var(--green)",
+  "glow": "rgba(111,220,140,.1)",
+  "body": "<p>After Mistral AI's mega VC round in late 2025, France quietly became home to seven private tech companies valued above $5B. The top 10 (as of Apr 2026):</p>\n  <ul>\n    <li>Dassault Systèmes — $28.0B · 3.8× · Public</li>\n    <li><b>Mistral AI — $13.8B · 34.5× · Private</b> (the AI standout)</li>\n    <li>Doctolib — $6.4B · 15.1×</li>\n    <li>Back Market — $5.7B · 13.7×</li>\n    <li>ContentSquare — $5.6B · 17.0×</li>\n    <li>Verkor — $5.6B</li>\n    <li>Alan — $5.5B · 2.0×</li>\n    <li>Edenred — $5.3B · 1.5× · Public</li>\n    <li>Qonto — $5.0B · 9.7×</li>\n    <li>Webhelp — $4.9B · Acquired</li>\n  </ul>\n  <p>Mistral's 34.5× revenue multiple dwarfs the field — the premium the market puts on a European frontier-model lab.</p>\n  <div class=\"srcline\">SOURCE · Multiples.vc, \"France is Europe's private tech capital.\"</div>",
+  "table": "france"
+}

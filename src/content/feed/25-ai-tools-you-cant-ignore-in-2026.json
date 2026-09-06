@@ -1,0 +1,10 @@
+{
+  "cat": "tools",
+  "title": "25 AI tools you can't ignore in 2026",
+  "source": "A. Armstrong",
+  "blurb": "A rapid-fire directory spanning search, video, code, design, music, marketing and agents.",
+  "size": "col6",
+  "accent": "var(--amber)",
+  "glow": "rgba(255,122,47,.12)",
+  "body": "<p>A curated grab-bag of AI tools worth knowing, by category of use:</p>\n  <h4>Search & research</h4><p>Perplexity.ai (solves anything) · Fastread.io (ebooks) · Bibley.io (Bible study)</p>\n  <h4>Video & thumbnails</h4><p>Syllaby.io (viral videos) · Skysnail.io (YouTube thumbnails) · Submagic.co (long→shorts) · Heygen.com (AI avatars)</p>\n  <h4>Code & build</h4><p>Replit.com (writes & runs code) · V0.dev (frontend mockups) · Manus.im (\"ultimate AI agent\")</p>\n  <h4>Design & brand</h4><p>Canva.com · Brandbutler.ai · Adcreative.ai · Gemini/NanoBanana (photo editing)</p>\n  <h4>Music & audio</h4><p>Soundraw.io · Suno.com</p>\n  <h4>Marketing & growth</h4><p>Ranked.ai (rank on Google/ChatGPT/Claude) · Threadmaster.ai · Sociableai.io · Webinarkit.com · Yoinkit.ai · Hellowarrant.com (marketing compliance)</p>\n  <h4>Personal</h4><p>Resumeenhance.com · askcoachken.com</p>\n  <div class=\"srcline\">SOURCE · Austin Armstrong (CEO of Syllaby), LinkedIn.</div>"
+}

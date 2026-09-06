@@ -1,0 +1,10 @@
+{
+  "cat": "tools",
+  "title": "Vibe CLI + Mistral Devstral 2 — going local",
+  "source": "Mistral AI",
+  "blurb": "Why the Vibe CLI asks for an API key, and how to bypass it to run fully local against llama.cpp.",
+  "size": "col6",
+  "accent": "var(--amber)",
+  "glow": "rgba(255,122,47,.1)",
+  "body": "<p><b>Why an API key is requested:</b> Vibe defaults to Mistral's hosted <b>Devstral 2</b> model, which requires an account and key. Even if you plan to go local, the CLI initialises by creating a <code>.env</code> or <code>config.toml</code> that expects a <code>MISTRAL_API_KEY</code> entry.</p>\n  <h4>How to bypass / disable the key for local use</h4>\n  <ol>\n    <li><b>Dummy input</b> — if prompted in the terminal, enter any string.</li>\n    <li><b>Config edit</b> — open <code>~/.vibe/config.toml</code> (or <code>./.vibe/config.toml</code> in your project root).</li>\n    <li><b>Local provider settings</b> — point the provider block at a local server with an empty key:</li>\n  </ol>\n  <p><code>[[providers]] name=\"llamacpp\" · api_base=\"http://127.0.0.1:8080/v1\" · api_key_env_var=\"\" · api_style=\"openai\" · backend=\"generic\"</code></p>\n  <div class=\"srcline\">SOURCE · Vibe CLI / Mistral Devstral 2 setup notes.</div>"
+}

@@ -1,0 +1,10 @@
+{
+  "cat": "guides",
+  "title": "Anthropic's 13 free AI courses",
+  "source": "Anthropic · free + certs",
+  "blurb": "While most AI courses cost $200–$2,000, Anthropic dropped 13 courses with certificates — 100% free.",
+  "size": "col6",
+  "accent": "var(--acid)",
+  "glow": "rgba(200,255,77,.1)",
+  "body": "<p>13 free Anthropic courses with certificates — no subscriptions, no hidden fees.</p>\n  <h4>For anyone starting with AI</h4>\n  <ul><li>Claude 101</li><li>AI Fluency: Framework & Foundations</li></ul>\n  <h4>For developers</h4>\n  <ul>\n    <li>Building With the Claude API</li>\n    <li>Introduction to Agent Skills</li>\n    <li>Claude Code in Action</li>\n    <li>Introduction to Model Context Protocol</li>\n    <li>Model Context Protocol: Advanced Topics</li>\n    <li>Claude With Amazon Bedrock</li>\n    <li>Claude With Google Cloud Vertex AI</li>\n  </ul>\n  <p>(…and more in the full catalogue — practical, certificate-bearing skills anyone can learn.)</p>\n  <div class=\"srcline\">SOURCE · \"The AI Learning Paywall Just Got Destroyed,\" LinkedIn.</div>"
+}

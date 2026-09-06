@@ -1,0 +1,10 @@
+{
+  "cat": "industry",
+  "title": "OpenAI plans a desktop 'superapp'",
+  "source": "WSJ · Mar 19 2026",
+  "blurb": "OpenAI will combine ChatGPT, the Codex app and a browser into one desktop product to refocus and streamline its resources.",
+  "size": "col6",
+  "accent": "var(--rose)",
+  "glow": "rgba(255,111,145,.1)",
+  "body": "<p>Per a WSJ exclusive (Mar 19, 2026): OpenAI plans to launch a desktop \"superapp\" that combines <b>ChatGPT, the Codex app and a browser</b> into a single product, in an effort to focus and streamline its resources and simplify the user experience.</p>\n  <p>A notable consolidation move — folding separate surfaces into one — and a useful contrast with the modular CLI/MCP ecosystem documented elsewhere in this base.</p>\n  <div class=\"srcline\">SOURCE · The Wall Street Journal (Berber Jin), Technology / Exclusive.</div>"
+}

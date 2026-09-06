@@ -1,0 +1,10 @@
+{
+  "cat": "guides",
+  "title": "10 Levels of Claude Code Mastery",
+  "source": "mapped from 100s of setups",
+  "blurb": "From \"terminal tourist\" to \"swarm architect.\" The gap between levels isn't knowledge — it's setup.",
+  "size": "col4",
+  "accent": "var(--acid)",
+  "glow": "rgba(200,255,77,.1)",
+  "body": "<p>Ten levels of Claude Code mastery, mapped from hundreds of real community setups — from \"terminal tourist\" to \"swarm architect.\"</p>\n  <ul>\n    <li><b>L0</b> — type prompts and hope for the best</li>\n    <li><b>L1</b> — a <code>CLAUDE.md</code> file; you know <code>/compact</code> and <code>/cost</code></li>\n    <li><b>L2</b> — connected MCP servers (Slack, Notion, Drive) pulling live data</li>\n    <li><b>L3</b> — custom skills; repeatable workflows, one command</li>\n    <li><b>L4</b> — memory files, patterns, examples; context engineering</li>\n    <li><b>L5</b> — multi-phase skills, subagents, systems that chain together</li>\n    <li><b>L6</b> — headless mode; scripts calling Claude Code, JSON piping</li>\n    <li><b>L7</b> — Playwright browser control; screenshots, scraping, PDF generation</li>\n    <li><b>L8</b> — parallel sessions; orchestrator + specialist agents</li>\n    <li><b>L9</b> — cron jobs; background agents running 24/7 as infrastructure</li>\n    <li><b>L10</b> — autonomous loops; agents that build agents (a handful of people on the planet)</li>\n  </ul>\n  <p><b>The gap between each level isn't knowledge — it's mostly just setup.</b></p>\n  <div class=\"srcline\">SOURCE · community \"10 levels\" post + <code>/level-up</code> tool.</div>"
+}

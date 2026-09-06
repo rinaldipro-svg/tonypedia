@@ -1,0 +1,10 @@
+{
+  "cat": "prompts",
+  "title": "The ship-10x CLAUDE.md",
+  "source": "B. Kubicka, LiquidMetal",
+  "blurb": "A battle-tested CLAUDE.md: workflow orchestration, a self-improvement loop, verification gates and core principles.",
+  "size": "col6",
+  "accent": "var(--violet)",
+  "glow": "rgba(184,155,255,.12)",
+  "body": "<p>A CLAUDE.md template built for autonomous, high-quality output.</p>\n  <h4>Workflow orchestration</h4>\n  <ul>\n    <li><b>Plan-mode default</b> — enter plan mode for any non-trivial task (3+ steps); if something goes sideways, STOP and re-plan.</li>\n    <li><b>Subagent strategy</b> — use subagents liberally to keep the main context clean; one task per subagent.</li>\n    <li><b>Self-improvement loop</b> — after ANY correction, update <code>tasks/lessons.md</code> with the pattern; write rules to prevent the same mistake.</li>\n    <li><b>Verification before done</b> — never mark complete without proving it works (\"would a staff engineer approve this?\").</li>\n    <li><b>Demand elegance (balanced)</b> — for non-trivial changes, ask \"is there a more elegant way?\"; don't over-engineer simple fixes.</li>\n    <li><b>Autonomous bug fixing</b> — given a bug report, just fix it; point at logs/errors/failing tests, then resolve.</li>\n  </ul>\n  <h4>Task management</h4>\n  <p>Plan first (<code>tasks/todo.md</code>, checkable items) → verify plan → track progress → explain changes → document results → capture lessons (<code>tasks/lessons.md</code>).</p>\n  <h4>Core principles</h4>\n  <p><b>Simplicity first</b> · <b>No laziness</b> (root causes, no temporary fixes) · <b>Minimal impact</b> (touch only what's necessary).</p>\n  <div class=\"srcline\">SOURCE · Basia Kubicka (AI PM @ LiquidMetal).</div>"
+}

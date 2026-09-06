@@ -1,0 +1,11 @@
+{
+  "cat": "data",
+  "title": "Every 2026 AI release, ranked by usefulness",
+  "source": "hype vs usefulness",
+  "blurb": "20 releases scored on hype vs usefulness (out of 10) and sorted into tiers — from \"the best\" to \"skip.\" Claude Code 2.1.0 is the most underrated; OpenClaw the most overhyped.",
+  "size": "col12",
+  "accent": "var(--green)",
+  "glow": "rgba(111,220,140,.1)",
+  "body": "<p>20 of 2026's AI releases, each rated on <b>hype</b> vs <b>usefulness</b> (out of 10) and bucketed into tiers. The pattern: the most useful releases were often the least hyped.</p>\n  <h4>The best</h4><p>Claude Code 2.1.0 (most underrated, hype 3 / use 9) · Cowork (6/9) · Claude Opus 4.6 (8/9) · Claude Code Security (7/9).</p>\n  <h4>Strong</h4><p>Kling 3.0 · Claude Sonnet 4.6 · Code Remote Control (use 8).</p>\n  <h4>Solid</h4><p>GPT-5.3-Codex · Kimi K2.5 · Notion Custom Agents · Perplexity Computer (use 7).</p>\n  <h4>Meh</h4><p>Cowork Plugins · Copilot Tasks · Nano Banana 2 · Gemini 3.1 Pro · Seedance 2.0 — note Nano Banana 2 and Seedance carried hype 8–9 but landed at use 5–6.</p>\n  <h4>Skip</h4><p>MiniMax M2.5 · OpenAI Retired 6 · Qwen 3.5 · OpenClaw (most overhyped: hype 9 / use 3).</p>\n  <div class=\"srcline\">SOURCE · \"Every 2026 AI Release Ranked by Usefulness\" infographic.</div>",
+  "table": "releases"
+}

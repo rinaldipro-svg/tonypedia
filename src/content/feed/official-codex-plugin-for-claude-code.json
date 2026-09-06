@@ -1,0 +1,10 @@
+{
+  "cat": "tools",
+  "title": "Official Codex Plugin for Claude Code",
+  "source": "OpenAI · Mar 2026",
+  "blurb": "As of late March 2026, OpenAI ships an official plugin to trigger Codex directly from a Claude Code session.",
+  "size": "col6",
+  "accent": "var(--amber)",
+  "glow": "rgba(255,122,47,.1)",
+  "body": "<p>OpenAI now provides an official <b>Codex Plugin for Claude Code</b> that lets you trigger Codex directly from your Claude Code session — cross-vendor tooling in one terminal.</p>\n  <h4>Install</h4>\n  <ol>\n    <li>Ensure Codex CLI is installed: <code>npm install -g @openai/codex</code></li>\n    <li>Install the plugin: <code>npm install -g @openai/codex-plugin-cc</code></li>\n  </ol>\n  <h4>Key slash commands</h4>\n  <ul>\n    <li><code>/codex:review</code> — sends current changes to Codex for a standard code review</li>\n    <li><code>/codex:adversarial-review</code> — a security-focused audit of the code</li>\n    <li><code>/codex:rescue</code> — investigates and suggests fixes for persistent bugs</li>\n  </ul>\n  <div class=\"srcline\">SOURCE · OpenAI Developer docs, surfaced via LinkedIn.</div>"
+}

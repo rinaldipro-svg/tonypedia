@@ -1,0 +1,10 @@
+{
+  "cat": "guides",
+  "title": "Claude Code Project Structure",
+  "source": "reference tree",
+  "blurb": "Your setup — not the model — is why you get mediocre results. The canonical .claude/ directory layout, file by file.",
+  "size": "col6",
+  "accent": "var(--acid)",
+  "glow": "rgba(200,255,77,.1)",
+  "body": "<p>\"Your Claude setup is why you keep getting mediocre results — not the model, not your prompts.\" The canonical project layout:</p>\n  <ul>\n    <li><code>CLAUDE.md</code> — loaded at session start; project overview, tech stack, commands, conventions & architecture.</li>\n    <li><code>CLAUDE.local.md</code> — local overrides.</li>\n    <li><code>.mcp.json</code> — MCP integration configs (GitHub, JIRA, Slack, DBs); shared across the team via git.</li>\n    <li><code>.claude/settings.json</code> — permissions & tool access, model selection (+ <code>settings.local.json</code> overrides).</li>\n    <li><code>.claude/rules/</code> — modular files by topic: <code>code-style.md</code>, <code>testing.md</code>, <code>api-conventions.md</code>; can target specific files/paths.</li>\n    <li><code>.claude/commands/</code> — custom slash commands (<code>review.md</code>, <code>fix-issue.md</code>) for repeatable workflows; supports shell execution.</li>\n    <li><code>.claude/skills/</code> — auto-triggered by task context; e.g. <code>deploy/SKILL.md</code>. Loads only when needed.</li>\n    <li><code>.claude/agents/</code> — specialized sub-agents with roles (<code>code-reviewer.md</code>, <code>security-auditor.md</code>); isolated context windows.</li>\n    <li><code>.claude/hooks/</code> — event-driven scripts (<code>validate-bash.sh</code>); automate validation, linting, formatting; block unsafe operations.</li>\n  </ul>\n  <div class=\"srcline\">SOURCE · \"Claude Code Project Structure\" infographic.</div>"
+}

@@ -1,0 +1,10 @@
+{
+  "cat": "tools",
+  "title": "abtop — agent observability",
+  "source": "A. Lindenberg · Rust/MIT",
+  "blurb": "A fleet-level monitor: auto-discovers every running Claude Code & Codex CLI session and puts the whole fleet on one terminal screen.",
+  "size": "col4",
+  "accent": "var(--amber)",
+  "glow": "rgba(255,122,47,.12)",
+  "body": "<p><b>abtop</b> auto-discovers every running Claude Code and Codex CLI session and puts the fleet on one Ratatui screen: tokens, rate limits, context-window fill, orphan ports, subagent trees.</p>\n  <p>Where session-scoped tools like Claudoscope watch one run, abtop watches the operator running ten. No API keys, no auth — it reads local session files only. Rust, MIT-licensed, tmux-integrated.</p>\n  <p><b>The gap it fills was always fleet-level</b> — observability across many parallel agents, not just inside one.</p>\n  <div class=\"srcline\">SOURCE · André Lindenberg (Agents, Graphs, Ontologies), LinkedIn. #agentObservability</div>"
+}

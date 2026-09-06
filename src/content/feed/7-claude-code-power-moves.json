@@ -1,0 +1,10 @@
+{
+  "cat": "guides",
+  "title": "7 Claude Code power moves",
+  "source": "power-user thread",
+  "blurb": "Token-saving and autonomy tricks most people miss — from slimming the system prompt to orchestrating sandboxed worker agents.",
+  "size": "col6",
+  "accent": "var(--acid)",
+  "glow": "rgba(200,255,77,.1)",
+  "body": "<ul>\n    <li><b>Slim the system prompt</b> — Claude Code loads ~18K tokens before you type (9% of context). Patching the CLI bundle cuts it to ~10K — ~7,300 tokens back for real work.</li>\n    <li><b>Talk to it with your voice</b> — transcription is 3–4× faster than typing; use SuperWhisper or MacWhisper.</li>\n    <li><b>Use Gemini CLI as a fallback</b> — for Reddit, paywalled sites or blocked URLs, route those requests through Gemini CLI via tmux.</li>\n    <li><b>Run inside containers</b> — for risky long jobs, spin up Docker with <code>--dangerously-skip-permissions</code>; if it breaks, it's contained.</li>\n    <li><b>Orchestrate a worker Claude</b> — local Claude starts a tmux session → runs a container → sends prompts via send-keys → reads output via capture-pane. A sandboxed autonomous worker.</li>\n    <li><b>Lazy-load MCP tools</b> — set <code>ENABLE_TOOL_SEARCH=true</code> in settings.json so tools load on demand. Big token savings.</li>\n    <li><b>Manual exponential backoff</b> — waiting on builds/CI? Have Claude check status at 1, 2, 4, 8 min intervals — more token-efficient than watching.</li>\n  </ul>\n  <div class=\"srcline\">SOURCE · Claude Code power-user thread.</div>"
+}

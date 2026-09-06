@@ -1,0 +1,10 @@
+{
+  "cat": "tools",
+  "title": "The Outreach Tech Stack you can run with Claude Code",
+  "source": "Massive",
+  "blurb": "A full sales-outreach stack mapped by integration type — Native MCP, 3rd-party MCP, or API — across six functional buckets.",
+  "size": "col6",
+  "accent": "var(--amber)",
+  "glow": "rgba(255,122,47,.12)",
+  "body": "<p>Every major outreach tool, mapped to how it connects to Claude Code (Native MCP / 3rd-party MCP / API):</p>\n  <h4>Enterprise sales engagement</h4><p>Outreach (Native MCP) · Salesloft (3rd-party MCP)</p>\n  <h4>Cold email sequencing</h4><p>Instantly.ai · Smartlead · Woodpecker (all 3rd-party MCP)</p>\n  <h4>LinkedIn outreach & automation</h4><p>HeyReach (Native MCP) · Expandi · Dripify · SalesRobot · Skylead · Waalaxy (API)</p>\n  <h4>Multichannel platforms</h4><p>Lemlist (Native MCP) · Reply · Snov.io · Klenty (3rd-party MCP) · LaGrowthMachine · Salesforge.ai (API)</p>\n  <h4>AI SDRs & autonomous outbound</h4><p>Artisan · 11x · AiSDR (API)</p>\n  <h4>Data & enrichment</h4><p>ZoomInfo · Apollo (Native MCP)</p>\n  <div class=\"srcline\">SOURCE · \"Outreach Tech Stack,\" presented by Massive.</div>"
+}

@@ -1,0 +1,14 @@
+{
+  "cat": "industry",
+  "title": "The $27,000 power user",
+  "source": "reported usage",
+  "blurb": "One Claude user consumed ~$27K of compute in 23 days on a $200 plan — a 135× subsidy.",
+  "size": "col4",
+  "accent": "var(--rose)",
+  "glow": "rgba(255,111,145,.1)",
+  "body": "<p>One Claude user reportedly consumed <b>~$27,000 of compute in 23 days</b> on a $200/month plan — a 135× subsidy.</p>\n  <h4>Estimated usage</h4>\n  <ul>\n    <li>~1.1B est. total tokens</li>\n    <li>~$27K est. API cost</li>\n    <li>9,221 sub-agent spawns</li>\n    <li>~335K avg tokens / session</li>\n  </ul>\n  <p>A vivid data point on the unit economics of \"unlimited\" agentic plans — and why per-seat pricing is under pressure as agents spawn agents.</p>\n  <div class=\"srcline\">SOURCE · viral usage screenshot (estimates based on session data).</div>",
+  "stat": {
+    "n": "135×",
+    "label": "compute subsidy on a $200 plan — the economics of unlimited"
+  }
+}

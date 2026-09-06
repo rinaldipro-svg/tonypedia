@@ -1,0 +1,14 @@
+{
+  "cat": "tools",
+  "title": "Claude-Mem",
+  "source": "open source · 27K★",
+  "blurb": "Infinite memory for Claude Code, free. Records sessions, compresses them with AI, and injects relevant context back into future ones.",
+  "size": "col4",
+  "accent": "var(--amber)",
+  "glow": "rgba(255,122,47,.12)",
+  "body": "<p><b>Claude-Mem</b> gives Claude Code persistent memory. It records what Claude does during coding sessions, compresses it with AI, and injects relevant context back into future sessions.</p>\n  <h4>The numbers</h4>\n  <ul>\n    <li>Up to <b>95% fewer tokens</b> per session</li>\n    <li><b>20× more tool calls</b> before hitting context limits</li>\n    <li>100% open source · 27K+ GitHub stars</li>\n  </ul>\n  <p>No more re-explaining your codebase every session. No more losing decisions after <code>/compact</code>. No more starting from scratch.</p>\n  <div class=\"srcline\">SOURCE · claude-mem launch post. One of several \"memory layer\" tools in this space.</div>",
+  "stat": {
+    "n": "95%",
+    "label": "fewer tokens per session · 20× more tool calls before context limits"
+  }
+}

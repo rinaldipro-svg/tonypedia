@@ -1,0 +1,10 @@
+{
+  "cat": "concepts",
+  "title": "MCP vs RAG vs AI Agents",
+  "source": "C. Malmoum",
+  "blurb": "You don't choose between them — they solve different layers of the same system.",
+  "size": "col4",
+  "accent": "var(--sky)",
+  "glow": "rgba(92,200,255,.1)",
+  "body": "<p>Three concepts that get conflated constantly. They're not competitors; they're <b>different layers of one stack.</b></p>\n  <h4>MCP — a standard way for LLMs to use tools</h4>\n  <p>An MCP host (Claude Desktop, an IDE, AI tools) runs MCP clients that speak the MCP protocol to servers, which in turn invoke web APIs, execute database queries, and read/write the filesystem. Standardized tool & resource access for LLMs.</p>\n  <h4>RAG — LLMs augmented with retrieved knowledge</h4>\n  <p>User query → a retriever fetches info from a knowledge base (PDFs, vector DB, code) → relevant docs are returned → query + docs go to the LLM → response. Runtime knowledge retrieval.</p>\n  <h4>AI Agents — LLMs that take actions and make decisions</h4>\n  <p>An autonomous reasoning & action loop: the agent perceives the environment, invokes tools (API calls, internet, code interpretation), keeps memory, delegates tasks, and acts with a configurable autonomy level under human control.</p>\n  <div class=\"srcline\">SOURCE · Chorouk Malmoum (Founder & CTO), LinkedIn.</div>"
+}

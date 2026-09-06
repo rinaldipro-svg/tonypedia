@@ -1,0 +1,10 @@
+{
+  "cat": "tools",
+  "title": "Claude History MCP",
+  "source": "community MCP",
+  "blurb": "An MCP server that indexes every past conversation transcript and gives Claude a searchable long-term memory with 6 auto-usable tools.",
+  "size": "col4",
+  "accent": "var(--amber)",
+  "glow": "rgba(255,122,47,.12)",
+  "body": "<p>An MCP server that indexes all your past conversation transcripts and provides 6 tools Claude can use automatically — like giving your AI pair-programmer a brain that persists between sessions.</p>\n  <h4>What it does</h4>\n  <ul>\n    <li>Hybrid search engine: BM25 + TF-IDF + Reciprocal Rank Fusion across all conversations</li>\n    <li>Knowledge extraction: auto-pulls decisions, solutions and error→fix patterns from each session</li>\n    <li>Session-start hook: auto-injects relevant project context on a new session</li>\n    <li>Filter syntax, e.g. <code>docker error project:myapp after:7d</code></li>\n    <li>Indexes ~170 sessions in ~9s · searches under 200ms</li>\n  </ul>\n  <h4>Learnings system</h4>\n  <p>Clusters similar solutions/error-fixes using Jaccard similarity on stemmed words, scores them by frequency and cross-project reach, then promotes high-scoring clusters into \"learnings\" that surface automatically — written to <code>MEMORY.md</code> with sentinel markers so your own notes stay untouched.</p>\n  <div class=\"srcline\">SOURCE · \"Claude Code doesn't remember what it learned today\" LinkedIn post.</div>"
+}

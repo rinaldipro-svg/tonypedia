@@ -32,16 +32,22 @@ const studies = defineCollection({
 });
 
 const feed = defineCollection({
-  type: 'content',
+  type: 'data',
   schema: z.object({
+    cat: z.enum(['concepts', 'tools', 'guides', 'prompts', 'industry', 'data']),
     title: z.string(),
     source: z.string(),
-    category: z.enum(['concepts', 'tools', 'guides', 'prompts', 'industry', 'data']),
-    accent: z.string(),
-    size: z.enum(['col4', 'col6', 'col8']).default('col4'),
     blurb: z.string(),
-    date: z.coerce.date(),
-    tags: z.array(z.string()).default([]),
+    size: z.enum(['col4', 'col6', 'col8', 'col12']).default('col4'),
+    accent: z.string(),
+    glow: z.string(),
+    body: z.string(),
+    feature: z.string().optional(),
+    list: z.array(z.string()).optional(),
+    stat: z.object({ n: z.string(), label: z.string() }).optional(),
+    // string discriminator consumed by tableHTML(kind) in public/feed/index.html;
+    // the row data lives in the page's RELEASES / COSTROWS / FRANCEROWS arrays.
+    table: z.enum(['releases', 'cost', 'france']).optional(),
   }),
 });
 
