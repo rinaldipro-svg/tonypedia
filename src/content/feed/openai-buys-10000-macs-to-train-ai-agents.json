@@ -1,0 +1,14 @@
+{
+  "cat": "industry",
+  "title": "OpenAI Buys 10,000+ Macs to Train AI Agents",
+  "source": "Linas Beliūnas, LinkedIn",
+  "blurb": "OpenAI and other AI labs are quietly snapping up thousands of Mac Minis and Mac Studios to train computer-use agents at scale.",
+  "body": "<p>For two years, the narrative was that Apple had lost the AI race. The reality looks different: Apple spent the last decade building exactly the hardware AI labs now need most.</p><h4>Why Macs?</h4><ul><li>Computer-use agents need a real OS to click, type, fail, and reset inside — not a simulation.</li><li>Mac Minis and Mac Studios offer dense, power-efficient compute that's cheap to rack at scale.</li><li>Apple Silicon's unified memory architecture is well suited to running many parallel agent instances.</li></ul><p>OpenAI and other labs are reportedly buying <b>10,000+</b> of these machines specifically to generate training data from agents learning to operate real desktop environments.</p><p>The twist: Apple didn't set out to become critical AI infrastructure — it became one almost by accident, simply by building efficient, scalable personal computers for a decade.</p><div class=\"srcline\">SOURCE · Linas Beliūnas, LinkedIn</div>",
+  "stat": {
+    "n": "10,000+",
+    "label": "Mac Minis & Studios bought to train AI agents"
+  },
+  "size": "col4",
+  "accent": "var(--rose)",
+  "glow": "rgba(255,111,145,.12)"
+}
