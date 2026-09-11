@@ -315,7 +315,7 @@ async function handleStatusCommand(env: Env, chatId: number): Promise<Response> 
   }
 
   const lines = ['Tonypedia queue status'];
-  for (const status of ['Ready', 'Processing', 'Draft Sent', 'Approved', 'Published', 'Rejected']) {
+  for (const status of ['Ready', 'Processing', 'Draft Sent', 'Approved', 'Published', 'Rejected', 'Deleted']) {
     if (counts[status]) {
       lines.push(`${status}: ${counts[status]}`);
     }
