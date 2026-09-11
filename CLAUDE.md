@@ -97,7 +97,7 @@ Then the ticket's own acceptance criterion — usually a grep against a **fresh*
 
 Visual checks at **390px** and **1440px**.
 
-⚠️ Both commands fail until **P0-00** lands (platform-mismatched `node_modules`). Until then, no acceptance gate in the roadmap is runnable.
+`npm run build` and `npx astro check` both pass cleanly as of **P0-00** (merged) — run them for real on every ticket, don't assume failure from this doc.
 
 ---
 
