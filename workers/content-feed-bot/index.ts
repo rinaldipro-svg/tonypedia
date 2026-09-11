@@ -90,6 +90,13 @@ function getRichText(property: any): string {
     .trim();
 }
 
+function getTitle(property: any): string {
+  return (property?.title ?? [])
+    .map((entry: any) => entry?.plain_text ?? entry?.text?.content ?? '')
+    .join('')
+    .trim();
+}
+
 async function notionFetch<T>(url: string, init: RequestInit): Promise<T> {
   const response = await fetch(url, init);
 
@@ -681,15 +688,21 @@ async function feedSlugTaken(env: Env, branch: string, slug: string): Promise<bo
   }
 }
 
-async function commitFeedCardBranch(env: Env, card: FeedCard, slug: string, uuid: string): Promise<string> {
+// Creates `branch` off the current tip of GITHUB_REPO_BRANCH (or `main`).
+// Shared by the /feed card-commit flow and the /delete file-removal flow —
+// both need "branch from base," they just differ in what they commit next.
+async function createBranchFromBase(env: Env, branch: string): Promise<void> {
   const base = env.GITHUB_REPO_BRANCH || 'main';
-  const branch = `feed/${uuid}`;
-
   const ref = await githubFetch<{ object: { sha: string } }>(env, `/git/ref/heads/${base}`);
   await githubFetch(env, '/git/refs', {
     method: 'POST',
     body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: ref.object.sha }),
   });
+}
+
+async function commitFeedCardBranch(env: Env, card: FeedCard, slug: string, uuid: string): Promise<string> {
+  const branch = `feed/${uuid}`;
+  await createBranchFromBase(env, branch);
 
   const fileBody = JSON.stringify(card, null, 2) + '\n';
   await githubFetch(env, `/contents/src/content/feed/${slug}.json`, {
@@ -697,6 +710,138 @@ async function commitFeedCardBranch(env: Env, card: FeedCard, slug: string, uuid
     body: JSON.stringify({
       message: `feed: add "${card.title}"`,
       content: bytesToBase64(new TextEncoder().encode(fileBody)),
+      branch,
+    }),
+  });
+
+  return branch;
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// /delete — Telegram command to remove a published article: branch, DELETE
+// via the Contents API, approval link, merge, Notion "Deleted" sync.
+// ───────────────────────────────────────────────────────────────────────────
+
+interface ArticleMatch {
+  path: string; // "src/content/articles/tech/2026-03-15-foo.md"
+  category: string;
+  filename: string; // "2026-03-15-foo.md" — matches AutomationMetadata.filename
+  slug: string; // filename without extension
+  title: string;
+  pubDate: string; // as it appears in frontmatter, e.g. "2026-03-15"
+}
+
+function decodeGithubFileContent(file: { content: string; encoding?: string }): string {
+  const b64 = file.content.replace(/\n/g, '');
+  const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
+function extractFrontmatterField(frontmatter: string, field: string): string | null {
+  const match = frontmatter.match(new RegExp(`^${field}:\\s*"?([^"\\n]+?)"?\\s*$`, 'm'));
+  return match ? match[1].trim() : null;
+}
+
+// Recursively lists src/content/articles/** via the Contents API (not
+// search-index.json — that route excludes drafts and this worker has no
+// SITE_URL to fetch it from; see P4-25 recon). One API call per category
+// directory plus one per article file to read title/pubDate off frontmatter.
+async function listArticles(env: Env): Promise<ArticleMatch[]> {
+  const base = env.GITHUB_REPO_BRANCH || 'main';
+  const articles: ArticleMatch[] = [];
+
+  for (const category of CATEGORY_KEYS) {
+    let items: Array<{ name: string; path: string; type: string }>;
+    try {
+      items = await githubFetch(
+        env,
+        `/contents/src/content/articles/${category}?ref=${encodeURIComponent(base)}`
+      );
+    } catch {
+      continue; // category directory missing/empty — nothing to list
+    }
+
+    for (const item of items) {
+      if (item.type !== 'file' || !item.name.toLowerCase().endsWith('.md')) continue;
+
+      const file = await githubFetch<{ content: string; encoding?: string }>(
+        env,
+        `/contents/${item.path}?ref=${encodeURIComponent(base)}`
+      );
+      const raw = decodeGithubFileContent(file);
+      const frontmatter = raw.split('---')[1] ?? '';
+
+      articles.push({
+        path: item.path,
+        category,
+        filename: item.name,
+        slug: item.name.replace(/\.md$/i, ''),
+        title: extractFrontmatterField(frontmatter, 'title') ?? item.name,
+        pubDate: extractFrontmatterField(frontmatter, 'pubDate') ?? '',
+      });
+    }
+  }
+
+  return articles;
+}
+
+// Pure — unit tested separately from the Telegram/GitHub plumbing.
+function matchArticles(articles: ArticleMatch[], term: string): ArticleMatch[] {
+  const trimmed = term.trim();
+  if (!trimmed) return [];
+
+  if (trimmed.toLowerCase() === 'latest') {
+    if (articles.length === 0) return [];
+    return [articles.reduce((a, b) => (a.pubDate >= b.pubDate ? a : b))];
+  }
+
+  const slashIndex = trimmed.indexOf('/');
+  if (slashIndex !== -1) {
+    const cat = trimmed.slice(0, slashIndex).trim().toLowerCase();
+    const slugPart = trimmed.slice(slashIndex + 1).trim().toLowerCase();
+    return articles.filter(
+      (a) => a.category.toLowerCase() === cat && a.slug.toLowerCase() === slugPart
+    );
+  }
+
+  const needle = trimmed.toLowerCase();
+  return articles.filter(
+    (a) =>
+      a.title.toLowerCase().includes(needle) ||
+      a.slug.toLowerCase().includes(needle) ||
+      a.filename.toLowerCase().includes(needle)
+  );
+}
+
+function formatMatchList(matches: ArticleMatch[], cap = 10): string {
+  const shown = matches.slice(0, cap);
+  const lines = shown.map(
+    (m, i) => `${i + 1}. ${m.title} — ${m.category}/${m.slug} — ${m.pubDate}`
+  );
+  if (matches.length > cap) {
+    lines.push(`…${matches.length - cap} more not shown`);
+  }
+  return lines.join('\n');
+}
+
+// DELETE requires the file's current blob sha (unlike commitFeedCardBranch's
+// PUT-a-new-file, which doesn't need one). The commit message carries the
+// title so handleDeleteApproval can use it as a Notion fallback lookup
+// without needing shared state across the two separate requests.
+async function commitDeleteBranch(env: Env, path: string, title: string, uuid: string): Promise<string> {
+  const branch = `delete/${uuid}`;
+  await createBranchFromBase(env, branch);
+
+  const file = await githubFetch<{ sha: string }>(
+    env,
+    `/contents/${path}?ref=${encodeURIComponent(branch)}`
+  );
+
+  await githubFetch(env, `/contents/${path}`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      message: `delete: remove ${path}\n\ntitle: ${title}`,
+      sha: file.sha,
       branch,
     }),
   });
@@ -806,6 +951,64 @@ async function handleFeedCommand(
   return new Response('OK');
 }
 
+async function handleDeleteCommand(
+  env: Env,
+  message: NonNullable<TelegramUpdate['message']>,
+  baseUrl: string
+): Promise<Response> {
+  const chatId = message.chat!.id;
+  const term = (message.text ?? '').replace(/^\/delete\b/, '').trim();
+
+  if (!term) {
+    await sendTelegramMessage(
+      env,
+      chatId,
+      'Send `/delete latest`, `/delete <category>/<slug>`, or `/delete <search term>`.'
+    );
+    return new Response('OK');
+  }
+
+  try {
+    const articles = await listArticles(env);
+    const matches = matchArticles(articles, term);
+
+    if (matches.length === 0) {
+      await sendTelegramMessage(env, chatId, `No article matches "${term}".`);
+      return new Response('OK');
+    }
+
+    if (matches.length > 1) {
+      await sendTelegramMessage(
+        env,
+        chatId,
+        `${matches.length} articles match "${term}":\n\n${formatMatchList(matches)}\n\n` +
+          `Re-run /delete with a specific category/slug.`
+      );
+      return new Response('OK');
+    }
+
+    const article = matches[0];
+    const uuid = crypto.randomUUID();
+    const base = env.GITHUB_REPO_BRANCH || 'main';
+    const branch = await commitDeleteBranch(env, article.path, article.title, uuid);
+    const approveUrl = `${baseUrl}/approve/delete/${uuid}`;
+
+    await sendTelegramMessage(
+      env,
+      chatId,
+      `Delete pending approval.\n\n` +
+        `Title: ${article.title}\nCategory/slug: ${article.category}/${article.slug}\n` +
+        `Published: ${article.pubDate}\nBranch: ${branch}\n\n` +
+        `Approve (merges to ${base} and redeploys):\n${approveUrl}`
+    );
+  } catch (error) {
+    console.error(error);
+    await sendTelegramMessage(env, chatId, `Something went wrong resolving that delete. Nothing was committed.`);
+  }
+
+  return new Response('OK');
+}
+
 function approvalPage(title: string, bodyHtml: string, status = 200): Response {
   return new Response(
     `<!DOCTYPE html><html><body style="font-family: sans-serif; text-align: center; padding: 64px;">` +
@@ -814,43 +1017,165 @@ function approvalPage(title: string, bodyHtml: string, status = 200): Response {
   );
 }
 
-async function handleFeedApproval(env: Env, uuid: string): Promise<Response> {
+// Shared by handleFeedApproval and handleDeleteApproval — same 409 (conflict)
+// / 404 (already merged or branch missing) / else (502) handling either way.
+async function mergeBranch(
+  env: Env,
+  branch: string,
+  commitMessage: string
+): Promise<{ ok: true } | { ok: false; kind: 'conflict' | 'not_found' | 'error' }> {
   const base = env.GITHUB_REPO_BRANCH || 'main';
-  const branch = `feed/${uuid}`;
 
   try {
     await githubFetch(env, '/merges', {
       method: 'POST',
-      body: JSON.stringify({ base, head: branch, commit_message: `feed: approve ${branch}` }),
+      body: JSON.stringify({ base, head: branch, commit_message: commitMessage }),
     });
+    return { ok: true };
   } catch (error) {
     const msg = String((error as Error).message);
-    if (msg.includes('failed (409)')) {
-      return approvalPage(
-        'Merge conflict',
-        `<p>Branch <code>${branch}</code> conflicts with <code>${base}</code> and can't be merged automatically. Resolve it by hand.</p>`,
-        409
-      );
-    }
-    if (msg.includes('failed (404)')) {
-      return approvalPage(
-        'Nothing to approve',
-        `<p>Branch <code>${branch}</code> was not found — it may already have been merged.</p>`,
-        404
-      );
-    }
+    if (msg.includes('failed (409)')) return { ok: false, kind: 'conflict' };
+    if (msg.includes('failed (404)')) return { ok: false, kind: 'not_found' };
     console.error(error);
+    return { ok: false, kind: 'error' };
+  }
+}
+
+function mergeFailurePage(branch: string, base: string, result: { kind: 'conflict' | 'not_found' | 'error' }): Response {
+  if (result.kind === 'conflict') {
     return approvalPage(
-      'Approval failed',
-      `<p>Could not merge <code>${branch}</code>. Check the worker logs.</p>`,
-      502
+      'Merge conflict',
+      `<p>Branch <code>${branch}</code> conflicts with <code>${base}</code> and can't be merged automatically. Resolve it by hand.</p>`,
+      409
     );
+  }
+  if (result.kind === 'not_found') {
+    return approvalPage(
+      'Nothing to approve',
+      `<p>Branch <code>${branch}</code> was not found — it may already have been merged.</p>`,
+      404
+    );
+  }
+  return approvalPage(
+    'Approval failed',
+    `<p>Could not merge <code>${branch}</code>. Check the worker logs.</p>`,
+    502
+  );
+}
+
+async function handleFeedApproval(env: Env, uuid: string): Promise<Response> {
+  const base = env.GITHUB_REPO_BRANCH || 'main';
+  const branch = `feed/${uuid}`;
+  const result = await mergeBranch(env, branch, `feed: approve ${branch}`);
+
+  if (!result.ok) {
+    return mergeFailurePage(branch, base, result);
   }
 
   return approvalPage(
     'Feed card approved',
     `<p>Branch <code>${branch}</code> merged into <code>${base}</code>.</p>` +
       `<p>Cloudflare will redeploy from the push.</p>`
+  );
+}
+
+// Looks up the Notion row for a just-deleted article: automationMetadata.filename
+// exact match first (this is how scripts/content-agent/lib/notion.ts stamps it —
+// the bare filename, e.g. "2026-03-15-foo.md"), falling back to a Topic-contains
+// check against the commit-message title or the slug when metadata lookup finds
+// nothing. Ambiguous fallback matches (0 or >1) are treated as "not found" rather
+// than guessing which row to mutate.
+async function markArticleDeletedInNotion(env: Env, path: string, titleFromCommit: string | null): Promise<string> {
+  const basename = path.split('/').pop() ?? path;
+  const slug = basename.replace(/\.md$/i, '');
+  const pages = await queryDatabase(env, {});
+
+  const parseMetadata = (page: NotionPage): Record<string, unknown> => {
+    const raw = getRichText(page.properties['Automation Metadata']);
+    if (!raw) return {};
+    try {
+      return JSON.parse(raw) as Record<string, unknown>;
+    } catch {
+      return {};
+    }
+  };
+
+  let match = pages.find((p) => parseMetadata(p).filename === basename);
+
+  if (!match) {
+    const needle = (titleFromCommit ?? slug).toLowerCase();
+    const slugNeedle = slug.toLowerCase();
+    const candidates = pages.filter((p) => {
+      const topic = getTitle(p.properties.Topic).toLowerCase();
+      return topic.includes(needle) || topic.includes(slugNeedle);
+    });
+    if (candidates.length === 1) match = candidates[0];
+  }
+
+  if (!match) {
+    return 'No Notion record found for this article — nothing to update there.';
+  }
+
+  const metadata = parseMetadata(match);
+  metadata.deletedAt = new Date().toISOString();
+
+  // Single combined PATCH, plain JSON.stringify — mirrors the proven pattern
+  // in scripts/content-agent/lib/notion.ts's updatePageStatus, not the
+  // \{-escaped/separate-calls pattern from the notion-update-page MCP tool's
+  // one-off P4-24 manual edit (that quirk belongs to that tool, not this API).
+  await notionFetch(`https://api.notion.com/v1/pages/${match.id}`, {
+    method: 'PATCH',
+    headers: notionHeaders(env),
+    body: JSON.stringify({
+      properties: {
+        Status: { select: { name: 'Deleted' } },
+        'Automation Metadata': {
+          rich_text: [{ text: { content: JSON.stringify(metadata) } }],
+        },
+      },
+    }),
+  });
+
+  return 'Notion row updated → Status: Deleted.';
+}
+
+async function handleDeleteApproval(env: Env, uuid: string): Promise<Response> {
+  const base = env.GITHUB_REPO_BRANCH || 'main';
+  const branch = `delete/${uuid}`;
+  const result = await mergeBranch(env, branch, `delete: approve ${branch}`);
+
+  if (!result.ok) {
+    return mergeFailurePage(branch, base, result);
+  }
+
+  // Merge succeeded — the branch ref still exists (same as /feed's branches
+  // aren't deleted post-merge), so its one commit's diff tells us exactly
+  // which file was removed, without needing state carried from the earlier
+  // Telegram request.
+  let notionNote: string;
+  try {
+    const commit = await githubFetch<{
+      commit: { message: string };
+      files?: Array<{ filename: string; status: string }>;
+    }>(env, `/commits/${branch}`);
+    const removed = commit.files?.find((f) => f.status === 'removed');
+
+    if (!removed) {
+      notionNote = 'Could not determine which file was removed — skipped the Notion update.';
+    } else {
+      const titleMatch = commit.commit.message.match(/\ntitle: (.+)$/);
+      notionNote = await markArticleDeletedInNotion(env, removed.filename, titleMatch?.[1]?.trim() ?? null);
+    }
+  } catch (error) {
+    console.error(error);
+    notionNote = 'Notion update failed — check worker logs and update the row by hand.';
+  }
+
+  return approvalPage(
+    'Article deleted',
+    `<p>Branch <code>${branch}</code> merged into <code>${base}</code>.</p>` +
+      `<p>Cloudflare will redeploy from the push.</p>` +
+      `<p>${notionNote}</p>`
   );
 }
 
@@ -887,6 +1212,10 @@ async function handleTelegram(env: Env, request: Request): Promise<Response> {
 
   if (text.startsWith('/feed')) {
     return handleFeedCommand(env, message, new URL(request.url).origin);
+  }
+
+  if (text.startsWith('/delete')) {
+    return handleDeleteCommand(env, message, new URL(request.url).origin);
   }
 
   if (hasPhoto) {
@@ -989,6 +1318,14 @@ export default {
         return new Response('Invalid approval link.', { status: 400 });
       }
       return handleFeedApproval(env, uuid);
+    }
+
+    if (request.method === 'GET' && url.pathname.startsWith('/approve/delete/')) {
+      const uuid = url.pathname.slice('/approve/delete/'.length);
+      if (!/^[a-f0-9-]{36}$/i.test(uuid)) {
+        return new Response('Invalid approval link.', { status: 400 });
+      }
+      return handleDeleteApproval(env, uuid);
     }
 
     if (request.method === 'GET' && url.pathname.startsWith('/approve/')) {
