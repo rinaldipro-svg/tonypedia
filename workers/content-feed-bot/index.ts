@@ -780,7 +780,7 @@ async function handleFeedCommand(
 
     const rawCard = await generateFeedCardJson(env, { image, context: contextParts.join('\n') });
     const v = validateFeedCard(rawCard);
-    if (!v.ok) {
+    if ('error' in v) {
       await sendTelegramMessage(
         env,
         chatId,
@@ -925,7 +925,7 @@ async function handleTelegram(env: Env, request: Request): Promise<Response> {
     await sendTelegramMessage(
       env,
       message.chat.id,
-      `Added to feed\n\nTopic: ${parsed.topic}\nCategory: ${parsed.category}\nAudience: ${parsed.audience}\nTone: ${parsed.tone}\nReady queue: ${readyCount}`
+      `Added to Hub queue\n\nTopic: ${parsed.topic}\nCategory: ${parsed.category}\nAudience: ${parsed.audience}\nTone: ${parsed.tone}\nReady queue: ${readyCount}`
     );
   } catch (error) {
     await sendTelegramMessage(
