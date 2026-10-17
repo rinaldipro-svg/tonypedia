@@ -4,12 +4,12 @@ import {
   estimateReadingTime,
   normalizeDescription,
   normalizeTags,
-  safeJsonParse,
   sanitizeBodyMarkdown,
 } from './utils.js';
 
 interface AnthropicResponse {
-  content?: Array<{ type?: string; text?: string }>;
+  content?: Array<{ type?: string; text?: string; input?: Partial<GeneratedArticle> }>;
+  stop_reason?: string;
 }
 
 function getResponseText(response: AnthropicResponse): string {
@@ -34,25 +34,35 @@ export async function generateArticle(
     },
     body: JSON.stringify({
       model: 'claude-sonnet-5',
-      max_tokens: 8192,
+      max_tokens: 16000,
       system: `${killerPrompt}
 
-Return only valid JSON with this exact shape:
-{
-  "title": "string",
-  "description": "string, <= 200 chars",
-  "tags": ["lower-case-tag"],
-  "body_markdown": "markdown body only, no frontmatter, no H1 title",
-  "category": "one of: ${CATEGORY_KEYS.join(', ')}",
-  "reading_time": 8
-}
+Deliver the article by calling submit_article.
 
 Rules:
 - The markdown body must start with the opening paragraph or an H2 heading. Do not include an H1 title.
 - Do not include frontmatter.
 - Keep the description punchy and under 200 characters.
-- Use 3-7 tags.
-- Return JSON only, with no code fences or commentary.`,
+- Use 3-7 tags.`,
+      tools: [
+        {
+          name: 'submit_article',
+          description: 'Submit the finished article.',
+          input_schema: {
+            type: 'object',
+            required: ['title', 'description', 'tags', 'body_markdown', 'category', 'reading_time'],
+            properties: {
+              title: { type: 'string' },
+              description: { type: 'string', maxLength: 200 },
+              tags: { type: 'array', items: { type: 'string' } },
+              body_markdown: { type: 'string' },
+              category: { type: 'string', enum: [...CATEGORY_KEYS] },
+              reading_time: { type: 'integer' },
+            },
+          },
+        },
+      ],
+      tool_choice: { type: 'tool', name: 'submit_article' },
       messages: [
         {
           role: 'user',
@@ -78,12 +88,14 @@ The article should be 800-1500 words, analytically strong, and readable for a sm
   }
 
   const data = (await response.json()) as AnthropicResponse;
-  const rawText = getResponseText(data).replace(/```json|```/g, '').trim();
-  const parsed = safeJsonParse<Partial<GeneratedArticle>>(rawText, {});
+  const toolUse = (data.content ?? []).find((block) => block.type === 'tool_use');
+  const parsed = toolUse?.input ?? {};
   const bodyMarkdown = sanitizeBodyMarkdown(parsed.body_markdown ?? '');
 
-  if (!bodyMarkdown) {
-    throw new Error('Anthropic response did not include article body markdown.');
+  if (!toolUse || !bodyMarkdown) {
+    throw new Error(
+      `Anthropic response did not include a submit_article body (stop_reason: ${data.stop_reason ?? 'unknown'}). Text: ${getResponseText(data).slice(0, 300)}`
+    );
   }
 
   const title = (parsed.title ?? brief.topic).trim();
