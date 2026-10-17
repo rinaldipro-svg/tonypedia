@@ -338,21 +338,20 @@ async function handlePublishCommand(env: Env, chatId: number): Promise<Response>
       return new Response('OK');
     }
 
-    if ((counts['Draft Sent'] ?? 0) > 0) {
-      await sendTelegramMessage(
-        env,
-        chatId,
-        `You already have ${counts['Draft Sent']} draft batch item(s) waiting for approval.\n\nApprove them from the email link before publishing.`
-      );
-      return new Response('OK');
+    const draftSentPages = pages.filter(
+      (page) => page.properties.Status?.select?.name === 'Draft Sent'
+    );
+    for (const page of draftSentPages) {
+      await updatePageStatus(env, page.id, 'Approved');
     }
 
-    if ((counts.Approved ?? 0) > 0) {
+    const approvedTotal = (counts.Approved ?? 0) + draftSentPages.length;
+    if (approvedTotal > 0) {
       await triggerWorkflow(env, 'publish-approved.yml');
       await sendTelegramMessage(
         env,
         chatId,
-        `Triggered Publish Approved Articles.\n\nApproved items queued for publish: ${counts.Approved}`
+        `Publishing now: ${approvedTotal} article(s). Live in ~2 min.`
       );
       return new Response('OK');
     }
@@ -388,7 +387,7 @@ async function handleHelpCommand(env: Env, chatId: number): Promise<Response> {
   await sendTelegramMessage(
     env,
     chatId,
-    'Send any article idea as a plain message and I will add it to the Tonypedia queue.\n\nCommands:\n/status\n/publish\n/help'
+    'Send any article idea as a plain message and I will add it to the Tonypedia queue.\n\nCommands:\n/status\n/publish — approve pending drafts and publish now\n/help'
   );
   return new Response('OK');
 }
@@ -959,11 +958,23 @@ async function handleApproval(env: Env, request: Request): Promise<Response> {
     }
   }
 
+  let heading = 'Tonypedia batch approved';
+  let message = 'Nothing new was approved (link already used?).';
+
+  if (approvedCount > 0) {
+    try {
+      await triggerWorkflow(env, 'publish-approved.yml');
+      message = `${approvedCount} article(s) approved. Publishing now — live in ~2 min.`;
+    } catch (error) {
+      console.error(error);
+      message = `${approvedCount} article(s) approved, but the publish trigger failed. Send /publish in Telegram.`;
+    }
+  }
+
   return new Response(
     `<!DOCTYPE html><html><body style="font-family: sans-serif; text-align: center; padding: 64px;">
-<h1>Tonypedia batch approved</h1>
-<p>${approvedCount} article(s) were marked Approved.</p>
-<p>The publish workflow will pick them up on its next run.</p>
+<h1>${heading}</h1>
+<p>${message}</p>
 </body></html>`,
     {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },

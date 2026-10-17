@@ -1,9 +1,11 @@
 name: Publish Approved Articles
 
 on:
-  schedule:
-    - cron: '*/15 * * * 1,3,5'
   workflow_dispatch:
+
+concurrency:
+  group: publish-approved
+  cancel-in-progress: false
 
 permissions:
   contents: write
