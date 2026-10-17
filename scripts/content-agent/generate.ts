@@ -7,6 +7,7 @@ import type { DraftBatchArticle } from './lib/contracts.js';
 import { sendDraftBatchEmail, sendEmptyQueueEmail } from './lib/email.js';
 import { commitDraftBranch } from './lib/git.js';
 import { getReadyBriefs, updatePageStatus } from './lib/notion.js';
+import { notify } from './lib/telegram.js';
 import { buildFilename, slugify } from './lib/utils.js';
 
 export async function main(): Promise<void> {
@@ -25,6 +26,7 @@ export async function main(): Promise<void> {
   }
 
   const batchId = randomUUID();
+  const failedTopics: Array<{ topic: string; message: string }> = [];
   const repoRoot = getRepoRoot();
   const draftFiles: Array<{ category: string; filename: string; markdown: string }> = [];
   const draftsToEmail: DraftBatchArticle[] = [];
@@ -70,12 +72,20 @@ export async function main(): Promise<void> {
         });
       } catch (error) {
         console.error(`Failed to generate "${brief.topic}":`, error);
+        failedTopics.push({
+          topic: brief.topic,
+          message: error instanceof Error ? error.message : String(error),
+        });
         await updatePageStatus(env.notionApiKey, brief.pageId, 'Ready');
       }
     }
 
     if (draftsToEmail.length === 0) {
       console.log('No drafts were generated successfully.');
+      for (const failure of failedTopics) {
+        await notify(`Draft failed: ${failure.topic} — ${failure.message}`);
+      }
+      process.exitCode = 1;
       return;
     }
 
@@ -95,6 +105,13 @@ export async function main(): Promise<void> {
       await updatePageStatus(env.notionApiKey, page.pageId, 'Draft Sent', {
         automationMetadata: page.metadata,
       });
+    }
+
+    for (const draft of draftsToEmail) {
+      await notify(`Draft ready: ${draft.topic} — check email`);
+    }
+    for (const failure of failedTopics) {
+      await notify(`Draft failed: ${failure.topic} — ${failure.message}`);
     }
 
     console.log(`Generated ${draftsToEmail.length} draft(s) and sent approval email for batch ${batchId}.`);

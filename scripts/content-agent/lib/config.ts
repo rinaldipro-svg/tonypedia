@@ -89,3 +89,10 @@ export function getWeeklySummaryEnv(): WeeklySummaryEnv {
     siteBaseUrl: normalizeUrl(readEnv('SITE_BASE_URL')),
   };
 }
+
+export function getTelegramEnv(): { botToken?: string; chatId?: string } {
+  return {
+    botToken: process.env.TELEGRAM_BOT_TOKEN || undefined,
+    chatId: process.env.TELEGRAM_CHAT_ID || undefined,
+  };
+}

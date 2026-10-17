@@ -5,6 +5,7 @@ import { getPublishEnv, getRepoRoot } from './lib/config.js';
 import { sendConfirmationEmail } from './lib/email.js';
 import { checkoutDraftFile, commitAndPushPublishedArticles, deleteDraftBranch } from './lib/git.js';
 import { getApprovedBriefs, updatePageStatus } from './lib/notion.js';
+import { notify } from './lib/telegram.js';
 import { buildFilename, buildPublishedUrl, extractFrontmatterTitle, slugify } from './lib/utils.js';
 
 export async function main(): Promise<void> {
@@ -76,6 +77,7 @@ export async function main(): Promise<void> {
 
   if (publishedArticles.length === 0) {
     console.log('No approved drafts could be published.');
+    await reportFailures(failures);
     return;
   }
 
@@ -106,7 +108,22 @@ export async function main(): Promise<void> {
     }))
   );
 
+  for (const article of publishedArticles) {
+    await notify(`Published: ${article.topic} — ${article.url}`);
+  }
+  await reportFailures(failures);
+
   console.log(`Published ${publishedArticles.length} article(s).`);
+}
+
+async function reportFailures(failures: Array<{ topic: string; message: string }>): Promise<void> {
+  for (const failure of failures) {
+    await notify(`Publish failed: ${failure.topic} — ${failure.message}`);
+  }
+
+  if (failures.length > 0) {
+    process.exitCode = 1;
+  }
 }
 
 const isMainModule =
