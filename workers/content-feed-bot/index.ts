@@ -152,6 +152,7 @@ async function sendTelegramMessage(env: Env, chatId: number, text: string): Prom
     body: JSON.stringify({
       chat_id: chatId,
       text,
+      link_preview_options: { is_disabled: true },
     }),
   });
 }
