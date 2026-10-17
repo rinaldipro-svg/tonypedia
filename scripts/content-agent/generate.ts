@@ -6,13 +6,18 @@ import { getGenerateEnv, getRepoRoot, loadKillerPrompt } from './lib/config.js';
 import type { DraftBatchArticle } from './lib/contracts.js';
 import { sendDraftBatchEmail, sendEmptyQueueEmail } from './lib/email.js';
 import { commitDraftBranch } from './lib/git.js';
-import { getReadyBriefs, updatePageStatus } from './lib/notion.js';
+import { getReadyBriefs, resetStaleProcessing, updatePageStatus } from './lib/notion.js';
 import { notify } from './lib/telegram.js';
 import { buildFilename, slugify } from './lib/utils.js';
 
 export async function main(): Promise<void> {
   const env = getGenerateEnv();
   const killerPrompt = await loadKillerPrompt();
+  const staleReset = await resetStaleProcessing(env.notionApiKey, env.notionDatabaseId, 30);
+  if (staleReset > 0) {
+    console.log(`Reset ${staleReset} stale Processing row(s) to Ready.`);
+  }
+
   const readyBriefs = await getReadyBriefs(env.notionApiKey, env.notionDatabaseId, 3);
 
   if (readyBriefs.length === 0) {
