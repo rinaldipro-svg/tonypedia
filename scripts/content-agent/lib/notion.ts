@@ -147,6 +147,30 @@ export async function getReadyBriefs(
     .slice(0, limit);
 }
 
+export async function resetStaleProcessing(
+  apiKey: string,
+  databaseId: string,
+  maxAgeMinutes: number
+): Promise<number> {
+  const pages = await queryDatabase(apiKey, databaseId, {
+    filter: {
+      property: 'Status',
+      select: { equals: 'Processing' },
+    },
+  });
+  const cutoff = Date.now() - maxAgeMinutes * 60_000;
+  let reset = 0;
+
+  for (const page of pages) {
+    if (new Date(page.last_edited_time ?? 0).getTime() < cutoff) {
+      await updatePageStatus(apiKey, page.id, 'Ready');
+      reset += 1;
+    }
+  }
+
+  return reset;
+}
+
 export async function getApprovedBriefs(
   apiKey: string,
   databaseId: string

@@ -59,6 +59,7 @@ interface TelegramUpdate {
 
 interface NotionPage {
   id: string;
+  last_edited_time?: string;
   properties: Record<string, any>;
 }
 
@@ -151,6 +152,7 @@ async function sendTelegramMessage(env: Env, chatId: number, text: string): Prom
     body: JSON.stringify({
       chat_id: chatId,
       text,
+      link_preview_options: { is_disabled: true },
     }),
   });
 }
@@ -321,7 +323,21 @@ async function handleStatusCommand(env: Env, chatId: number): Promise<Response> 
 
 async function handlePublishCommand(env: Env, chatId: number): Promise<Response> {
   try {
-    const pages = await queryDatabase(env, {});
+    let pages = await queryDatabase(env, {});
+
+    const staleCutoff = Date.now() - 30 * 60_000;
+    const stalePages = pages.filter(
+      (page) =>
+        page.properties.Status?.select?.name === 'Processing' &&
+        new Date(page.last_edited_time ?? 0).getTime() < staleCutoff
+    );
+    if (stalePages.length > 0) {
+      for (const page of stalePages) {
+        await updatePageStatus(env, page.id, 'Ready');
+      }
+      pages = await queryDatabase(env, {});
+    }
+
     const counts: Record<string, number> = {};
 
     for (const page of pages) {
@@ -764,7 +780,7 @@ async function handleFeedCommand(
 
     const rawCard = await generateFeedCardJson(env, { image, context: contextParts.join('\n') });
     const v = validateFeedCard(rawCard);
-    if (!v.ok) {
+    if ('error' in v) {
       await sendTelegramMessage(
         env,
         chatId,
@@ -909,7 +925,7 @@ async function handleTelegram(env: Env, request: Request): Promise<Response> {
     await sendTelegramMessage(
       env,
       message.chat.id,
-      `Added to feed\n\nTopic: ${parsed.topic}\nCategory: ${parsed.category}\nAudience: ${parsed.audience}\nTone: ${parsed.tone}\nReady queue: ${readyCount}`
+      `Added to Hub queue\n\nTopic: ${parsed.topic}\nCategory: ${parsed.category}\nAudience: ${parsed.audience}\nTone: ${parsed.tone}\nReady queue: ${readyCount}`
     );
   } catch (error) {
     await sendTelegramMessage(

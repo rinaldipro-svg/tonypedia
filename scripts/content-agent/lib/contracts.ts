@@ -29,6 +29,7 @@ export type Tone = (typeof TONE_OPTIONS)[number];
 export interface AutomationMetadata {
   batchId?: string;
   filename?: string;
+  draftPath?: string;
   generatedAt?: string;
   publishedAt?: string;
   topicSlug?: string;

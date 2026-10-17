@@ -1,16 +1,23 @@
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
-import { buildArticleMarkdown } from './lib/articles.js';
+import { buildArticleMarkdown, writeArticleFile } from './lib/articles.js';
 import { generateArticle } from './lib/anthropic.js';
-import { getGenerateEnv, loadKillerPrompt } from './lib/config.js';
+import { getGenerateEnv, getRepoRoot, loadKillerPrompt } from './lib/config.js';
 import type { DraftBatchArticle } from './lib/contracts.js';
 import { sendDraftBatchEmail, sendEmptyQueueEmail } from './lib/email.js';
-import { getReadyBriefs, updatePageStatus } from './lib/notion.js';
+import { commitDraftBranch } from './lib/git.js';
+import { getReadyBriefs, resetStaleProcessing, updatePageStatus } from './lib/notion.js';
+import { notify } from './lib/telegram.js';
 import { buildFilename, slugify } from './lib/utils.js';
 
 export async function main(): Promise<void> {
   const env = getGenerateEnv();
   const killerPrompt = await loadKillerPrompt();
+  const staleReset = await resetStaleProcessing(env.notionApiKey, env.notionDatabaseId, 30);
+  if (staleReset > 0) {
+    console.log(`Reset ${staleReset} stale Processing row(s) to Ready.`);
+  }
+
   const readyBriefs = await getReadyBriefs(env.notionApiKey, env.notionDatabaseId, 3);
 
   if (readyBriefs.length === 0) {
@@ -24,12 +31,16 @@ export async function main(): Promise<void> {
   }
 
   const batchId = randomUUID();
+  const failedTopics: Array<{ topic: string; message: string }> = [];
+  const repoRoot = getRepoRoot();
+  const draftFiles: Array<{ category: string; filename: string; markdown: string }> = [];
   const draftsToEmail: DraftBatchArticle[] = [];
   const draftedPages: Array<{
     pageId: string;
     metadata: {
       batchId: string;
       filename: string;
+      draftPath: string;
       generatedAt: string;
       topicSlug: string;
     };
@@ -52,25 +63,42 @@ export async function main(): Promise<void> {
           draftMarkdown,
         });
 
+        draftFiles.push({ category: brief.category, filename, markdown: draftMarkdown });
+
         draftedPages.push({
           pageId: brief.pageId,
           metadata: {
             batchId,
             filename,
+            draftPath: `src/content/articles/${brief.category}/${filename}`,
             generatedAt,
             topicSlug: slugify(brief.topic),
           },
         });
       } catch (error) {
         console.error(`Failed to generate "${brief.topic}":`, error);
+        failedTopics.push({
+          topic: brief.topic,
+          message: error instanceof Error ? error.message : String(error),
+        });
         await updatePageStatus(env.notionApiKey, brief.pageId, 'Ready');
       }
     }
 
     if (draftsToEmail.length === 0) {
       console.log('No drafts were generated successfully.');
+      for (const failure of failedTopics) {
+        await notify(`Draft failed: ${failure.topic} — ${failure.message}`);
+      }
+      process.exitCode = 1;
       return;
     }
+
+    const writtenPaths: string[] = [];
+    for (const file of draftFiles) {
+      writtenPaths.push(await writeArticleFile(repoRoot, file.category, file.filename, file.markdown));
+    }
+    commitDraftBranch(repoRoot, batchId, writtenPaths);
 
     await sendDraftBatchEmail({
       ...env,
@@ -82,6 +110,13 @@ export async function main(): Promise<void> {
       await updatePageStatus(env.notionApiKey, page.pageId, 'Draft Sent', {
         automationMetadata: page.metadata,
       });
+    }
+
+    for (const draft of draftsToEmail) {
+      await notify(`Draft ready: ${draft.topic} — check email`);
+    }
+    for (const failure of failedTopics) {
+      await notify(`Draft failed: ${failure.topic} — ${failure.message}`);
     }
 
     console.log(`Generated ${draftsToEmail.length} draft(s) and sent approval email for batch ${batchId}.`);

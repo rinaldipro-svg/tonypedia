@@ -1,16 +1,16 @@
 import { pathToFileURL } from 'node:url';
-import { buildArticleMarkdown, getPublicationDateFromFilename, writeArticleFile } from './lib/articles.js';
-import { generateArticle } from './lib/anthropic.js';
-import { getPublishEnv, getRepoRoot, loadKillerPrompt } from './lib/config.js';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { getPublishEnv, getRepoRoot } from './lib/config.js';
 import { sendConfirmationEmail } from './lib/email.js';
-import { commitAndPushPublishedArticles } from './lib/git.js';
+import { checkoutDraftFile, commitAndPushPublishedArticles, deleteDraftBranch } from './lib/git.js';
 import { getApprovedBriefs, updatePageStatus } from './lib/notion.js';
-import { buildFilename, buildPublishedUrl, slugify } from './lib/utils.js';
+import { notify } from './lib/telegram.js';
+import { buildFilename, buildPublishedUrl, extractFrontmatterTitle, slugify } from './lib/utils.js';
 
 export async function main(): Promise<void> {
   const env = getPublishEnv();
   const repoRoot = getRepoRoot();
-  const killerPrompt = await loadKillerPrompt();
   const approvedBriefs = await getApprovedBriefs(env.notionApiKey, env.notionDatabaseId);
 
   if (approvedBriefs.length === 0) {
@@ -33,32 +33,64 @@ export async function main(): Promise<void> {
     };
   }> = [];
 
-  for (const brief of approvedBriefs) {
-    const filename = brief.automationMetadata.filename ?? buildFilename(new Date(), brief.topic);
-    const publicationDate = getPublicationDateFromFilename(filename, new Date());
-    const generated = await generateArticle(env.anthropicApiKey, killerPrompt, brief);
-    const markdown = buildArticleMarkdown(brief, generated, publicationDate);
-    const filePath = await writeArticleFile(repoRoot, brief.category, filename, markdown);
-    const publishedAt = new Date().toISOString();
-    const url = buildPublishedUrl(env.siteBaseUrl, brief.category, filename);
+  const failedBatchIds = new Set<string>();
+  const failures: Array<{ topic: string; message: string }> = [];
 
-    writtenFiles.push(filePath);
-    publishedArticles.push({
-      pageId: brief.pageId,
-      topic: generated.title,
-      url,
-      category: brief.category,
-      metadata: {
-        filename,
-        batchId: brief.automationMetadata.batchId,
-        generatedAt: brief.automationMetadata.generatedAt,
-        topicSlug: brief.automationMetadata.topicSlug ?? slugify(brief.topic),
-        publishedAt,
-      },
-    });
+  for (const brief of approvedBriefs) {
+    const { batchId, draftPath } = brief.automationMetadata;
+
+    try {
+      if (!batchId || !draftPath) {
+        throw new Error('No saved draft (missing batchId/draftPath in Automation Metadata).');
+      }
+
+      const filename = brief.automationMetadata.filename ?? buildFilename(new Date(), brief.topic);
+      checkoutDraftFile(repoRoot, batchId, draftPath);
+      const filePath = path.join(repoRoot, draftPath);
+      const title = extractFrontmatterTitle(await readFile(filePath, 'utf8')) ?? brief.topic;
+      const publishedAt = new Date().toISOString();
+      const url = buildPublishedUrl(env.siteBaseUrl, brief.category, filename);
+
+      writtenFiles.push(filePath);
+      publishedArticles.push({
+        pageId: brief.pageId,
+        topic: title,
+        url,
+        category: brief.category,
+        metadata: {
+          filename,
+          batchId,
+          generatedAt: brief.automationMetadata.generatedAt,
+          topicSlug: brief.automationMetadata.topicSlug ?? slugify(brief.topic),
+          publishedAt,
+        },
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`Failed to publish "${brief.topic}":`, error);
+      failures.push({ topic: brief.topic, message });
+      if (batchId) {
+        failedBatchIds.add(batchId);
+      }
+    }
+  }
+
+  if (publishedArticles.length === 0) {
+    console.log('No approved drafts could be published.');
+    await reportFailures(failures);
+    return;
   }
 
   commitAndPushPublishedArticles(repoRoot, writtenFiles, publishedArticles.length);
+
+  const publishedBatchIds = new Set(
+    publishedArticles.map((article) => article.metadata.batchId).filter((id): id is string => Boolean(id))
+  );
+  for (const batchId of publishedBatchIds) {
+    if (!failedBatchIds.has(batchId)) {
+      deleteDraftBranch(repoRoot, batchId);
+    }
+  }
 
   for (const article of publishedArticles) {
     await updatePageStatus(env.notionApiKey, article.pageId, 'Published', {
@@ -76,7 +108,22 @@ export async function main(): Promise<void> {
     }))
   );
 
+  for (const article of publishedArticles) {
+    await notify(`Published: ${article.topic} — ${article.url}`);
+  }
+  await reportFailures(failures);
+
   console.log(`Published ${publishedArticles.length} article(s).`);
+}
+
+async function reportFailures(failures: Array<{ topic: string; message: string }>): Promise<void> {
+  for (const failure of failures) {
+    await notify(`Publish failed: ${failure.topic} — ${failure.message}`);
+  }
+
+  if (failures.length > 0) {
+    process.exitCode = 1;
+  }
 }
 
 const isMainModule =
