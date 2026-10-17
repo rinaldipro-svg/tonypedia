@@ -106,3 +106,15 @@ export function safeJsonParse<T>(value: string, fallback: T): T {
     return fallback;
   }
 }
+
+export function extractFrontmatterTitle(markdown: string): string | undefined {
+  const match = markdown.match(/^title:\s*(.+)$/m);
+
+  if (!match) {
+    return undefined;
+  }
+
+  const raw = match[1].trim();
+  const parsed = safeJsonParse<unknown>(raw, raw);
+  return typeof parsed === 'string' && parsed ? parsed : undefined;
+}

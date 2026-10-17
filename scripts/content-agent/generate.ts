@@ -1,10 +1,11 @@
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
-import { buildArticleMarkdown } from './lib/articles.js';
+import { buildArticleMarkdown, writeArticleFile } from './lib/articles.js';
 import { generateArticle } from './lib/anthropic.js';
-import { getGenerateEnv, loadKillerPrompt } from './lib/config.js';
+import { getGenerateEnv, getRepoRoot, loadKillerPrompt } from './lib/config.js';
 import type { DraftBatchArticle } from './lib/contracts.js';
 import { sendDraftBatchEmail, sendEmptyQueueEmail } from './lib/email.js';
+import { commitDraftBranch } from './lib/git.js';
 import { getReadyBriefs, updatePageStatus } from './lib/notion.js';
 import { buildFilename, slugify } from './lib/utils.js';
 
@@ -24,12 +25,15 @@ export async function main(): Promise<void> {
   }
 
   const batchId = randomUUID();
+  const repoRoot = getRepoRoot();
+  const draftFiles: Array<{ category: string; filename: string; markdown: string }> = [];
   const draftsToEmail: DraftBatchArticle[] = [];
   const draftedPages: Array<{
     pageId: string;
     metadata: {
       batchId: string;
       filename: string;
+      draftPath: string;
       generatedAt: string;
       topicSlug: string;
     };
@@ -52,11 +56,14 @@ export async function main(): Promise<void> {
           draftMarkdown,
         });
 
+        draftFiles.push({ category: brief.category, filename, markdown: draftMarkdown });
+
         draftedPages.push({
           pageId: brief.pageId,
           metadata: {
             batchId,
             filename,
+            draftPath: `src/content/articles/${brief.category}/${filename}`,
             generatedAt,
             topicSlug: slugify(brief.topic),
           },
@@ -71,6 +78,12 @@ export async function main(): Promise<void> {
       console.log('No drafts were generated successfully.');
       return;
     }
+
+    const writtenPaths: string[] = [];
+    for (const file of draftFiles) {
+      writtenPaths.push(await writeArticleFile(repoRoot, file.category, file.filename, file.markdown));
+    }
+    commitDraftBranch(repoRoot, batchId, writtenPaths);
 
     await sendDraftBatchEmail({
       ...env,
